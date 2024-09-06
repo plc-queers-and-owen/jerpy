@@ -6,5 +6,6 @@ public enum TokenContext {
     REL_OP,
     NUMBER,
     STRING,
-    NOTEQUAL
+    NOTEQUAL,
+    ID_KEYWORD
 }

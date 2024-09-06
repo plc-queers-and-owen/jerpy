@@ -76,6 +76,55 @@ public class JottTokenizer {
                     character++;
                     continue;
                 }
+
+                if (current == '!') {
+                    context = TokenContext.NOTEQUAL;
+                    stub = "!";
+                    character++;
+                    continue;
+                }
+
+                if (current == '=') {
+                    context = TokenContext.REL_OP_ASSIGN;
+                    stub = "=";
+                    character++;
+                    continue;
+                }
+
+                if (current == ':') {
+                    context = TokenContext.COLON_FC_HEADER;
+                    stub = ":";
+                    character++;
+                    continue;
+                }
+
+                if (current == '"') {
+                    context = TokenContext.STRING;
+                    stub = "\"";
+                    character++;
+                    continue;
+                }
+
+                if ("0123456789.".indexOf(current) > -1) {
+                    context = TokenContext.NUMBER;
+                    stub = String.valueOf(current);
+                    character++;
+                    continue;
+                }
+
+                if ("<>".indexOf(current) > -1) {
+                    context = TokenContext.REL_OP;
+                    stub = String.valueOf(current);
+                    character++;
+                    continue;
+                }
+
+                if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".indexOf(current) > -1) {
+                    context = TokenContext.ID_KEYWORD;
+                    stub = String.valueOf(current);
+                    character++;
+                    continue;
+                }
             }
         }
 
