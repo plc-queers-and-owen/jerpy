@@ -17,14 +17,34 @@ import internal.TokenValidity;
 public class JottTokenizer {
     private final String filename;
 
+    /**
+     * Constructs a Tokenizer instance, mostly useful for internal state
+     * 
+     * @param filename
+     */
     private JottTokenizer(String filename) {
         this.filename = filename;
     }
 
+    /**
+     * Utility function to make a token with internal filename
+     * 
+     * @param token   Token type
+     * @param value   Token value
+     * @param lineNum Line number
+     * @return
+     */
     public Token makeToken(TokenType token, String value, int lineNum) {
         return new Token(value, this.filename, lineNum, token);
     }
 
+    /**
+     * Validates an in-progress token
+     * 
+     * @param context TokenContext
+     * @param value   Current value
+     * @return TokenValidity instance
+     */
     public TokenValidity validate(TokenContext context, String value) {
         char recent = value.charAt(value.length() - 1);
         String head = value.substring(0, value.length() - 1);
@@ -89,6 +109,13 @@ public class JottTokenizer {
         }
     }
 
+    /**
+     * Tokenizes a single line
+     * 
+     * @param line   String to tokenize
+     * @param lineNo Line number
+     * @return ArrayList of tokens, or null if errored.
+     */
     public ArrayList<Token> tokenize_line(String line, int lineNo) {
         ArrayList<Token> tokens = new ArrayList<>();
         TokenContext context = null;

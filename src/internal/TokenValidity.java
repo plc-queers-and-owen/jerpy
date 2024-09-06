@@ -3,14 +3,12 @@ package internal;
 import provided.Token;
 import provided.TokenType;
 
-/*public enum TokenValidity {
-    COMPLETE,
-    CONTINUE,
-    ACCEPT,
-    REJECT,
-    ERROR
-}*/
-
+/**
+ * Utility class for storing token validity data
+ * 
+ * @param filename   Token filename
+ * @param lineNumber Token line number
+ */
 public class TokenValidity {
     private boolean valid;
     private boolean recoverable;
