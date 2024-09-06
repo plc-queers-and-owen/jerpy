@@ -30,54 +30,62 @@ public class JottTokenizer {
         String head = value.substring(0, value.length() - 1);
         switch (context) {
             case TokenContext.COLON_FC_HEADER:
-                if (value == "::") {
-                    return TokenValidity.COMPLETE;
+                if (value.equals("::")) {
+                    return TokenValidity.createComplete(TokenType.FC_HEADER, "::");
                 } else {
-                    return TokenValidity.REJECT;
+                    return TokenValidity.createReject(TokenType.COLON, ":");
                 }
             case TokenContext.REL_OP_ASSIGN:
-                if (recent == '=') {
-                    return TokenValidity.COMPLETE;
+                if (value.equals("==")) {
+                    return TokenValidity.createComplete(TokenType.REL_OP, "==");
                 } else {
-                    return TokenValidity.REJECT;
+                    return TokenValidity.createReject(TokenType.ASSIGN, "=");
                 }
             case TokenContext.REL_OP:
                 if (recent == '=') {
-                    return TokenValidity.COMPLETE;
+                    return TokenValidity.createComplete(TokenType.REL_OP, value);
                 } else {
-                    return TokenValidity.REJECT;
+                    return TokenValidity.createReject(TokenType.REL_OP, head);
                 }
             case TokenContext.NUMBER:
                 if ("0123456789".indexOf(recent) > -1) {
-                    return TokenValidity.ACCEPT;
-                }
-                if (recent == '.') {
-                    if (head.contains(".")) {
-                        return TokenValidity.ERROR;
-                    } else {
-                        return TokenValidity.CONTINUE;
+                    return TokenValidity.createAccept(TokenType.NUMBER, value);
+                } else if (recent == '.') {
+                    if (value.equals(".")) {
+                        return TokenValidity.createError("Unexpected token \".\"");
                     }
+                    if (head.contains(".")) {
+                        return TokenValidity
+                                .createError(String.format(
+                                        "Unexpected token \".\": 0-1 decimal points allowed per number token; Got \"%s\"",
+                                        value));
+                    } else {
+                        return TokenValidity.createAccept(TokenType.NUMBER, value);
+                    }
+                } else {
+                    return TokenValidity.createReject(TokenType.NUMBER, head);
                 }
             case TokenContext.STRING:
                 if (recent == '"') {
-                    return TokenValidity.COMPLETE;
+                    return TokenValidity.createComplete(TokenType.STRING, value);
                 } else {
-                    return TokenValidity.CONTINUE;
+                    return TokenValidity.createContinue(TokenType.STRING, value);
                 }
             case TokenContext.NOTEQUAL:
                 if (recent == '=') {
-                    return TokenValidity.COMPLETE;
+                    return TokenValidity.createComplete(TokenType.REL_OP, "!=");
                 } else {
-                    return TokenValidity.REJECT;
+                    return TokenValidity.createError(
+                            String.format("Unexpected token \"%s\": Expected \"=\".", String.valueOf(recent)));
                 }
             case TokenContext.ID_KEYWORD:
                 if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789".indexOf(recent) > -1) {
-                    return TokenValidity.ACCEPT;
+                    return TokenValidity.createAccept(TokenType.ID_KEYWORD, value);
                 } else {
-                    return TokenValidity.REJECT;
+                    return TokenValidity.createReject(TokenType.ID_KEYWORD, head);
                 }
             default:
-                return TokenValidity.ERROR;
+                return TokenValidity.createError("Critical: Invalid token context, missing case handler.");
         }
     }
 
@@ -91,97 +99,92 @@ public class JottTokenizer {
             if (context == null) {
                 if (current == '#') {
                     break;
-                }
-                if (current == '[') {
+                } else if (current == '[') {
                     tokens.add(this.makeToken(TokenType.L_BRACKET, "[", lineNo));
                     character++;
-                    continue;
-                }
-
-                if (current == ']') {
+                } else if (current == ']') {
                     tokens.add(this.makeToken(TokenType.R_BRACKET, "]", lineNo));
                     character++;
-                    continue;
-                }
-
-                if (current == '{') {
+                } else if (current == '{') {
                     tokens.add(this.makeToken(TokenType.L_BRACE, "{", lineNo));
                     character++;
-                    continue;
-                }
-
-                if (current == '}') {
+                } else if (current == '}') {
                     tokens.add(this.makeToken(TokenType.R_BRACE, "}", lineNo));
                     character++;
-                    continue;
-                }
-
-                if (current == ';') {
+                } else if (current == ';') {
                     tokens.add(this.makeToken(TokenType.SEMICOLON, ";", lineNo));
                     character++;
-                    continue;
-                }
-
-                if (current == ',') {
+                } else if (current == ',') {
                     tokens.add(this.makeToken(TokenType.COMMA, ",", lineNo));
                     character++;
-                    continue;
-                }
-
-                if ("+-/*".indexOf(current) > -1) {
+                } else if ("+-/*".indexOf(current) > -1) {
                     tokens.add(this.makeToken(TokenType.MATH_OP, String.valueOf(current), lineNo));
                     character++;
-                    continue;
-                }
-
-                if (current == '!') {
+                } else if (current == '!') {
                     context = TokenContext.NOTEQUAL;
                     stub = "!";
                     character++;
-                    continue;
-                }
-
-                if (current == '=') {
+                } else if (current == '=') {
                     context = TokenContext.REL_OP_ASSIGN;
                     stub = "=";
                     character++;
-                    continue;
-                }
-
-                if (current == ':') {
+                } else if (current == ':') {
                     context = TokenContext.COLON_FC_HEADER;
                     stub = ":";
                     character++;
-                    continue;
-                }
-
-                if (current == '"') {
+                } else if (current == '"') {
                     context = TokenContext.STRING;
                     stub = "\"";
                     character++;
-                    continue;
-                }
-
-                if ("0123456789.".indexOf(current) > -1) {
+                } else if ("0123456789.".indexOf(current) > -1) {
                     context = TokenContext.NUMBER;
                     stub = String.valueOf(current);
                     character++;
-                    continue;
-                }
-
-                if ("<>".indexOf(current) > -1) {
+                } else if ("<>".indexOf(current) > -1) {
                     context = TokenContext.REL_OP;
                     stub = String.valueOf(current);
                     character++;
-                    continue;
-                }
-
-                if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".indexOf(current) > -1) {
+                } else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".indexOf(current) > -1) {
                     context = TokenContext.ID_KEYWORD;
                     stub = String.valueOf(current);
                     character++;
-                    continue;
+                } else {
+                    character++;
                 }
+            } else {
+                TokenValidity state = this.validate(context, stub.concat(String.valueOf(current)));
+                /*
+                 * System.out.println(String.
+                 * format("Content: %s | COM: %s, REJ: %s, ERR: %s, ACC: %s, CON: %s",
+                 * state.getContent(), state.isComplete(),
+                 * state.isReject(), state.isError(), state.isAccepting(), state.isContinue()));
+                 */
+                if (state.isComplete()) {
+                    tokens.add(state.makeToken(this.filename, lineNo));
+                    context = null;
+                    stub = null;
+                    character++;
+                } else if (state.isReject()) {
+                    tokens.add(state.makeToken(this.filename, lineNo));
+                    context = null;
+                    stub = null;
+                } else if (state.isError()) {
+                    System.err.println("ERROR: ".concat(state.getError()));
+                    return null;
+                } else {
+                    stub = stub.concat(String.valueOf(current));
+                    character++;
+                }
+            }
+        }
+
+        if (context != null && stub != null && stub.length() > 0) {
+            TokenValidity state = this.validate(context, stub);
+            if (state.isAccepting() || state.isComplete() || state.isReject()) {
+                tokens.add(state.makeToken(this.filename, lineNo));
+            } else {
+                System.err.println(String.format("ERROR: Incomplete/unexpected token \"%s\"", stub));
+                return null;
             }
         }
 
@@ -201,24 +204,29 @@ public class JottTokenizer {
             BufferedReader reader = new BufferedReader(new FileReader(filename));
             ArrayList<Token> tokens = new ArrayList<Token>();
             JottTokenizer tokenizer = new JottTokenizer(filename);
-            int lineNo = 0;
+            int lineNo = 1;
             while (true) {
                 try {
                     String line = reader.readLine();
                     if (line == null) {
                         break;
                     }
-                    tokens.addAll(tokenizer.tokenize_line(line, lineNo));
+                    ArrayList<Token> result = tokenizer.tokenize_line(line, lineNo);
+                    if (result == null) {
+                        return null;
+                    }
+                    tokens.addAll(result);
                 } catch (Exception e) {
                     break;
                 }
                 lineNo++;
             }
             reader.close();
+            System.out.println(tokens.toString());
 
             return tokens;
         } catch (Exception e) {
-            return new ArrayList<Token>();
+            return null;
         }
     }
 }

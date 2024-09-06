@@ -54,4 +54,8 @@ public class Token {
     public TokenType getTokenType() {
         return type;
     }
+
+    public String toString() {
+        return String.format("%s : %s @ %s", this.type, this.token, this.lineNum);
+    }
 }
