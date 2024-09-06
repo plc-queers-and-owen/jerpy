@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Jott",
+            "request": "launch",
+            "mainClass": "Jott",
+            "projectName": "jerpy_3a3478d0"
+        },
+        {
+            "type": "java",
+            "name": "JottParserTester",
+            "request": "launch",
+            "mainClass": "testers.JottParserTester",
+            "projectName": "jerpy_3a3478d0"
+        },
+        {
+            "type": "java",
+            "name": "JottTokenizerTester",
+            "request": "launch",
+            "mainClass": "testers.JottTokenizerTester",
+            "projectName": "jerpy_3a3478d0"
+        }
+    ]
+}
