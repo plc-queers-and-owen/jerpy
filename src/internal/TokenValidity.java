@@ -1,7 +1,9 @@
 package internal;
 
 public enum TokenValidity {
-    ACCEPT,
+    COMPLETE,
     CONTINUE,
-    REJECT
+    ACCEPT,
+    REJECT,
+    ERROR
 }

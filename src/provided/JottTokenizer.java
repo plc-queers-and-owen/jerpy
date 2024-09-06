@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import internal.TokenContext;
+import internal.TokenValidity;
 
 public class JottTokenizer {
     private final String filename;
@@ -22,6 +23,62 @@ public class JottTokenizer {
 
     public Token makeToken(TokenType token, String value, int lineNum) {
         return new Token(value, this.filename, lineNum, token);
+    }
+
+    public TokenValidity validate(TokenContext context, String value) {
+        char recent = value.charAt(value.length() - 1);
+        String head = value.substring(0, value.length() - 1);
+        switch (context) {
+            case TokenContext.COLON_FC_HEADER:
+                if (value == "::") {
+                    return TokenValidity.COMPLETE;
+                } else {
+                    return TokenValidity.REJECT;
+                }
+            case TokenContext.REL_OP_ASSIGN:
+                if (recent == '=') {
+                    return TokenValidity.COMPLETE;
+                } else {
+                    return TokenValidity.REJECT;
+                }
+            case TokenContext.REL_OP:
+                if (recent == '=') {
+                    return TokenValidity.COMPLETE;
+                } else {
+                    return TokenValidity.REJECT;
+                }
+            case TokenContext.NUMBER:
+                if ("0123456789".indexOf(recent) > -1) {
+                    return TokenValidity.ACCEPT;
+                }
+                if (recent == '.') {
+                    if (head.contains(".")) {
+                        return TokenValidity.ERROR;
+                    } else {
+                        return TokenValidity.CONTINUE;
+                    }
+                }
+            case TokenContext.STRING:
+                if (recent == '"') {
+                    return TokenValidity.COMPLETE;
+                } else {
+                    return TokenValidity.CONTINUE;
+                }
+            case TokenContext.NOTEQUAL:
+                if (recent == '=') {
+                    return TokenValidity.COMPLETE;
+                } else {
+                    return TokenValidity.REJECT;
+                }
+            case TokenContext.ID_KEYWORD:
+                if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789".indexOf(recent) > -1) {
+                    return TokenValidity.ACCEPT;
+                } else {
+                    return TokenValidity.REJECT;
+                }
+            default:
+                return TokenValidity.ERROR;
+        }
     }
 
     public ArrayList<Token> tokenize_line(String line, int lineNo) {
