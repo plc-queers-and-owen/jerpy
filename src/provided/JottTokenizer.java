@@ -163,15 +163,15 @@ public class JottTokenizer {
                     context = TokenContext.STRING;
                     stub = "\"";
                     character++;
-                } else if ("0123456789.".indexOf(current) > -1) {
+                } else if ((current >= '0' && current <= '9') || current == '.') {
                     context = TokenContext.NUMBER;
                     stub = String.valueOf(current);
                     character++;
-                } else if ("<>".indexOf(current) > -1) {
+                } else if (/* '<' or '>' */ (current | 2) == '>') {
                     context = TokenContext.REL_OP;
                     stub = String.valueOf(current);
                     character++;
-                } else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".indexOf(current) > -1) {
+                } else if (/* [A-Za-z] */ (current | 32) >= 'a' && (current | 32) <= 'z') {
                     context = TokenContext.ID_KEYWORD;
                     stub = String.valueOf(current);
                     character++;
