@@ -153,50 +153,50 @@ public class JottTokenizer {
             if (currentToken == null) {
                 // if we haven't started over a token we just check the character
                 // to determine what character to start
-                 switch(current) {
-                     // If we detect a  comment we just stop parsing the line
-                     case '#' -> {
-                         break line_loop;
-                     }
-                     case '[' -> tokens.add(this.makeToken(TokenType.L_BRACKET, "[", lineNo));
-                    case ']'-> tokens.add(this.makeToken(TokenType.R_BRACKET, "]", lineNo));
+                switch (current) {
+                    // If we detect a comment we just stop parsing the line
+                    case '#' -> {
+                        break line_loop;
+                    }
+                    case '[' -> tokens.add(this.makeToken(TokenType.L_BRACKET, "[", lineNo));
+                    case ']' -> tokens.add(this.makeToken(TokenType.R_BRACKET, "]", lineNo));
                     case '{' -> tokens.add(this.makeToken(TokenType.L_BRACE, "{", lineNo));
-                     case '}' -> tokens.add(this.makeToken(TokenType.R_BRACE, "}", lineNo));
-                     case ';' -> tokens.add(this.makeToken(TokenType.SEMICOLON, ";", lineNo));
-                     case ',' -> tokens.add(this.makeToken(TokenType.COMMA, ",", lineNo));
-                     case '+', '*',  '/', '-' ->
-                         tokens.add(this.makeToken(TokenType.MATH_OP, String.valueOf(current), lineNo));
-                     case '!' -> {
-                         currentToken = TokenContext.NOTEQUAL;
-                         currentTokenString = "!";
-                     }
-                     case '=' -> {
-                         currentToken = TokenContext.REL_OP_ASSIGN;
-                         currentTokenString = "=";
-                     }
-                     case ':' -> {
-                         currentToken = TokenContext.COLON_FC_HEADER;
-                         currentTokenString = ":";
-                     }
-                     case '"' -> {
-                         currentToken = TokenContext.STRING;
-                         currentTokenString = "\"";
-                     }
-                     case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' -> {
-                         currentToken = TokenContext.NUMBER;
-                         currentTokenString = String.valueOf(current);
-                     }
-                     case '<', '>' -> {
-                         currentToken = TokenContext.REL_OP;
-                         currentTokenString = String.valueOf(current);
-                     }
-                 }
+                    case '}' -> tokens.add(this.makeToken(TokenType.R_BRACE, "}", lineNo));
+                    case ';' -> tokens.add(this.makeToken(TokenType.SEMICOLON, ";", lineNo));
+                    case ',' -> tokens.add(this.makeToken(TokenType.COMMA, ",", lineNo));
+                    case '+', '*', '/', '-' ->
+                        tokens.add(this.makeToken(TokenType.MATH_OP, String.valueOf(current), lineNo));
+                    case '!' -> {
+                        currentToken = TokenContext.NOTEQUAL;
+                        currentTokenString = "!";
+                    }
+                    case '=' -> {
+                        currentToken = TokenContext.REL_OP_ASSIGN;
+                        currentTokenString = "=";
+                    }
+                    case ':' -> {
+                        currentToken = TokenContext.COLON_FC_HEADER;
+                        currentTokenString = ":";
+                    }
+                    case '"' -> {
+                        currentToken = TokenContext.STRING;
+                        currentTokenString = "\"";
+                    }
+                    case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' -> {
+                        currentToken = TokenContext.NUMBER;
+                        currentTokenString = String.valueOf(current);
+                    }
+                    case '<', '>' -> {
+                        currentToken = TokenContext.REL_OP;
+                        currentTokenString = String.valueOf(current);
+                    }
+                }
 
-                 // If the character is a letter we have a ID_KEYWORD
-                 if(Character.isAlphabetic(current)) {
+                // If the character is a letter we have a ID_KEYWORD
+                if (Character.isAlphabetic(current)) {
                     currentToken = TokenContext.ID_KEYWORD;
                     currentTokenString = String.valueOf(current);
-                 }
+                }
 
                 characterNumber++;
             } else {
@@ -230,7 +230,8 @@ public class JottTokenizer {
             }
         }
 
-        // If we still have a partially complete token we check if it is in a valid state
+        // If we still have a partially complete token we check if it is in a valid
+        // state
         // and either finish the token or error
         if (currentToken != null && currentTokenString != null && !currentTokenString.isEmpty()) {
             TokenValidity state = this.validate(currentToken, currentTokenString);
@@ -264,7 +265,7 @@ public class JottTokenizer {
             // Read in lines until we reach EOF
             int lineNo = 1;
             try {
-                for(String line : reader.lines().toList()) {
+                for (String line : reader.lines().toList()) {
                     ArrayList<Token> result = tokenizer.tokenize_line(line, lineNo);
 
                     // If we've encountered an error we just immediately return null
