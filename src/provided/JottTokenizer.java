@@ -158,14 +158,21 @@ public class JottTokenizer {
                     case '#' -> {
                         break line_loop;
                     }
+
+                    // Handle single-character tokens
                     case '[' -> tokens.add(this.makeToken(TokenType.L_BRACKET, "[", lineNo));
                     case ']' -> tokens.add(this.makeToken(TokenType.R_BRACKET, "]", lineNo));
                     case '{' -> tokens.add(this.makeToken(TokenType.L_BRACE, "{", lineNo));
                     case '}' -> tokens.add(this.makeToken(TokenType.R_BRACE, "}", lineNo));
                     case ';' -> tokens.add(this.makeToken(TokenType.SEMICOLON, ";", lineNo));
                     case ',' -> tokens.add(this.makeToken(TokenType.COMMA, ",", lineNo));
+
+                    // Handle MATH_OP
                     case '+', '*', '/', '-' ->
                         tokens.add(this.makeToken(TokenType.MATH_OP, String.valueOf(current), lineNo));
+
+                    // If the following characters are encountered, enter a tokenizing context to
+                    // narrow choices to 1/determine invalidity
                     case '!' -> {
                         currentToken = TokenContext.NOTEQUAL;
                         currentTokenString = "!";
