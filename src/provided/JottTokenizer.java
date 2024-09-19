@@ -6,7 +6,7 @@ import java.io.FileReader;
 /**
  * This class is responsible for tokenizing Jott code.
  * 
- * @author 
+ * @author Dax, Madeline
  **/
 
 import java.util.ArrayList;
@@ -46,29 +46,39 @@ public class JottTokenizer {
      * @return TokenValidity instance
      */
     public TokenValidity validate(TokenContext context, String value) {
+        // The last character added to the token
         char recent = value.charAt(value.length() - 1);
+        // The current token string without the last character
         String head = value.substring(0, value.length() - 1);
+
         switch (context) {
-            case TokenContext.COLON_FC_HEADER:
+            // Simplify COLON_FC_HEADER into either FC_HEADER or COLON
+            case TokenContext.COLON_FC_HEADER -> {
                 if (value.equals("::")) {
                     return TokenValidity.createComplete(TokenType.FC_HEADER, "::");
                 } else {
                     return TokenValidity.createReject(TokenType.COLON, ":");
                 }
-            case TokenContext.REL_OP_ASSIGN:
+            }
+            // Simplify REL_OP_ASSIGN into either REL_OP or ASSIGN
+            case TokenContext.REL_OP_ASSIGN -> {
                 if (value.equals("==")) {
                     return TokenValidity.createComplete(TokenType.REL_OP, "==");
                 } else {
                     return TokenValidity.createReject(TokenType.ASSIGN, "=");
                 }
-            case TokenContext.REL_OP:
+            }
+            // Completes if we have >= or <= and otherwise just finishes < or > and rejects
+            case TokenContext.REL_OP -> {
                 if (recent == '=') {
                     return TokenValidity.createComplete(TokenType.REL_OP, value);
                 } else {
                     return TokenValidity.createReject(TokenType.REL_OP, head);
                 }
-            case TokenContext.NUMBER:
-                if ("0123456789".indexOf(recent) > -1) {
+            }
+            // Checks that a number only has one '.' and only accepts numbers
+            case TokenContext.NUMBER -> {
+                if (Character.isDigit(recent)) {
                     return TokenValidity.createAccept(TokenType.NUMBER, value);
                 } else if (recent == '.') {
                     if (value.equals(".")) {
@@ -85,132 +95,150 @@ public class JottTokenizer {
                 } else {
                     return TokenValidity.createReject(TokenType.NUMBER, head);
                 }
-            case TokenContext.STRING:
+            }
+            // We complete a string if the last character was '"'
+            // otherwise we need to keep adding characters to the string literal
+            case TokenContext.STRING -> {
                 if (recent == '"') {
                     return TokenValidity.createComplete(TokenType.STRING, value);
                 } else {
                     return TokenValidity.createContinue(TokenType.STRING, value);
                 }
-            case TokenContext.NOTEQUAL:
+            }
+            // Complete NOTEQUAL only if the last character was '='
+            case TokenContext.NOTEQUAL -> {
                 if (recent == '=') {
                     return TokenValidity.createComplete(TokenType.REL_OP, "!=");
                 } else {
                     return TokenValidity.createError(
-                            String.format("Unexpected token \"%s\": Expected \"=\".", String.valueOf(recent)));
+                            String.format("Unexpected token \"%s\": Expected \"=\".", recent));
                 }
-            case TokenContext.ID_KEYWORD:
-                if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789".indexOf(recent) > -1) {
+            }
+            // Accept ID_KEYWORD only if the last character was a letter or number
+            case TokenContext.ID_KEYWORD -> {
+                if (Character.isAlphabetic(recent) || Character.isDigit(recent)) {
                     return TokenValidity.createAccept(TokenType.ID_KEYWORD, value);
                 } else {
                     return TokenValidity.createReject(TokenType.ID_KEYWORD, head);
                 }
-            default:
+            }
+            // We've encountered an invalid token context, error out
+            default -> {
                 return TokenValidity.createError("Critical: Invalid token context, missing case handler.");
+            }
         }
     }
 
     /**
      * Tokenizes a single line
      * 
-     * @param line   String to tokenize
+     * @param line   String to tokenize, a single line of the input program
      * @param lineNo Line number
      * @return ArrayList of tokens, or null if errored.
      */
     public ArrayList<Token> tokenize_line(String line, int lineNo) {
+        // Create a buffer for the tokens for this line
         ArrayList<Token> tokens = new ArrayList<>();
-        TokenContext context = null;
-        String stub = null;
-        int character = 0;
-        while (character < line.length()) {
-            char current = line.charAt(character);
-            if (context == null) {
-                if (current == '#') {
-                    break;
-                } else if (current == '[') {
-                    tokens.add(this.makeToken(TokenType.L_BRACKET, "[", lineNo));
-                    character++;
-                } else if (current == ']') {
-                    tokens.add(this.makeToken(TokenType.R_BRACKET, "]", lineNo));
-                    character++;
-                } else if (current == '{') {
-                    tokens.add(this.makeToken(TokenType.L_BRACE, "{", lineNo));
-                    character++;
-                } else if (current == '}') {
-                    tokens.add(this.makeToken(TokenType.R_BRACE, "}", lineNo));
-                    character++;
-                } else if (current == ';') {
-                    tokens.add(this.makeToken(TokenType.SEMICOLON, ";", lineNo));
-                    character++;
-                } else if (current == ',') {
-                    tokens.add(this.makeToken(TokenType.COMMA, ",", lineNo));
-                    character++;
-                } else if ("+-/*".indexOf(current) > -1) {
-                    tokens.add(this.makeToken(TokenType.MATH_OP, String.valueOf(current), lineNo));
-                    character++;
-                } else if (current == '!') {
-                    context = TokenContext.NOTEQUAL;
-                    stub = "!";
-                    character++;
-                } else if (current == '=') {
-                    context = TokenContext.REL_OP_ASSIGN;
-                    stub = "=";
-                    character++;
-                } else if (current == ':') {
-                    context = TokenContext.COLON_FC_HEADER;
-                    stub = ":";
-                    character++;
-                } else if (current == '"') {
-                    context = TokenContext.STRING;
-                    stub = "\"";
-                    character++;
-                } else if ("0123456789.".indexOf(current) > -1) {
-                    context = TokenContext.NUMBER;
-                    stub = String.valueOf(current);
-                    character++;
-                } else if ("<>".indexOf(current) > -1) {
-                    context = TokenContext.REL_OP;
-                    stub = String.valueOf(current);
-                    character++;
-                } else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".indexOf(current) > -1) {
-                    context = TokenContext.ID_KEYWORD;
-                    stub = String.valueOf(current);
-                    character++;
-                } else {
-                    character++;
+
+        // buffer to store multi-character tokens
+        TokenContext currentToken = null;
+        String currentTokenString = null;
+
+        int characterNumber = 0;
+
+        // loop over every character in the line
+        line_loop: while (characterNumber < line.length()) {
+            char current = line.charAt(characterNumber);
+
+            if (currentToken == null) {
+                // if we haven't started over a token we just check the character
+                // to determine what character to start
+                switch (current) {
+                    // If we detect a comment we just stop parsing the line
+                    case '#' -> {
+                        break line_loop;
+                    }
+                    case '[' -> tokens.add(this.makeToken(TokenType.L_BRACKET, "[", lineNo));
+                    case ']' -> tokens.add(this.makeToken(TokenType.R_BRACKET, "]", lineNo));
+                    case '{' -> tokens.add(this.makeToken(TokenType.L_BRACE, "{", lineNo));
+                    case '}' -> tokens.add(this.makeToken(TokenType.R_BRACE, "}", lineNo));
+                    case ';' -> tokens.add(this.makeToken(TokenType.SEMICOLON, ";", lineNo));
+                    case ',' -> tokens.add(this.makeToken(TokenType.COMMA, ",", lineNo));
+                    case '+', '*', '/', '-' ->
+                        tokens.add(this.makeToken(TokenType.MATH_OP, String.valueOf(current), lineNo));
+                    case '!' -> {
+                        currentToken = TokenContext.NOTEQUAL;
+                        currentTokenString = "!";
+                    }
+                    case '=' -> {
+                        currentToken = TokenContext.REL_OP_ASSIGN;
+                        currentTokenString = "=";
+                    }
+                    case ':' -> {
+                        currentToken = TokenContext.COLON_FC_HEADER;
+                        currentTokenString = ":";
+                    }
+                    case '"' -> {
+                        currentToken = TokenContext.STRING;
+                        currentTokenString = "\"";
+                    }
+                    case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' -> {
+                        currentToken = TokenContext.NUMBER;
+                        currentTokenString = String.valueOf(current);
+                    }
+                    case '<', '>' -> {
+                        currentToken = TokenContext.REL_OP;
+                        currentTokenString = String.valueOf(current);
+                    }
                 }
+
+                // If the character is a letter we have a ID_KEYWORD
+                if (Character.isAlphabetic(current)) {
+                    currentToken = TokenContext.ID_KEYWORD;
+                    currentTokenString = String.valueOf(current);
+                }
+
+                characterNumber++;
             } else {
-                TokenValidity state = this.validate(context, stub.concat(String.valueOf(current)));
-                /*
-                 * System.out.println(String.
-                 * format("Content: %s | COM: %s, REJ: %s, ERR: %s, ACC: %s, CON: %s",
-                 * state.getContent(), state.isComplete(),
-                 * state.isReject(), state.isError(), state.isAccepting(), state.isContinue()));
-                 */
+                // If we have started a token we add the current character to it
+                // and then check if it is still a valid token
+                TokenValidity state = this.validate(currentToken, currentTokenString.concat(String.valueOf(current)));
                 if (state.isComplete()) {
+                    // if we have a valid token we finish that token
                     tokens.add(state.makeToken(this.filename, lineNo));
-                    context = null;
-                    stub = null;
-                    character++;
+                    currentToken = null;
+                    currentTokenString = null;
+                    characterNumber++;
                 } else if (state.isReject()) {
+                    // if we have a rejecting token, we finish the current token
+                    // but don't increment the character number since we'll need to
+                    // check the character again as the start of a new token
                     tokens.add(state.makeToken(this.filename, lineNo));
-                    context = null;
-                    stub = null;
+                    currentToken = null;
+                    currentTokenString = null;
                 } else if (state.isError()) {
+                    // if we get an error we abort parsing the current line
                     System.err.println("ERROR: ".concat(state.getError()));
                     return null;
                 } else {
-                    stub = stub.concat(String.valueOf(current));
-                    character++;
+                    // the character is a valid addition to the token but
+                    // the token can still continue, so we just add the
+                    // character to the token and continue tokenizing
+                    currentTokenString = currentTokenString.concat(String.valueOf(current));
+                    characterNumber++;
                 }
             }
         }
 
-        if (context != null && stub != null && stub.length() > 0) {
-            TokenValidity state = this.validate(context, stub);
+        // If we still have a partially complete token we check if it is in a valid
+        // state
+        // and either finish the token or error
+        if (currentToken != null && currentTokenString != null && !currentTokenString.isEmpty()) {
+            TokenValidity state = this.validate(currentToken, currentTokenString);
             if (state.isAccepting() || state.isComplete() || state.isReject()) {
                 tokens.add(state.makeToken(this.filename, lineNo));
             } else {
-                System.err.println(String.format("ERROR: Incomplete/unexpected token \"%s\"", stub));
+                System.err.printf("ERROR: Incomplete/unexpected token \"%s\"%n", currentTokenString);
                 return null;
             }
         }
@@ -228,31 +256,40 @@ public class JottTokenizer {
      */
     public static ArrayList<Token> tokenize(String filename) {
         try {
+            // Read in the file and create buffer for the output
             BufferedReader reader = new BufferedReader(new FileReader(filename));
-            ArrayList<Token> tokens = new ArrayList<Token>();
+            ArrayList<Token> tokens = new ArrayList<>();
+
             JottTokenizer tokenizer = new JottTokenizer(filename);
+
+            // Read in lines until we reach EOF
             int lineNo = 1;
-            while (true) {
-                try {
-                    String line = reader.readLine();
-                    if (line == null) {
-                        break;
-                    }
+            try {
+                for (String line : reader.lines().toList()) {
                     ArrayList<Token> result = tokenizer.tokenize_line(line, lineNo);
+
+                    // If we've encountered an error we just immediately return null
                     if (result == null) {
                         return null;
                     }
+
                     tokens.addAll(result);
-                } catch (Exception e) {
-                    break;
+                    lineNo++;
                 }
-                lineNo++;
+            } catch (Exception e) {
+                System.err.println(e);
             }
+
+            // Close the reader
             reader.close();
-            System.out.println(tokens.toString());
+
+            // Print out the tokens
+            System.out.println(tokens);
 
             return tokens;
         } catch (Exception e) {
+            // If we've encountered an Exception, print it to stderr and return null
+            System.err.println(e);
             return null;
         }
     }
