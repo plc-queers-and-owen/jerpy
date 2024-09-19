@@ -53,7 +53,7 @@ public class JottTokenizer {
 
         switch (context) {
             // Simplify COLON_FC_HEADER into either FC_HEADER or COLON
-            case TokenContext.COLON_FC_HEADER -> {
+            case COLON_FC_HEADER -> {
                 if (value.equals("::")) {
                     return TokenValidity.createComplete(TokenType.FC_HEADER, "::");
                 } else {
@@ -61,7 +61,7 @@ public class JottTokenizer {
                 }
             }
             // Simplify REL_OP_ASSIGN into either REL_OP or ASSIGN
-            case TokenContext.REL_OP_ASSIGN -> {
+            case REL_OP_ASSIGN -> {
                 if (value.equals("==")) {
                     return TokenValidity.createComplete(TokenType.REL_OP, "==");
                 } else {
@@ -69,7 +69,7 @@ public class JottTokenizer {
                 }
             }
             // Completes if we have >= or <= and otherwise just finishes < or > and rejects
-            case TokenContext.REL_OP -> {
+            case REL_OP -> {
                 if (recent == '=') {
                     return TokenValidity.createComplete(TokenType.REL_OP, value);
                 } else {
@@ -77,7 +77,7 @@ public class JottTokenizer {
                 }
             }
             // Checks that a number only has one '.' and only accepts numbers
-            case TokenContext.NUMBER -> {
+            case NUMBER -> {
                 if (Character.isDigit(recent)) {
                     return TokenValidity.createAccept(TokenType.NUMBER, value);
                 } else if (recent == '.') {
@@ -98,7 +98,7 @@ public class JottTokenizer {
             }
             // We complete a string if the last character was '"'
             // otherwise we need to keep adding characters to the string literal
-            case TokenContext.STRING -> {
+            case STRING -> {
                 if (recent == '"') {
                     return TokenValidity.createComplete(TokenType.STRING, value);
                 } else {
@@ -106,7 +106,7 @@ public class JottTokenizer {
                 }
             }
             // Complete NOTEQUAL only if the last character was '='
-            case TokenContext.NOTEQUAL -> {
+            case NOTEQUAL -> {
                 if (recent == '=') {
                     return TokenValidity.createComplete(TokenType.REL_OP, "!=");
                 } else {
@@ -115,7 +115,7 @@ public class JottTokenizer {
                 }
             }
             // Accept ID_KEYWORD only if the last character was a letter or number
-            case TokenContext.ID_KEYWORD -> {
+            case ID_KEYWORD -> {
                 if (Character.isAlphabetic(recent) || Character.isDigit(recent)) {
                     return TokenValidity.createAccept(TokenType.ID_KEYWORD, value);
                 } else {
