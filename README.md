@@ -4,9 +4,8 @@
 
 To correctly execute, the host system MUST be running Java 21.
 
-# Execution
-
-Helper scripts are located in `binaries/`. Run the correct one for your system.
+# Running:
+Compile all the java files and then run the `Jott` class with the `.jott` file as the only argument.
 
 # Original README
 
