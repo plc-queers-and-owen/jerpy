@@ -1,6 +1,18 @@
 package internal;
 
+/**
+ * Thrown when the parser encounters an unexpected token
+ * Thrown by static parse methods in individual Node classes
+ * Caught by JottParser::parse
+ */
 public class ParseError extends Exception {
+    /**
+     * Used internally to generate the error message for a parsing error
+     * @param line the line the error occurred on
+     * @param expected what tokens where expected (ex: "\"Def\"", "&lt;eof&gt;)
+     * @param found what token was found (ex: "\"Def\"", "&lt;eof&gt;)
+     * @return the parsing error message
+     */
     private static String generateMessage(int line, String[] expected, String found) {
         StringBuilder builder = new StringBuilder();
         builder.append("[line ");
@@ -25,6 +37,13 @@ public class ParseError extends Exception {
         return builder.toString();
     }
 
+    /**
+     * Create a parsing error, used to terminate parsing on error
+     * @param line the line the error occurred on
+     * @param expected what tokens where expected (ex: "\"Def\"", "&lt;eof&gt;)
+     * @param found what token was found (ex: "\"Def\"", "&lt;eof&gt;)
+     * @return the parsing error message
+     */
     public ParseError(int line, String[] expected, String found) {
         super(generateMessage(line, expected, found));
     }

@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringJoiner;
 
+/**
+ * A Node representing a full Jott program
+ */
 public class ProgramNode extends Node {
     private final ArrayList<FunctionDefNode> functions;
 

@@ -3,6 +3,9 @@ package internal.nodes;
 import internal.ParseError;
 import internal.PeekingArrayIterator;
 
+/**
+ * A boolean constant, True or False
+ */
 public class BoolOperandNode extends OperandNode {
     private final boolean val;
 

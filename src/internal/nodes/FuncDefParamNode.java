@@ -5,6 +5,9 @@ import internal.PeekingArrayIterator;
 import provided.Token;
 import provided.TokenType;
 
+/**
+ * A parameter used as part of a function definition
+ */
 public class FuncDefParamNode extends Node {
     private final String id;
     private final TypeNode type;

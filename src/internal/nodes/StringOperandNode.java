@@ -1,5 +1,8 @@
 package internal.nodes;
 
+/**
+ * An operand representing a string literal
+ */
 public class StringOperandNode extends OperandNode {
     private final String val;
 

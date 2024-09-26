@@ -6,6 +6,9 @@ import internal.UnreachableException;
 import provided.Token;
 import provided.TokenType;
 
+/**
+ * A numerical constant operand
+ */
 public class NumberOperandNode extends OperandNode {
     private String val;
 

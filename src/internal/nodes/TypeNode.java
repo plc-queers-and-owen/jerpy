@@ -4,6 +4,9 @@ import internal.ParseError;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
 
+/**
+ * A Jott type as an ID_KEYWORD, not including "Void"
+ */
 public class TypeNode extends Node {
     private final Type type;
 

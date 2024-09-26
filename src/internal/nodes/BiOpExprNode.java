@@ -5,6 +5,9 @@ import internal.PeekingArrayIterator;
 import provided.Token;
 import provided.TokenType;
 
+/**
+ * An expression which performs an operation on two operands
+ */
 public class BiOpExprNode extends ExprNode {
     private final OperandNode a, b;
     private final String op;

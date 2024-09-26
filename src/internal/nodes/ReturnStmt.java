@@ -4,6 +4,9 @@ import internal.ParseError;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
 
+/**
+ * A return statement
+ */
 public class ReturnStmt extends Node {
     private final ExprNode expr;
 

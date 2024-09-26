@@ -14,15 +14,26 @@ public class PeekingArrayIterator {
     private final ArrayList<Token> internal;
     private int idx;
 
+    /**
+     * Construct a PeekingArrayIterator from an ArrayList&lt;Token&gt;
+     * @param internal the list of tokens to iterate over
+     */
     public PeekingArrayIterator(ArrayList<Token> internal) {
         this.internal = internal;
         this.idx = 0;
     }
 
+    /**
+     * Peeks the current token
+     * @return the current token, null on &lt;eof&gt;
+     */
     public Token peek() {
         return idx < internal.size() ? internal.get(idx) : null;
     }
 
+    /**
+     * Skips the current token
+     */
     public void skip() {
         if (idx < internal.size()) {
             idx++;
@@ -83,6 +94,10 @@ public class PeekingArrayIterator {
         }
     }
 
+    /**
+     * Gets the current line
+     * @return the line associated with the current token, or on &lt;eof&gt;, the line associated with the last token
+     */
     public int getCurrentLine() {
         if (idx < internal.size()) {
             return internal.get(idx).getLineNum();
@@ -107,6 +122,10 @@ public class PeekingArrayIterator {
         return tk;
     }
 
+    /**
+     * Checks if this iterator has hit &lt;eof&gt;
+     * @return true iff this iterator is finished
+     */
     public boolean isDone() {
         return idx >= internal.size();
     }

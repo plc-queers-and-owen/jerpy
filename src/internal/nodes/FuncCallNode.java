@@ -7,6 +7,9 @@ import provided.TokenType;
 import java.util.ArrayList;
 import java.util.StringJoiner;
 
+/**
+ * A function call operand
+ */
 public class FuncCallNode extends OperandNode {
     private final String name;
     private final ArrayList<ExprNode> params;

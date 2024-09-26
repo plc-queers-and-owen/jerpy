@@ -5,6 +5,9 @@ import internal.PeekingArrayIterator;
 import provided.Token;
 import provided.TokenType;
 
+/**
+ * An identifier operand -- variable reference
+ */
 public class IdOperandNode extends OperandNode {
     String id;
 

@@ -2,6 +2,9 @@ package internal.nodes;
 
 import internal.eval.Type;
 
+/**
+ * The specified return type in a function definition
+ */
 public class FunctionReturnNode extends Node {
     private Type type;
 

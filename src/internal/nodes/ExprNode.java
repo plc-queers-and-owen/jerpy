@@ -4,6 +4,9 @@ import internal.ParseError;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
 
+/**
+ * An abstract base class for Jott expressions
+ */
 public abstract class ExprNode extends Node {
     protected ExprNode(int lineNumber) {
         super(lineNumber);
