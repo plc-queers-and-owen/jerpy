@@ -93,6 +93,13 @@ public class PeekingArrayIterator {
         }
     }
 
+    /**
+     * Like peekExpect, but returns the current token instead of the match index
+     * and skips to the next token
+     * @param tokens list of String and TokenType
+     * @return the current matching token
+     * @throws ParseError on parsing error
+     */
     public Token expect(Object... tokens) throws ParseError {
         peekExpect(tokens);
         Token tk =  peek();
