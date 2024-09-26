@@ -7,6 +7,10 @@ package provided;
  * @author
  */
 
+import internal.ParseError;
+import internal.PeekingArrayIterator;
+import internal.nodes.ProgramNode;
+
 import java.util.ArrayList;
 
 public class JottParser {
@@ -17,7 +21,12 @@ public class JottParser {
      * @return the root of the Jott Parse Tree represented by the tokens.
      *         or null upon an error in parsing.
      */
-    public static JottTree parse(ArrayList<Token> tokens){
-		return null;
+    public static JottTree parse(ArrayList<Token> tokens) {
+        try {
+            return ProgramNode.parse(new PeekingArrayIterator(tokens));
+        } catch (ParseError e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 }
