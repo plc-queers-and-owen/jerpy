@@ -7,6 +7,7 @@ import provided.TokenType;
 
 /**
  * An identifier operand -- variable reference
+ * Node: <id>
  */
 public class IdOperandNode extends OperandNode {
     String id;

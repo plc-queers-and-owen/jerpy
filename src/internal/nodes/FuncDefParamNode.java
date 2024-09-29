@@ -20,6 +20,7 @@ public class FuncDefParamNode extends Node {
 
     public FuncDefParamNode parse(PeekingArrayIterator it) throws ParseError {
         Token id = it.expect(TokenType.ID_KEYWORD);
+        // Looks like we're skipping twice here?
         it.expect(TokenType.COLON);
         it.skip();
         TypeNode type = TypeNode.parse(it);
