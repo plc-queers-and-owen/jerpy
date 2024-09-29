@@ -23,7 +23,7 @@ public class FuncCallNode extends OperandNode {
     public static FuncCallNode parse(PeekingArrayIterator it) throws ParseError {
         int line = it.expect(TokenType.FC_HEADER).getLineNum();
         String name = it.expect(TokenType.ID_KEYWORD).getToken();
-        it.expect(TokenType.L_BRACKET)
+        it.expect(TokenType.L_BRACKET);
     }
 
     @Override
