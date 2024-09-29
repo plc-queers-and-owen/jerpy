@@ -1,5 +1,6 @@
 {
     "prettier.tabWidth": 4,
     "editor.detectIndentation": false,
-    "rust-analyzer.linkedProjects": ["runner/Cargo.toml"]
+    "rust-analyzer.linkedProjects": ["runner/Cargo.toml"],
+    "java.project.sourcePaths": ["src"]
 }
