@@ -7,6 +7,7 @@ import provided.TokenType;
 
 /**
  * An expression which performs an operation on two operands
+ * Node: <rel_op> | <math_op>
  */
 public class BiOpExprNode extends ExprNode {
     private final OperandNode a, b;

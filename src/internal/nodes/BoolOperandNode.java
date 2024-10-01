@@ -5,6 +5,7 @@ import internal.PeekingArrayIterator;
 
 /**
  * A boolean constant, True or False
+ * Node: <bool>
  */
 public class BoolOperandNode extends OperandNode {
     private final boolean val;
