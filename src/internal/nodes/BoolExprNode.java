@@ -1,25 +1,25 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 
 /**
  * A boolean constant, True or False
  * Node: <bool>
  */
-public class BoolOperandNode extends OperandNode {
+public class BoolExprNode extends ExprNode {
     private final boolean val;
 
-    protected BoolOperandNode(int lineNumber, boolean val) {
+    protected BoolExprNode(int lineNumber, boolean val) {
         super(lineNumber);
         this.val = val;
     }
 
-    public static BoolOperandNode parse(PeekingArrayIterator it) throws ParseError {
+    public static BoolExprNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         boolean val = it.peekExpect("True", "False") == 0;
         int line = it.peek().getLineNum();
         it.skip();
-        return new BoolOperandNode(line, val);
+        return new BoolExprNode(line, val);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
-import provided.JottTree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.StringJoiner;
 
 /**
@@ -19,7 +17,7 @@ public class ProgramNode extends Node {
         this.functions = functions;
     }
 
-    public static ProgramNode parse(PeekingArrayIterator it) throws ParseError {
+    public static ProgramNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         ArrayList<FunctionDefNode> functions = new ArrayList<>();
         while (!it.isDone()) {
             functions.add(FunctionDefNode.parse(it));

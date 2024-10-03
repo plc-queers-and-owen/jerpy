@@ -1,6 +1,6 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
 
@@ -21,7 +21,7 @@ public class FuncCallNode extends OperandNode {
     }
 
     // Needs completion
-    public static FuncCallNode parse(PeekingArrayIterator it) throws ParseError {
+    public static FuncCallNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         int line = it.expect(TokenType.FC_HEADER).getLineNum();
         String name = it.expect(TokenType.ID_KEYWORD).getToken();
         it.expect(TokenType.L_BRACKET);
