@@ -1,6 +1,6 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.Token;
 import provided.TokenType;
@@ -20,7 +20,7 @@ public class BiOpExprNode extends ExprNode {
         this.b = b;
     }
 
-    public static BiOpExprNode parse(PeekingArrayIterator it, OperandNode a) throws ParseError {
+    public static BiOpExprNode parse(PeekingArrayIterator it, OperandNode a) throws ParseUnexpectedTokenException {
         Token op = it.expect(TokenType.REL_OP, TokenType.MATH_OP);
         OperandNode b = OperandNode.parse(it);
         return new BiOpExprNode(op.getLineNum(), a, op.getToken(), b);

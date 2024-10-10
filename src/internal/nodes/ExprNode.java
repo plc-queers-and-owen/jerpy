@@ -1,6 +1,7 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseHaltException;
+import internal.ParseLowerCaseIdentifierException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
 
@@ -12,7 +13,20 @@ public abstract class ExprNode extends Node {
         super(lineNumber);
     }
 
-    public static ExprNode parse(PeekingArrayIterator it) throws ParseError {
+    public static ExprNode parse(PeekingArrayIterator it) throws ParseHaltException {
+        switch (it.peekExpect(TokenType.ID_KEYWORD, TokenType.NUMBER, "-", TokenType.FC_HEADER, TokenType.STRING)) {
+            case 0 -> {
+                String data = it.peek().getToken();
+                if (data.equals("True") || data.equals("False")) {
+                    return BoolExprNode.parse(it);
+                } else if (Character.isUpperCase(data.charAt(0))) {
+                    throw new ParseLowerCaseIdentifierException();
+                }
+            }
+            case 4 -> {
+                return StringExprNode.parse(it);
+            }
+        }
         OperandNode base = OperandNode.parse(it);
         if (it.isDone()) {
             return base;

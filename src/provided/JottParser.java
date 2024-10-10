@@ -7,7 +7,7 @@ package provided;
  * @author
  */
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.nodes.ProgramNode;
 
@@ -22,10 +22,13 @@ public class JottParser {
      *         or null upon an error in parsing.
      */
     public static JottTree parse(ArrayList<Token> tokens) {
+        PeekingArrayIterator it = new PeekingArrayIterator(tokens);
         try {
-            return ProgramNode.parse(new PeekingArrayIterator(tokens));
-        } catch (ParseError e) {
+            return ProgramNode.parse(it);
+        } catch (ParseUnexpectedTokenException e) {
+            System.err.println("Syntax Error");
             System.err.println(e.getMessage());
+            System.err.println(it.getCurrentFilename() + ":" + it.getCurrentLine());
             return null;
         }
     }

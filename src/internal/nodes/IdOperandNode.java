@@ -1,6 +1,6 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.Token;
 import provided.TokenType;
@@ -17,7 +17,7 @@ public class IdOperandNode extends OperandNode {
         this.id = id;
     }
 
-    public static IdOperandNode parse(PeekingArrayIterator it) throws ParseError {
+    public static IdOperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         Token id = it.expect(TokenType.ID_KEYWORD);
         return new IdOperandNode(id.getLineNum(), id.getToken());
     }

@@ -1,6 +1,6 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
 
@@ -15,10 +15,9 @@ public class ReturnStmt extends Node {
         this.expr = expr;
     }
 
-    public static ReturnStmt parse(PeekingArrayIterator it) throws ParseError {
-        int line = it.expect("Return").getLineNum();
-        ExprNode expr = ExprNode.parse(it);
-
+    public static ReturnStmt parse(PeekingArrayIterator it) throws ParseHaltException {
+        int line = it.getCurrentLine();
+        ExprNode expr = null;
         if (it.peekExpect("Return", TokenType.R_BRACE) == 0) {
             line = it.peek().getLineNum();
             it.skip();
@@ -30,7 +29,11 @@ public class ReturnStmt extends Node {
 
     @Override
     public String convertToJott() {
-        return "Return " + expr.convertToJott() + ";";
+        if (expr == null) {
+            return "";
+        } else {
+            return "Return " + expr.convertToJott() + ";\n";
+        }
     }
 
     @Override

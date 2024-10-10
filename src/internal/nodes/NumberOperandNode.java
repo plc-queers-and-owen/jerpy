@@ -1,6 +1,6 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.UnreachableException;
 import provided.Token;
@@ -17,7 +17,7 @@ public class NumberOperandNode extends OperandNode {
         this.val = val;
     }
 
-    public static NumberOperandNode parse(PeekingArrayIterator it) throws ParseError {
+    public static NumberOperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         switch (it.peekExpect("-", TokenType.NUMBER)) {
             case 0 -> {
                 int line = it.peek().getLineNum();

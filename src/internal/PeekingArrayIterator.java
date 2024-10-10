@@ -41,35 +41,14 @@ public class PeekingArrayIterator {
     }
 
     /**
-     * Used by peekExpect to produce ParseError messages.
-     * Has to quote String objects with '"'
-     * and quote TokenType objects with '<' and '>'.
-     * null is interpreted as "&lt;eof&gt;".
-     * @param tokens array of String and TokenType objects
-     * @return tokens as a String array which can be output to stderr
-     */
-    private static String[] peekErrorConvert(Object... tokens) {
-        String[] ret = new String[tokens.length];
-        for (int i = 0; i < tokens.length; i++) {
-            ret[i] = switch (tokens[i]) {
-                case null -> "<eof>";
-                case String s -> "\"" + s + "\"";
-                case TokenType t -> "<" + t + ">";
-                default -> null;
-            };
-        }
-        return ret;
-    }
-
-    /**
      * Peek the next token, expecting an ID_KEYWORD with a given String value
      * or a token of the given TokenType type.
      *
      * @param tokens list of String and TokenType
      * @return index into tokens which matched
-     * @throws ParseError on parsing error
+     * @throws ParseUnexpectedTokenException on parsing error
      */
-    public int peekExpect(Object... tokens) throws ParseError {
+    public int peekExpect(Object... tokens) throws ParseUnexpectedTokenException {
         if (idx < internal.size()) {
             Token current = internal.get(idx);
             for (int i = 0; i < tokens.length; i++) {
@@ -83,14 +62,14 @@ public class PeekingArrayIterator {
                     }
                 }
             }
-            throw new ParseError(current.getLineNum(), peekErrorConvert(tokens), current.getToken());
+            throw new ParseUnexpectedTokenException(tokens, current.getToken());
         } else {
             for (int i = 0; i < tokens.length; i++) {
                 if (tokens[i] == null) {
                     return i;
                 }
             }
-            throw new ParseError(getCurrentLine(), peekErrorConvert(tokens), null);
+            throw new ParseUnexpectedTokenException(tokens, null);
         }
     }
 
@@ -109,13 +88,27 @@ public class PeekingArrayIterator {
     }
 
     /**
+     * Gets the current filename
+     * @return the line associated with the current token, or on &lt;eof&gt;, the line associated with the last token
+     */
+    public String getCurrentFilename() {
+        if (idx < internal.size()) {
+            return internal.get(idx).getFilename();
+        } else if (!internal.isEmpty()) {
+            return internal.getLast().getFilename();
+        } else {
+            return "???";
+        }
+    }
+
+    /**
      * Like peekExpect, but returns the current token instead of the match index
      * and skips to the next token
      * @param tokens list of String and TokenType
      * @return the current matching token
-     * @throws ParseError on parsing error
+     * @throws ParseUnexpectedTokenException on parsing error
      */
-    public Token expect(Object... tokens) throws ParseError {
+    public Token expect(Object... tokens) throws ParseUnexpectedTokenException {
         peekExpect(tokens);
         Token tk =  peek();
         skip();

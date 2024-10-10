@@ -1,6 +1,6 @@
 package internal.nodes;
 
-import internal.ParseError;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
 
@@ -19,7 +19,7 @@ public class TypeNode extends Node {
         return type;
     }
 
-    public static TypeNode parse(PeekingArrayIterator it) throws ParseError {
+    public static TypeNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         Type type = switch (it.peekExpect("Double", "Integer", "String", "Boolean")) {
             case 0 -> Type.Double;
             case 1 -> Type.Integer;
