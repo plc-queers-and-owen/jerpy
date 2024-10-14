@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import internal.ParseUnexpectedTokenException;
+import internal.PeekingArrayIterator;
 import internal.eval.Type;
 
 /**
@@ -13,6 +15,23 @@ public class FunctionReturnNode extends Node {
         this.type = type;
     }
 
+    public static FunctionReturnNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+        int lineNumber = it.getCurrentLine();
+        Type type = Type.fromString(it.peek().getToken());
+
+        // If we get null we don't have a valid type so we error
+        if (type == null) {
+            throw new ParseUnexpectedTokenException(
+                    new String[] { "String", "Boolean", "Integer", "Double", "Void" },
+                    it.peek().getToken());
+        }
+
+        // Skip since we only peeked earlier
+        it.skip();
+
+        return new FunctionReturnNode(lineNumber, type);
+    }
+
     @Override
     public String convertToJott() {
         return type.toString();
@@ -20,7 +39,7 @@ public class FunctionReturnNode extends Node {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return true;
     }
 
     @Override
