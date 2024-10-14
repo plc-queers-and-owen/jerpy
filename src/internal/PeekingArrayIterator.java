@@ -73,6 +73,14 @@ public class PeekingArrayIterator {
         }
     }
 
+    public int peekExpectSafe(Object... tokens) {
+        try {
+            return peekExpect(tokens);
+        } catch (ParseUnexpectedTokenException e) {
+            return -1;
+        }
+    }
+
     /**
      * Gets the current line
      * @return the line associated with the current token, or on &lt;eof&gt;, the line associated with the last token
