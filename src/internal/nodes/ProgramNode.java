@@ -1,5 +1,6 @@
 package internal.nodes;
 
+import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 
@@ -17,7 +18,7 @@ public class ProgramNode extends Node {
         this.functions = functions;
     }
 
-    public static ProgramNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+    public static ProgramNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         ArrayList<FunctionDefNode> functions = new ArrayList<>();
         while (!it.isDone()) {
             functions.add(FunctionDefNode.parse(it));

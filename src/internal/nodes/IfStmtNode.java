@@ -1,6 +1,9 @@
 package internal.nodes;
 
-import internal.ParseError;
+import java.util.ArrayList;
+
+import internal.ParseHaltException;
+import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
 
@@ -21,17 +24,17 @@ public class IfStmtNode extends Node {
         this.els = els;
     }
 
-    public static IfStmtNode parse(PeekingArrayIterator it) throws ParseError {
+    public static IfStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         int line = it.expect("If").getLineNum();
-        it.expect(TOKEN.L_BRACKET);
+        it.expect(TokenType.L_BRACKET);
         ExprNode expr = ExprNode.parse(it);
-        it.expect(TOKEN.R_BRACKET);
-        it.expect(TOKEN.L_BRACE);
+        it.expect(TokenType.R_BRACKET);
+        it.expect(TokenType.L_BRACE);
         BodyNode body = BodyNode.parse(it);
-        it.expect(TOKEN.R_BRACE);
+        it.expect(TokenType.R_BRACE);
         ArrayList<ElseIfNode> elifs = new ArrayList<ElseIfNode>();
         ElseNode els = null;
-        while (it.peekExpect("Elseif")){
+        while (it.peekExpectSafe("Elseif") >= 0) {
             ElseIfNode elif = ElseIfNode.parse(it);
             if (elif != null){
                 elifs.add(elif);
@@ -40,7 +43,7 @@ public class IfStmtNode extends Node {
                 break;
             }
         }
-        if (it.peekExpect("Else")){
+        if (it.peekExpectSafe("Else") >= 0) {
             els = ElseNode.parse(it);
         }
 
@@ -50,7 +53,9 @@ public class IfStmtNode extends Node {
     @Override
     public String convertToJott() {
         String main = "If[" + this.expr.convertToJott() + "]{\n" + this.body.convertToJott() + "\n}\n";
-        this.elifs.foreach((elif) -> { main += elif.convertToJott(); });
+        for (ElseIfNode elif : elifs) {
+            main += elif.convertToJott();
+        }
         
         if (this.els != null){
             main += this.els.convertToJott();

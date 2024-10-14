@@ -74,6 +74,21 @@ public class PeekingArrayIterator {
     }
 
     /**
+     * Does a peekExpect without throwing an exception. If the expectation isn't
+     * met, returns -1.
+     * 
+     * @param tokens list of String and TokenType
+     * @return index into tokens which matched, or -1 if no match
+     */
+    public int peekExpectSafe(Object... tokens) {
+        try {
+            return peekExpect(tokens);
+        } catch (ParseUnexpectedTokenException e) {
+            return -1;
+        }
+    }
+
+    /**
      * Gets the current line
      * @return the line associated with the current token, or on &lt;eof&gt;, the line associated with the last token
      */
