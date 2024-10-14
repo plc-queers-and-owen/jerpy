@@ -1,5 +1,6 @@
 package internal.nodes;
 
+import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.UnreachableException;
@@ -13,7 +14,7 @@ public abstract class OperandNode extends ExprNode {
         super(lineNumber);
     }
 
-    public static OperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+    public static OperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         return switch (it.peekExpect(TokenType.NUMBER, "-", TokenType.FC_HEADER, TokenType.ID_KEYWORD)) {
             case 0, 1 -> NumberOperandNode.parse(it);
             case 2 -> FuncCallNode.parse(it);

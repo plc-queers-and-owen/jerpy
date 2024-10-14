@@ -2,6 +2,7 @@ package internal.nodes;
 
 import java.util.ArrayList;
 
+import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
@@ -23,7 +24,7 @@ public class IfStmtNode extends Node {
         this.els = els;
     }
 
-    public static IfStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+    public static IfStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         int line = it.expect("If").getLineNum();
         it.expect(TokenType.L_BRACKET);
         ExprNode expr = ExprNode.parse(it);
@@ -52,9 +53,9 @@ public class IfStmtNode extends Node {
     @Override
     public String convertToJott() {
         String main = "If[" + this.expr.convertToJott() + "]{\n" + this.body.convertToJott() + "\n}\n";
-        this.elifs.forEach((elif) -> {
+        for (ElseIfNode elif : elifs) {
             main += elif.convertToJott();
-        });
+        }
         
         if (this.els != null){
             main += this.els.convertToJott();

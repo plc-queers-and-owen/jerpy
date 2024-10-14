@@ -1,5 +1,6 @@
 package internal.nodes;
 
+import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
@@ -8,7 +9,6 @@ import provided.TokenType;
  * A return statement
  */
 public class ElseNode extends Node {
-    private final ExprNode expr;
     private final BodyNode body;
 
     protected ElseNode(int lineNumber, BodyNode body) {
@@ -16,7 +16,7 @@ public class ElseNode extends Node {
         this.body = body;
     }
 
-    public static ElseNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+    public static ElseNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         int line = it.expect("Else").getLineNum();
         it.expect(TokenType.L_BRACE);
         BodyNode body = BodyNode.parse(it);

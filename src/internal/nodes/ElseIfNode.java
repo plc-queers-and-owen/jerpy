@@ -1,5 +1,6 @@
 package internal.nodes;
 
+import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
@@ -17,7 +18,7 @@ public class ElseIfNode extends Node {
         this.body = body;
     }
 
-    public static ElseIfNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+    public static ElseIfNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         int line = it.expect("Elseif").getLineNum();
         it.expect(TokenType.L_BRACKET);
         ExprNode expr = ExprNode.parse(it);
