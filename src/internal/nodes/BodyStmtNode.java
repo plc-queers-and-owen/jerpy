@@ -72,10 +72,10 @@ public class BodyStmtNode extends Node {
 
     @Override
     public boolean validateTree() {
-
+        return true;
     }
 
-    public static BodyStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+    public static BodyStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         switch (it.peekExpect(TokenType.FC_HEADER, "While", "If", TokenType.ID_KEYWORD)) {
             case 0:
                 return new BodyStmtNode(it.getCurrentLine(), FuncCallNode.parse(it));
@@ -83,7 +83,7 @@ public class BodyStmtNode extends Node {
                 return new BodyStmtNode(it.getCurrentLine(), WhileLoopNode.parse(it));
             case 2:
                 return new BodyStmtNode(it.getCurrentLine(), IfStmtNode.parse(it));
-            case 3:
+            default:
                 return new BodyStmtNode(it.getCurrentLine(), AsmtNode.parse(it));
         }
     }
@@ -97,7 +97,7 @@ public class BodyStmtNode extends Node {
                 return this.ifStmt.convertToJott();
             case BodyStmtType.WHILE:
                 return this.whileLoop.convertToJott();
-            case BodyStmtType.ASMT:
+            default:
                 return this.asmt.convertToJott();
         }
     }
