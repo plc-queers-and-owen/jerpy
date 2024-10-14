@@ -73,6 +73,13 @@ public class PeekingArrayIterator {
         }
     }
 
+    /**
+     * Does a peekExpect without throwing an exception. If the expectation isn't
+     * met, returns -1.
+     * 
+     * @param tokens list of String and TokenType
+     * @return index into tokens which matched, or -1 if no match
+     */
     public int peekExpectSafe(Object... tokens) {
         try {
             return peekExpect(tokens);
