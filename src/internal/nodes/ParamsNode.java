@@ -30,20 +30,22 @@ public class ParamsNode extends Node{
 
     @Override
     public String convertToJott() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'convertToJott'");
+        ArrayList<String> paramStrings = new ArrayList<>();
+        for (ExprNode param : this.params) {
+            paramStrings.add(param.convertToJott());
+
+        }
+        return String.join(",", paramStrings);
+
     }
 
     @Override
     public boolean validateTree() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validateTree'");
+        return true;
     }
 
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
     
 }
