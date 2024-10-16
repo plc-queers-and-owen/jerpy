@@ -18,7 +18,7 @@ public class FuncDefParamNode extends Node {
         this.type = type;
     }
 
-    public FuncDefParamNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
+    public static FuncDefParamNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         Token id = it.expect(TokenType.ID_KEYWORD);
         // Looks like we're skipping twice here?
         it.expect(TokenType.COLON);
