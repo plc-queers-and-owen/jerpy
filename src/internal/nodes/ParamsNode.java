@@ -1,10 +1,31 @@
 package internal.nodes;
 
-public class ParamsNode extends Node{
+import java.util.ArrayList;
 
-    protected ParamsNode(int lineNumber) {
+import internal.ParseHaltException;
+import internal.ParseUnexpectedTokenException;
+import internal.PeekingArrayIterator;
+
+public class ParamsNode extends Node{
+    private final ArrayList<ExprNode> params;
+
+    protected ParamsNode(int lineNumber, ArrayList<ExprNode> params) {
         super(lineNumber);
-        //TODO Auto-generated constructor stub
+        this.params = params;
+    }
+
+    public static ParamsNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
+        ArrayList<ExprNode> params = new ArrayList<>();
+        while (true) {
+            if(it.peekExpectSafe("]") == 0) {
+                return new ParamsNode(it.getCurrentLine(), params);
+            } else {
+                if (params.size() != 0) {
+                    it.expect(",");
+                }
+                params.add(ExprNode.parse(it));
+            }
+        }
     }
 
     @Override
