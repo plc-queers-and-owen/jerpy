@@ -277,6 +277,7 @@ public class JottTokenizer {
 
                     // If we've encountered an error we just immediately return null
                     if (result == null) {
+                        reader.close();
                         return null;
                     }
 

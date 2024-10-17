@@ -1,5 +1,7 @@
 package provided;
 
+import internal.ParseHaltException;
+
 /**
  * This class is responsible for paring Jott Tokens
  * into a Jott parse tree.
@@ -7,7 +9,6 @@ package provided;
  * @author
  */
 
-import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.nodes.ProgramNode;
 
@@ -25,7 +26,7 @@ public class JottParser {
         PeekingArrayIterator it = new PeekingArrayIterator(tokens);
         try {
             return ProgramNode.parse(it);
-        } catch (ParseUnexpectedTokenException e) {
+        } catch (ParseHaltException e) {
             System.err.println("Syntax Error");
             System.err.println(e.getMessage());
             System.err.println(it.getCurrentFilename() + ":" + it.getCurrentLine());

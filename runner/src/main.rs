@@ -36,9 +36,8 @@ pub fn execute(target: String, source: PathBuf, build: PathBuf) {
             .args([
                 "/C",
                 format!(
-                    "javac -d {} {}/*.java {}/*/*.java",
+                    "javac -d {} $(find {} -name \"*.java\")",
                     build.clone().into_os_string().to_str().unwrap(),
-                    source.clone().into_os_string().to_str().unwrap(),
                     source.clone().into_os_string().to_str().unwrap()
                 )
                 .as_str(),
@@ -90,9 +89,8 @@ pub fn execute(target: String, source: PathBuf, build: PathBuf) {
             .args([
                 "-c",
                 format!(
-                    "javac -d {} {}/*.java {}/*/*.java",
+                    "javac -d {} $(find {} -name \"*.java\")",
                     build.clone().into_os_string().to_str().unwrap(),
-                    source.clone().into_os_string().to_str().unwrap(),
                     source.clone().into_os_string().to_str().unwrap()
                 )
                 .as_str(),
