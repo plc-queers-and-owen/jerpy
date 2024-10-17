@@ -40,6 +40,20 @@ public class PeekingArrayIterator {
         }
     }
 
+    public String getContext() {
+        return String.join("",
+                this.internal
+                        .subList(Math.clamp(idx - 10000, 0, this.internal.size()),
+                                Math.clamp(idx, 0, this.internal.size()))
+                        .stream().map(value -> value.getToken()).toList())
+                + "  --> " + this.internal.get(Math.clamp(idx, 0, this.internal.size() - 1)).getToken() + " <--  "
+                + String.join("",
+                                this.internal
+                                .subList(Math.clamp(idx + 1, 0, this.internal.size()),
+                                        Math.clamp(idx + 100000, 0, this.internal.size()))
+                                .stream().map(value -> value.getToken()).toList());
+    }
+
     /**
      * Peek the next token, expecting an ID_KEYWORD with a given String value
      * or a token of the given TokenType type.
@@ -62,14 +76,14 @@ public class PeekingArrayIterator {
                     }
                 }
             }
-            throw new ParseUnexpectedTokenException(tokens, current.getToken());
+            throw new ParseUnexpectedTokenException(tokens, current.getToken(), this.getContext());
         } else {
             for (int i = 0; i < tokens.length; i++) {
                 if (tokens[i] == null) {
                     return i;
                 }
             }
-            throw new ParseUnexpectedTokenException(tokens, null);
+            throw new ParseUnexpectedTokenException(tokens, null, this.getContext());
         }
     }
 

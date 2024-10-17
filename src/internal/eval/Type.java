@@ -47,4 +47,22 @@ public enum Type {
             default -> null;
         };
     }
+
+    public String toString() {
+        switch (this) {
+            case Type.Double:
+                return "Double";
+            case Type.Integer:
+                return "Integer";
+            case Type.String:
+                return "String";
+            case Type.Boolean:
+                return "Boolean";
+            case Type.Void:
+                return "Void";
+            default:
+                return "";
+
+        }
+    }
 }

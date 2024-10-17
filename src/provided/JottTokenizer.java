@@ -277,6 +277,7 @@ public class JottTokenizer {
 
                     // If we've encountered an error we just immediately return null
                     if (result == null) {
+                        reader.close();
                         return null;
                     }
 
@@ -291,7 +292,8 @@ public class JottTokenizer {
             reader.close();
 
             // Print out the tokens
-            System.out.println(tokens);
+            // System.out.println(String.join(" ", tokens.stream().map(v ->
+            // v.toString()).toList()));
 
             return tokens;
         } catch (Exception e) {

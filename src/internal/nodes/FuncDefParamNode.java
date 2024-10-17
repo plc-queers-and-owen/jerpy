@@ -22,14 +22,13 @@ public class FuncDefParamNode extends Node {
         Token id = it.expect(TokenType.ID_KEYWORD);
         // Looks like we're skipping twice here?
         it.expect(TokenType.COLON);
-        it.skip();
         TypeNode type = TypeNode.parse(it);
         return new FuncDefParamNode(id.getLineNum(), id.getToken(), type);
     }
 
     @Override
     public String convertToJott() {
-        return id + ": " + type;
+        return id + ": " + type.convertToJott();
     }
 
     @Override

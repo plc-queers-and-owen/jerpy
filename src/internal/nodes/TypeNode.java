@@ -34,7 +34,7 @@ public class TypeNode extends Node {
 
     @Override
     public String convertToJott() {
-        return type.toString();
+        return this.type.toString();
     }
 
     @Override

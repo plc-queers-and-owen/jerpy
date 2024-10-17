@@ -13,7 +13,7 @@ public class ParseUnexpectedTokenException extends ParseHaltException {
      * @param found what token was found (ex: "\"Def\"", "&lt;eof&gt;)
      * @return the parsing error message
      */
-    private static String generateMessage(String[] expected, String found) {
+    private static String generateMessage(String[] expected, String found, String context) {
         StringBuilder builder = new StringBuilder();
         builder.append("expected ");
         for (int i = 0; i < expected.length; i++) {
@@ -32,6 +32,8 @@ public class ParseUnexpectedTokenException extends ParseHaltException {
         }
         builder.append(", found ");
         builder.append(found);
+        builder.append("\nContext: ");
+        builder.append(context);
         return builder.toString();
     }
 
@@ -61,7 +63,7 @@ public class ParseUnexpectedTokenException extends ParseHaltException {
      * @param expected what tokens where expected
      * @param found what token was found (ex: "\"Def\"", "&lt;eof&gt;)
      */
-    public ParseUnexpectedTokenException(Object[] expected, String found) {
-        super(generateMessage(peekErrorConvert(expected), found));
+    public ParseUnexpectedTokenException(Object[] expected, String found, String context) {
+        super(generateMessage(peekErrorConvert(expected), found, context));
     }
 }

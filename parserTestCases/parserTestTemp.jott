@@ -1,0 +1,4 @@
+Def foo[]:Void{Integer while;
+while = 5;
+::print[while];
+}

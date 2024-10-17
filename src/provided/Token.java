@@ -56,6 +56,6 @@ public class Token {
     }
 
     public String toString() {
-        return String.format("%s : %s @ %s", this.type, this.token, this.lineNum);
+        return String.format("%s:%s", this.token, this.type);
     }
 }

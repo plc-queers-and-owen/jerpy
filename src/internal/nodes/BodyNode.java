@@ -19,10 +19,18 @@ public class BodyNode extends Node {
     public static BodyNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         ArrayList<BodyStmtNode> statements = new ArrayList<>();
         while (true) {
-            if (it.peekExpectSafe("Return") == 0) {
-                return new BodyNode(it.getCurrentLine(), statements, ReturnStmt.parse(it));
-            } else {
-                statements.add(BodyStmtNode.parse(it));
+            switch (it.peekExpectSafe("Return", ";", "}")) {
+                case 0:
+                    ReturnStmt returnStmt = ReturnStmt.parse(it);
+                    it.peekExpect("}");
+                    return new BodyNode(it.getCurrentLine(), statements, returnStmt);
+                case 1:
+                    it.skip();
+                    break;
+                case 2:
+                    return new BodyNode(it.getCurrentLine(), statements, null);
+                default:
+                    statements.add(BodyStmtNode.parse(it));
             }
         }
     }
@@ -33,8 +41,10 @@ public class BodyNode extends Node {
         for (BodyStmtNode statement : this.bodyStatements) {
             result += statement.convertToJott() + "\n";
         }
+        if (this.returnStmt != null) {
+            result += this.returnStmt.convertToJott();
+        }
 
-        result += this.returnStmt.convertToJott();
         return result;
     }
 
