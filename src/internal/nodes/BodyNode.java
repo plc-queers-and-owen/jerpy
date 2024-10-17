@@ -19,10 +19,15 @@ public class BodyNode extends Node {
     public static BodyNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         ArrayList<BodyStmtNode> statements = new ArrayList<>();
         while (true) {
-            if (it.peekExpectSafe("Return") == 0) {
-                return new BodyNode(it.getCurrentLine(), statements, ReturnStmt.parse(it));
-            } else {
-                statements.add(BodyStmtNode.parse(it));
+            switch (it.peekExpectSafe("Return", ";", "}")) {
+                case 0:
+                    return new BodyNode(it.getCurrentLine(), statements, ReturnStmt.parse(it));
+                case 1:
+                    it.skip();
+                case 2:
+                    return new BodyNode(it.getCurrentLine(), statements, null);
+                default:
+                    statements.add(BodyStmtNode.parse(it));
             }
         }
     }

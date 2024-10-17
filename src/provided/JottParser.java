@@ -30,6 +30,7 @@ public class JottParser {
             System.err.println("Syntax Error");
             System.err.println(e.getMessage());
             System.err.println(it.getCurrentFilename() + ":" + it.getCurrentLine());
+            e.printStackTrace();
             return null;
         }
     }

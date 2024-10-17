@@ -23,7 +23,7 @@ public class FunctionReturnNode extends Node {
         if (type == null) {
             throw new ParseUnexpectedTokenException(
                     new String[] { "String", "Boolean", "Integer", "Double", "Void" },
-                    it.peek().getToken());
+                    it.peek().getToken(), it.getContext());
         }
 
         // Skip since we only peeked earlier
