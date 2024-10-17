@@ -23,7 +23,7 @@ public class StringExprNode extends ExprNode {
 
     @Override
     public String convertToJott() {
-        return "\"" + val + "\""; // no need to escape anything
+        return val; // no need to escape anything
     }
 
     @Override

@@ -25,12 +25,15 @@ public class JottParser {
     public static JottTree parse(ArrayList<Token> tokens) {
         PeekingArrayIterator it = new PeekingArrayIterator(tokens);
         try {
-            return ProgramNode.parse(it);
+            ProgramNode parsed = ProgramNode.parse(it);
+            // System.out.println("RESULT: " + it.getCurrentFilename() + "\n\n" +
+            // parsed.convertToJott());
+            return parsed;
         } catch (ParseHaltException e) {
             System.err.println("Syntax Error");
             System.err.println(e.getMessage());
             System.err.println(it.getCurrentFilename() + ":" + it.getCurrentLine());
-            e.printStackTrace();
+            // e.printStackTrace();
             return null;
         }
     }
