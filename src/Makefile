@@ -1,21 +1,33 @@
+tTC=build/tokenizerTestCases
+pTC=build/parserTestCases
+p3TC=build/phase3testcases
 
-main: comp_dir tTC
+main: compile_src $(tTC) $(pTC)
 
-tTC: comp_dir/tokenizerTestCases
-pTC: comp_dir/parserTestCases
-p3TC: comp_dir/phase3testcases
 
-$(p3TC): comp_dir
-	cp -r ../phase3testcases comp_dir/
+$(p3TC): build
+	cp -r ../phase3testcases build/
 
-$(pTC): comp_dir
-	cp -r ../parserTestCases comp_dir/
+$(pTC): build
+	cp -r ../parserTestCases build/
 
-$(tTC): comp_dir
-	cp -r ../tokenizerTestCases comp_dir/
+$(tTC): build
+	cp -r ../tokenizerTestCases build/
 
-comp_dir:
-	javac testers/JottTokenizerTester.java internal/* provided/* -d comp_dir
+compile_src: compile_provided compile_internal compile_testers 
+compile_testers: build
+	javac -d build testers/*.java 
+
+compile_internal: build
+	javac -d build internal/*.java
+	javac -d build internal/nodes/*.java
+
+compile_provided: build
+	javac -d build provided/*
+
+
+build:
+	mkdir build
 
 clean: 
-	rm -r comp_dir
+	rm -r build
