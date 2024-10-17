@@ -25,7 +25,7 @@ public class VariableDeclarationNode extends Node {
 
     @Override
     public String convertToJott() {
-        return this.type.toString() + " " + this.name + ';';
+        return this.type.convertToJott() + " " + this.name + ';';
     }
 
     @Override

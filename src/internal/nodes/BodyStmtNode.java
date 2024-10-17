@@ -78,7 +78,9 @@ public class BodyStmtNode extends Node {
     public static BodyStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         switch (it.peekExpect(TokenType.FC_HEADER, "While", "If", TokenType.ID_KEYWORD)) {
             case 0:
-                return new BodyStmtNode(it.getCurrentLine(), FuncCallNode.parse(it));
+                BodyStmtNode result = new BodyStmtNode(it.getCurrentLine(), FuncCallNode.parse(it));
+                it.expect(";");
+                return result;
             case 1:
                 return new BodyStmtNode(it.getCurrentLine(), WhileLoopNode.parse(it));
             case 2:
@@ -92,7 +94,7 @@ public class BodyStmtNode extends Node {
     public String convertToJott() {
         switch (this.getType()) {
             case BodyStmtType.FUNC_CALL:
-                return this.funcCall.convertToJott();
+                return this.funcCall.convertToJott() + ";";
             case BodyStmtType.IF:
                 return this.ifStmt.convertToJott();
             case BodyStmtType.WHILE:

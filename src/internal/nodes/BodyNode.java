@@ -21,9 +21,12 @@ public class BodyNode extends Node {
         while (true) {
             switch (it.peekExpectSafe("Return", ";", "}")) {
                 case 0:
-                    return new BodyNode(it.getCurrentLine(), statements, ReturnStmt.parse(it));
+                    ReturnStmt returnStmt = ReturnStmt.parse(it);
+                    it.peekExpect("}");
+                    return new BodyNode(it.getCurrentLine(), statements, returnStmt);
                 case 1:
                     it.skip();
+                    break;
                 case 2:
                     return new BodyNode(it.getCurrentLine(), statements, null);
                 default:
@@ -38,8 +41,10 @@ public class BodyNode extends Node {
         for (BodyStmtNode statement : this.bodyStatements) {
             result += statement.convertToJott() + "\n";
         }
+        if (this.returnStmt != null) {
+            result += this.returnStmt.convertToJott();
+        }
 
-        result += this.returnStmt.convertToJott();
         return result;
     }
 

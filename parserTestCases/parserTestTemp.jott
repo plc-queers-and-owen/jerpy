@@ -1,4 +1,4 @@
-Def main[]:Integer{internal.nodes.TypeNode@2e0fa5d3 x;
-x = 5.0;
-Return x;
+Def foo[]:Void{Integer while;
+while = 5;
+::print[while];
 }
