@@ -1,5 +1,6 @@
 package internal.nodes;
 
+import java.util.Arrays;
 import java.util.List;
 
 import provided.JottTree;
@@ -48,4 +49,38 @@ public abstract class Node implements JottTree {
      * @return List of Node objects
      */
     public abstract List<Node> getChildren();
+
+    /**
+     * Gets the closest node (upward) matching the specified name(s), possibly the
+     * current node.
+     * 
+     * @param names Node class name(s) (ie TypeNode). This does not account for
+     *              subclasses.
+     * @return First match against any of the specified names, or null if no match
+     */
+    public Node getClosest(String... names) {
+        if (Arrays.asList(names).contains(this.getClass().getSimpleName())) {
+            return this;
+        } else if (this.parent == null) {
+            return null;
+        } else {
+            return this.parent.getClosest(names);
+        }
+    }
+
+    /**
+     * Gets the closest node (upward) matching the specified name(s), not including
+     * the current node
+     * 
+     * @param names Node class name(s) (ie TypeNode). This does not account for
+     *              subclasses.
+     * @return First match against any of the specified names, or null if no match
+     */
+    public Node getClosestParent(String... names) {
+        if (this.parent == null) {
+            return null;
+        } else {
+            return this.parent.getClosest(names);
+        }
+    }
 }
