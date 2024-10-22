@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
@@ -13,6 +15,7 @@ public class ReturnStmt extends Node {
     protected ReturnStmt(int lineNumber, ExprNode expr) {
         super(lineNumber);
         this.expr = expr;
+        this.adopt();
     }
 
     public static ReturnStmt parse(PeekingArrayIterator it) throws ParseHaltException {
@@ -43,5 +46,10 @@ public class ReturnStmt extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(expr);
     }
 }

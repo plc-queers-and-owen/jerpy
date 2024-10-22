@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.UnreachableException;
@@ -15,6 +17,7 @@ public class NumberOperandNode extends OperandNode {
     protected NumberOperandNode(int lineNumber, String val) {
         super(lineNumber);
         this.val = val;
+        this.adopt();
     }
 
     public static NumberOperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
@@ -46,5 +49,10 @@ public class NumberOperandNode extends OperandNode {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of();
     }
 }

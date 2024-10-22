@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.Token;
@@ -14,6 +16,7 @@ public class StringExprNode extends ExprNode {
     protected StringExprNode(int lineNumber, String val) {
         super(lineNumber);
         this.val = val;
+        this.adopt();
     }
 
     public static StringExprNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
@@ -33,5 +36,10 @@ public class StringExprNode extends ExprNode {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of();
     }
 }

@@ -19,6 +19,7 @@ public class FunctionBodyNode extends Node {
         super(lineNumber);
         this.varDeclarations = varDeclarations;
         this.body = body;
+        this.adopt();
     }
 
     public static FunctionBodyNode parse(PeekingArrayIterator it) throws ParseHaltException {
@@ -70,5 +71,13 @@ public class FunctionBodyNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>();
+        children.addAll(this.varDeclarations);
+        children.add(body);
+        return children;
     }
 }

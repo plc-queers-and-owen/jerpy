@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.BodyStmtType;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
@@ -18,6 +20,7 @@ public class BodyStmtNode extends Node {
         this.ifStmt = null;
         this.whileLoop = null;
         this.asmt = null;
+        this.adopt();
     }
 
     protected BodyStmtNode(int lineNumber, IfStmtNode contained) {
@@ -26,6 +29,7 @@ public class BodyStmtNode extends Node {
         this.ifStmt = contained;
         this.whileLoop = null;
         this.asmt = null;
+        this.adopt();
     }
 
     protected BodyStmtNode(int lineNumber, WhileLoopNode contained) {
@@ -34,6 +38,7 @@ public class BodyStmtNode extends Node {
         this.ifStmt = null;
         this.whileLoop = contained;
         this.asmt = null;
+        this.adopt();
     }
 
     protected BodyStmtNode(int lineNumber, AsmtNode contained) {
@@ -42,6 +47,7 @@ public class BodyStmtNode extends Node {
         this.ifStmt = null;
         this.whileLoop = null;
         this.asmt = contained;
+        this.adopt();
     }
 
     /**
@@ -102,5 +108,23 @@ public class BodyStmtNode extends Node {
             default:
                 return this.asmt.convertToJott();
         }
+    }
+
+    public Node getNode() {
+        switch (this.getType()) {
+            case BodyStmtType.FUNC_CALL:
+                return this.funcCall;
+            case BodyStmtType.IF:
+                return this.ifStmt;
+            case BodyStmtType.WHILE:
+                return this.whileLoop;
+            default:
+                return this.asmt;
+        }
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(this.getNode());
     }
 }

@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
@@ -12,6 +14,7 @@ public class WhileLoopNode extends Node {
         super(lineNumber);
         this.expression = expression;
         this.body = body;
+        this.adopt();
     }
 
     @Override
@@ -39,6 +42,11 @@ public class WhileLoopNode extends Node {
         BodyNode body = BodyNode.parse(it);
         it.expect("}");
         return new WhileLoopNode(it.getCurrentLine(), expression, body);
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(expression, body);
     }
 
 }

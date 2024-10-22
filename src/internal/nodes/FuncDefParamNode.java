@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import provided.Token;
@@ -16,6 +18,7 @@ public class FuncDefParamNode extends Node {
         super(lineNumber);
         this.id = id;
         this.type = type;
+        this.adopt();
     }
 
     public static FuncDefParamNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
@@ -38,5 +41,10 @@ public class FuncDefParamNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(type);
     }
 }

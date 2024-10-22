@@ -24,6 +24,7 @@ public class FunctionDefNode extends Node {
         this.params = params;
         this.returnType = returnType;
         this.body = body;
+        this.adopt();
     }
 
     public static FunctionDefNode parse(PeekingArrayIterator it) throws ParseHaltException {
@@ -86,5 +87,14 @@ public class FunctionDefNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>();
+        children.addAll(this.params);
+        children.add(returnType);
+        children.add(body);
+        return children;
     }
 }

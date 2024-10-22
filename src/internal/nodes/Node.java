@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import provided.JottTree;
 
 /**
@@ -8,12 +10,42 @@ import provided.JottTree;
  */
 public abstract class Node implements JottTree {
     private final int lineNumber;
+    private Node parent;
 
     protected Node(int lineNumber) {
         this.lineNumber = lineNumber;
+        this.parent = null;
+    }
+
+    /**
+     * Sets the current node as the parent of all its children
+     * (Must be called separately because variables won't be assigned yet in the
+     * constructor)
+     */
+    protected void adopt() {
+        for (Node child : this.getChildren()) {
+            child.setParent(this);
+        }
     }
 
     public int getLineNumber() {
         return lineNumber;
     }
+
+    public Node getParent() {
+        return this.parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
+
+    /**
+     * Gets a List<Node> of all of this node's children.
+     * This is mostly only useful for traversal,
+     * the order in which each child will appear is not necessarily defined.
+     * 
+     * @return List of Node objects
+     */
+    public abstract List<Node> getChildren();
 }

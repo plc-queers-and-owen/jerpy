@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
@@ -13,6 +15,7 @@ public class TypeNode extends Node {
     protected TypeNode(int lineNumber, Type type) {
         super(lineNumber);
         this.type = type;
+        this.adopt();
     }
 
     public Type getType() {
@@ -44,5 +47,10 @@ public class TypeNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of();
     }
 }

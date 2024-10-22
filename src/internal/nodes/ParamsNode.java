@@ -1,6 +1,7 @@
 package internal.nodes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
@@ -12,6 +13,7 @@ public class ParamsNode extends Node{
     protected ParamsNode(int lineNumber, ArrayList<ExprNode> params) {
         super(lineNumber);
         this.params = params;
+        this.adopt();
     }
 
     public static ParamsNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -46,6 +48,13 @@ public class ParamsNode extends Node{
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>();
+        children.addAll(this.params);
+        return children;
     }
     
 }

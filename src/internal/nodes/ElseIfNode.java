@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
@@ -16,6 +18,7 @@ public class ElseIfNode extends Node {
         super(lineNumber);
         this.expr = expr;
         this.body = body;
+        this.adopt();
     }
 
     public static ElseIfNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -42,5 +45,10 @@ public class ElseIfNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(this.expr, this.body);
     }
 }

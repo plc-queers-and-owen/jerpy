@@ -5,6 +5,7 @@ import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
 /**
@@ -16,6 +17,7 @@ public class ProgramNode extends Node {
     protected ProgramNode(int lineNumber, ArrayList<FunctionDefNode> functions) {
         super(lineNumber);
         this.functions = functions;
+        this.adopt();
     }
 
     public static ProgramNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -42,5 +44,12 @@ public class ProgramNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>();
+        children.addAll(this.functions);
+        return children;
     }
 }

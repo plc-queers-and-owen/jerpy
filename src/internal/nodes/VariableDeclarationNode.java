@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import provided.TokenType;
@@ -13,6 +15,7 @@ public class VariableDeclarationNode extends Node {
         super(lineNumber);
         this.type = type;
         this.name = name;
+        this.adopt();
     }
 
     public static VariableDeclarationNode parse(PeekingArrayIterator it) throws ParseHaltException {
@@ -35,6 +38,11 @@ public class VariableDeclarationNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(type);
     }
 
 }

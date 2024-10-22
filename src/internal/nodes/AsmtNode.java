@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
@@ -12,6 +14,7 @@ public class AsmtNode extends Node {
         super(lineNumber);
         this.idNode = id;
         this.expressionNode = expression;
+        this.adopt();
     }
 
     @Override
@@ -35,5 +38,10 @@ public class AsmtNode extends Node {
         ExprNode expression = ExprNode.parse(it);
         it.expect(";");
         return new AsmtNode(it.getCurrentLine(), id, expression);
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(this.idNode, this.expressionNode);
     }
 }

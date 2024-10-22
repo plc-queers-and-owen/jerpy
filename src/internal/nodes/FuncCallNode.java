@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
@@ -16,6 +18,7 @@ public class FuncCallNode extends OperandNode {
         super(lineNumber);
         this.name = name;
         this.params = params;
+        this.adopt();
     }
 
     // Needs completion
@@ -40,5 +43,10 @@ public class FuncCallNode extends OperandNode {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(this.params);
     }
 }

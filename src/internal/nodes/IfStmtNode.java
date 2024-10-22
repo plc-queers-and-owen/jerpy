@@ -1,6 +1,7 @@
 package internal.nodes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
@@ -22,6 +23,7 @@ public class IfStmtNode extends Node {
         this.body = body;
         this.elifs = elseifs;
         this.els = els;
+        this.adopt();
     }
 
     public static IfStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -70,5 +72,17 @@ public class IfStmtNode extends Node {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>();
+        children.add(expr);
+        children.add(body);
+        children.addAll(this.elifs);
+        if (this.els != null) {
+            children.add(this.els);
+        }
+        return children;
     }
 }

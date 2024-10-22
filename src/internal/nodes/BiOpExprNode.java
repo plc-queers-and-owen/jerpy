@@ -1,5 +1,7 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
@@ -19,6 +21,7 @@ public class BiOpExprNode extends ExprNode {
         this.a = a;
         this.op = op;
         this.b = b;
+        this.adopt();
     }
 
     public static BiOpExprNode parse(PeekingArrayIterator it, OperandNode a)
@@ -40,5 +43,10 @@ public class BiOpExprNode extends ExprNode {
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(this.a, this.b);
     }
 }
