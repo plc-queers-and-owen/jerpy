@@ -47,4 +47,13 @@ public class FuncDefParamNode extends Node {
     public List<Node> getChildren() {
         return List.of(type);
     }
+
+    @Override
+    public String getSymbol() {
+        return this.id;
+    }
+
+    public TypeNode getType() {
+        return this.type;
+    }
 }

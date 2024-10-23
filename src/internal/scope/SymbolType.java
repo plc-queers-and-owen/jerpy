@@ -2,7 +2,8 @@ package internal.scope;
 
 public enum SymbolType {
     Variable,
-    Function;
+    Parameter,
+            Function;
 
     public String toString() {
         switch (this) {
@@ -10,6 +11,8 @@ public enum SymbolType {
                 return "Variable";
             case SymbolType.Function:
                 return "Function";
+            case SymbolType.Parameter:
+                return "Parameter";
             default:
                 return "Unknown";
         }

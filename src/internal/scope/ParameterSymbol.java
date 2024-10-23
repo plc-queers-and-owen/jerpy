@@ -1,22 +1,24 @@
 package internal.scope;
+
 import internal.eval.Type;
 import internal.eval.TypedValue;
-import internal.nodes.VariableDeclarationNode;
+import internal.nodes.FuncDefParamNode;
 
-public class VariableSymbol extends SymbolItem<VariableDeclarationNode> {
+public class ParameterSymbol extends SymbolItem<FuncDefParamNode> {
     private TypedValue value;
-    public VariableSymbol(String symbol, int definedAt, VariableDeclarationNode target) {
+
+    public ParameterSymbol(String symbol, int definedAt, FuncDefParamNode target) {
         super(symbol, definedAt, target);
         this.value = null;
     }
 
-    public VariableSymbol(String symbol, int definedAt, VariableDeclarationNode target, TypedValue value) {
+    public ParameterSymbol(String symbol, int definedAt, FuncDefParamNode target, TypedValue value) {
         super(symbol, definedAt, target);
         this.value = value;
     }
 
-    public static VariableSymbol from(VariableDeclarationNode target) {
-        return new VariableSymbol(target.getSymbol(), target.getLineNumber(), target);
+    public static ParameterSymbol from(FuncDefParamNode target) {
+        return new ParameterSymbol(target.getSymbol(), target.getLineNumber(), target);
     }
 
     public Type getType() {
@@ -24,7 +26,7 @@ public class VariableSymbol extends SymbolItem<VariableDeclarationNode> {
     }
 
     public String getName() {
-        return this.target.getName();
+        return this.target.getSymbol();
     }
 
     public TypedValue getValue() {
@@ -41,6 +43,6 @@ public class VariableSymbol extends SymbolItem<VariableDeclarationNode> {
 
     @Override
     public SymbolType getSymbolType() {
-        return SymbolType.Variable;
+        return SymbolType.Parameter;
     }
 }

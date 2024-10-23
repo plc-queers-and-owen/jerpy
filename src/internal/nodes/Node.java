@@ -2,7 +2,6 @@ package internal.nodes;
 
 import java.util.Arrays;
 import java.util.List;
-
 import provided.JottTree;
 
 /**
@@ -58,10 +57,9 @@ public abstract class Node implements JottTree {
      *              subclasses.
      * @return First match against any of the specified names, or null if no match
      */
-    @SuppressWarnings("unchecked")
-    public <T extends Node> T getClosest(String... names) {
+    public Node getClosest(String... names) {
         if (Arrays.asList(names).contains(this.getClass().getSimpleName())) {
-            return (T) this;
+            return this;
         } else if (this.parent == null) {
             return null;
         } else {
@@ -77,7 +75,7 @@ public abstract class Node implements JottTree {
      *              subclasses.
      * @return First match against any of the specified names, or null if no match
      */
-    public <T extends Node> T getClosestParent(String... names) {
+    public Node getClosestParent(String... names) {
         if (this.parent == null) {
             return null;
         } else {
