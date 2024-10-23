@@ -6,4 +6,10 @@ public class FunctionSymbol extends SymbolItem<FunctionDefNode> {
     public FunctionSymbol(String symbol, int definedAt, FunctionDefNode target) {
         super(symbol, definedAt, target);
     }
+
+    @Override
+    public SymbolType getSymbolType() {
+        return SymbolType.Function;
+    }
+
 }

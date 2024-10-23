@@ -40,4 +40,9 @@ public class VariableSymbol extends SymbolItem<VariableDeclarationNode> {
     public boolean hasValue() {
         return this.value != null;
     }
+
+    @Override
+    public SymbolType getSymbolType() {
+        return SymbolType.Variable;
+    }
 }

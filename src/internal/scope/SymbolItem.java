@@ -26,4 +26,6 @@ public abstract class SymbolItem<T extends Node> {
         this.definedAt = definedAt;
         this.target = target;
     }
+
+    public abstract SymbolType getSymbolType();
 }

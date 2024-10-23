@@ -58,9 +58,10 @@ public abstract class Node implements JottTree {
      *              subclasses.
      * @return First match against any of the specified names, or null if no match
      */
-    public Node getClosest(String... names) {
+    @SuppressWarnings("unchecked")
+    public <T extends Node> T getClosest(String... names) {
         if (Arrays.asList(names).contains(this.getClass().getSimpleName())) {
-            return this;
+            return (T) this;
         } else if (this.parent == null) {
             return null;
         } else {
@@ -76,7 +77,7 @@ public abstract class Node implements JottTree {
      *              subclasses.
      * @return First match against any of the specified names, or null if no match
      */
-    public Node getClosestParent(String... names) {
+    public <T extends Node> T getClosestParent(String... names) {
         if (this.parent == null) {
             return null;
         } else {
