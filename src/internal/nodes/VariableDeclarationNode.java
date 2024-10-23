@@ -9,7 +9,16 @@ import provided.TokenType;
 public class VariableDeclarationNode extends Node {
 
     TypeNode type;
+
+    public TypeNode getType() {
+        return type;
+    }
+
     String name;
+
+    public String getName() {
+        return name;
+    }
 
     protected VariableDeclarationNode(int lineNumber, TypeNode type, String name) {
         super(lineNumber);
@@ -43,6 +52,11 @@ public class VariableDeclarationNode extends Node {
     @Override
     public List<Node> getChildren() {
         return List.of(type);
+    }
+
+    @Override
+    public String getSymbol() {
+        return this.name;
     }
 
 }

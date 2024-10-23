@@ -83,4 +83,8 @@ public abstract class Node implements JottTree {
             return this.parent.getClosest(names);
         }
     }
+
+    public String getSymbol() {
+        return null;
+    }
 }
