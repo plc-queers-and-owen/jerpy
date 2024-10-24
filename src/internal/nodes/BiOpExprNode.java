@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
 
@@ -37,7 +38,7 @@ public class BiOpExprNode extends ExprNode {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 
 /**
  * A boolean constant, True or False
@@ -31,7 +32,7 @@ public class BoolExprNode extends ExprNode {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
+import internal.scope.Scope;
 
 /**
  * The specified return type in a function definition
@@ -41,7 +42,7 @@ public class FunctionReturnNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

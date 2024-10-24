@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.TokenType;
 
 /**
@@ -39,7 +40,7 @@ public class ElseIfNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

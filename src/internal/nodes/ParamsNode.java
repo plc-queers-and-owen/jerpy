@@ -6,6 +6,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 
 public class ParamsNode extends Node{
     private final ArrayList<ExprNode> params;
@@ -42,7 +43,7 @@ public class ParamsNode extends Node{
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

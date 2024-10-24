@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.UnreachableException;
+import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
 
@@ -43,7 +44,7 @@ public class NumberOperandNode extends OperandNode {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

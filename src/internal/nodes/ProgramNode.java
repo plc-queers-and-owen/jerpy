@@ -3,6 +3,7 @@ package internal.nodes;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,9 @@ public class ProgramNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
-        return functions.stream().allMatch(FunctionDefNode::validateTree);
+    public boolean validateTree(Scope scope) {
+        return true;
+        // return functions.stream().allMatch(FunctionDefNode::validateTree);
     }
 
     @Override

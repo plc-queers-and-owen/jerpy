@@ -4,6 +4,7 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.TokenType;
 
 /**
@@ -40,7 +41,7 @@ public class ReturnStmt extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

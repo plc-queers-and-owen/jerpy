@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
+import internal.scope.Scope;
 
 /**
  * A Jott type as an ID_KEYWORD, not including "Void"
@@ -41,7 +42,7 @@ public class TypeNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

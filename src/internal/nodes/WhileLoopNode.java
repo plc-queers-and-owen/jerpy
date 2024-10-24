@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 
 public class WhileLoopNode extends Node {
     private final ExprNode expression;
@@ -23,7 +24,7 @@ public class WhileLoopNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 

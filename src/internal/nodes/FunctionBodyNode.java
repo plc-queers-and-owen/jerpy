@@ -6,6 +6,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
+import internal.scope.Scope;
 
 /**
  * The body of a function definition
@@ -65,7 +66,7 @@ public class FunctionBodyNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
