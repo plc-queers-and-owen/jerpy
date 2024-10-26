@@ -6,74 +6,95 @@ import internal.SemanticException;
 import internal.SemanticRedefinitionException;
 import internal.SemanticUnknownSymbolException;
 
+/**
+ * A class representing the global scope, and containing the local scope of each
+ * function.
+ */
 public class Scope {
-    private HashMap<String, VariableSymbol> variables;
-    private HashMap<String, FunctionSymbol> functions;
-    private HashMap<String, ParameterSymbol> parameters;
+    private HashMap<String, LocalScope> scopes;
+    private String currentScope;
+
+    /**
+     * Gets a mapping of function name : local scope
+     * 
+     * @return Mapping of Name:Scope
+     */
+    public HashMap<String, LocalScope> getScopes() {
+        return scopes;
+    }
+
+    /**
+     * Gets the name of the current scope
+     * 
+     * @return Current scope name, or null.
+     */
+    public String getCurrentScopeName() {
+        return this.currentScope;
+    }
+
+    /**
+     * Gets the current scope
+     * 
+     * @return Current scope, or null.
+     */
+    public LocalScope getCurrentScope() {
+        if (this.currentScope == null) {
+            return null;
+        }
+        return this.scopes.get(currentScope);
+    }
+
+    /**
+     * Enables the specified scope as the current scope.
+     * 
+     * @param scope Current scope name
+     * @throws SemanticException Throws if the scope name is not yet defined.
+     */
+    public void enableScope(String scope) throws SemanticException {
+        if (this.scopes.containsKey(scope)) {
+            this.currentScope = scope;
+        } else {
+            throw new SemanticUnknownSymbolException(scope);
+        }
+    }
+
+    /**
+     * Sets the current scope to null.
+     */
+    public void clearScope() {
+        this.currentScope = null;
+    }
+
+    /**
+     * Defines a function symbol and initializes its local scope.
+     * 
+     * @param func Function symbol
+     * @throws SemanticException Thrown if the function has already been defined.
+     */
+    public void define(FunctionSymbol func) throws SemanticException {
+        if (this.scopes.containsKey(func.getSymbol())) {
+            throw new SemanticRedefinitionException(func.getSymbol());
+        }
+        this.scopes.put(func.getSymbol(), new LocalScope(func));
+    }
+
+    /**
+     * Gets a scope by name
+     * 
+     * @param scope Scope name
+     * @return LocalScope object, if it exists.
+     * @throws SemanticException Thrown if the scope name is unknown.
+     */
+    public LocalScope getScope(String scope) throws SemanticException {
+        if (this.scopes.containsKey(scope)) {
+            return this.scopes.get(scope);
+        } else {
+            throw new SemanticUnknownSymbolException(scope);
+        }
+    }
 
     public Scope() {
-        this.variables = new HashMap<>();
-        this.functions = new HashMap<>();
-        this.parameters = new HashMap<>();
-    }
-
-    public HashMap<String, VariableSymbol> getVariables() {
-        return variables;
-    }
-
-    public HashMap<String, FunctionSymbol> getFunctions() {
-        return functions;
-    }
-
-    public HashMap<String, ParameterSymbol> getParameters() {
-        return parameters;
-    }
-
-    public VariableSymbol getVariable(String name) throws SemanticException {
-        if (this.variables.containsKey(name)) {
-            return this.variables.get(name);
-        } else {
-            throw new SemanticUnknownSymbolException(name);
-        }
-    }
-
-    public FunctionSymbol getFunction(String name) throws SemanticException {
-        if (this.functions.containsKey(name)) {
-            return this.functions.get(name);
-        } else {
-            throw new SemanticUnknownSymbolException(name);
-        }
-    }
-
-    public ParameterSymbol getParameter(String name) throws SemanticException {
-        if (this.parameters.containsKey(name)) {
-            return this.parameters.get(name);
-        } else {
-            throw new SemanticUnknownSymbolException(name);
-        }
-    }
-
-    public void define(VariableSymbol symbol) throws SemanticException {
-        if (this.variables.containsKey(symbol.getSymbol())) {
-            throw new SemanticRedefinitionException(symbol.getSymbol());
-        } else {
-            this.variables.put(symbol.getSymbol(), symbol);
-        }
-    }
-
-    public void define(FunctionSymbol symbol) throws SemanticException {
-        if (this.functions.containsKey(symbol.getSymbol())) {
-            throw new SemanticRedefinitionException(symbol.getSymbol());
-        } else {
-            this.functions.put(symbol.getSymbol(), symbol);
-        }
-    }
-
-    public void define(ParameterSymbol symbol) throws SemanticException {
-        if (this.parameters.containsKey(symbol.getSymbol())) {
-            throw new SemanticRedefinitionException(symbol.getSymbol());
-        } else {
-            this.parameters.put(symbol.getSymbol(), symbol);
-        }
+        this.scopes = new HashMap<>();
+        this.currentScope = null;
     }
 }
