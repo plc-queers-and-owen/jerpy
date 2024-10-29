@@ -2,6 +2,7 @@ package internal.nodes;
 import java.util.List;
 import provided.JottTree;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Abstract base class for AST nodes
@@ -64,6 +65,51 @@ public abstract class Node implements JottTree {
         } else {
             return this.getParent().getClosestParent(node);
         }
+    }
+
+    /**
+     * Gets the closest parent that matches any of the supplied node names
+     * 
+     * @param nodeNames Any number of node names to search for (ie ElseNode,
+     *                  ExprNode, etc)
+     * @return The resulting Node, or null if none were found.
+     */
+    public Node getAnyClosestParent(String... nodeNames) {
+        if (this.getParent() == null) {
+            return null;
+        }
+        if (Arrays.asList(nodeNames).contains(this.getParent().getClass().getSimpleName())) {
+            return this.getParent();
+        } else {
+            return this.getParent().getAnyClosestParent(nodeNames);
+        }
+    }
+
+    /**
+     * Helper to check if this node is in a loop
+     * 
+     * @return True if in a loop, false otherwise
+     */
+    public boolean isLooped() {
+        return this.getClosestParent(WhileLoopNode.class) != null;
+    }
+
+    /**
+     * Helper to get the enclosing BodyNode.
+     * 
+     * @return The closest enclosure, or null if invalid context
+     */
+    public BodyNode getEnclosingBody() {
+        return this.getClosestParent(BodyNode.class);
+    }
+
+    /**
+     * Gets the function definition this node is inside.
+     * 
+     * @return The enclosing FunctionDefNode, or null if invalid context
+     */
+    public FunctionDefNode getEnclosingFunction() {
+        return this.getClosestParent(FunctionDefNode.class);
     }
 
     /**
