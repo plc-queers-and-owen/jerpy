@@ -1,8 +1,7 @@
 package internal.nodes;
-
-import java.util.Arrays;
 import java.util.List;
 import provided.JottTree;
+import java.util.ArrayList;
 
 /**
  * Abstract base class for AST nodes
@@ -50,37 +49,41 @@ public abstract class Node implements JottTree {
     public abstract List<Node> getChildren();
 
     /**
-     * Gets the closest node (upward) matching the specified name(s), possibly the
-     * current node.
+     * Gets the closest parent of type T (Class instance of Node subclass)
      * 
-     * @param names Node class name(s) (ie TypeNode). This does not account for
-     *              subclasses.
-     * @return First match against any of the specified names, or null if no match
+     * @param <T>  Node type (implicit)
+     * @param node Node class instance: ie ParamsNode.class
+     * @return A node of type T if found, or null if not
      */
-    public Node getClosest(String... names) {
-        if (Arrays.asList(names).contains(this.getClass().getSimpleName())) {
-            return this;
-        } else if (this.parent == null) {
+    public <T extends Node> T getClosestParent(Class<T> node) {
+        if (this.getParent() == null) {
             return null;
+        }
+        if (node.isInstance(this.getParent())) {
+            return node.cast(this.getParent());
         } else {
-            return this.parent.getClosest(names);
+            return this.getParent().getClosestParent(node);
         }
     }
 
     /**
-     * Gets the closest node (upward) matching the specified name(s), not including
-     * the current node
+     * Get all children matching a specific Node subclass
      * 
-     * @param names Node class name(s) (ie TypeNode). This does not account for
-     *              subclasses.
-     * @return First match against any of the specified names, or null if no match
+     * @param <T>  Node type (implicit)
+     * @param node Node class instance: ie ParamsNode.class
+     * @return A List<T> of nodes
      */
-    public Node getClosestParent(String... names) {
-        if (this.parent == null) {
-            return null;
-        } else {
-            return this.parent.getClosest(names);
+    public <T extends Node> List<T> getChildrenLike(Class<T> node) {
+        ArrayList<T> results = new ArrayList<>();
+        for (Node item : this.getChildren()) {
+            if (node.isInstance(item)) {
+                results.add(node.cast(item));
+            }
+
+            results.addAll(item.getChildrenLike(node));
         }
+
+        return results;
     }
 
     public String getSymbol() {
