@@ -1,8 +1,11 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
+import internal.scope.Scope;
 
 /**
  * The specified return type in a function definition
@@ -13,6 +16,7 @@ public class FunctionReturnNode extends Node {
     protected FunctionReturnNode(int lineNumber, Type type) {
         super(lineNumber);
         this.type = type;
+        this.adopt();
     }
 
     public static FunctionReturnNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
@@ -38,12 +42,17 @@ public class FunctionReturnNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
 
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of();
     }
 }

@@ -1,10 +1,12 @@
 package internal.nodes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 
 public class BodyNode extends Node {
     private final ArrayList<BodyStmtNode> bodyStatements;
@@ -14,6 +16,7 @@ public class BodyNode extends Node {
         super(lineNumber);
         this.bodyStatements = bodyStatements;
         this.returnStmt = returnStmt;
+        this.adopt();
     }
 
     public static BodyNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -49,11 +52,21 @@ public class BodyNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<Node>();
+        children.addAll(this.bodyStatements);
+        if (this.returnStmt != null) {
+            children.add(returnStmt);
+        }
+        return children;
     }
 }

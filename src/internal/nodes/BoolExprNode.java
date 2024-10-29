@@ -1,7 +1,10 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 
 /**
  * A boolean constant, True or False
@@ -13,6 +16,7 @@ public class BoolExprNode extends ExprNode {
     protected BoolExprNode(int lineNumber, boolean val) {
         super(lineNumber);
         this.val = val;
+        this.adopt();
     }
 
     public static BoolExprNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
@@ -28,11 +32,16 @@ public class BoolExprNode extends ExprNode {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of();
     }
 }

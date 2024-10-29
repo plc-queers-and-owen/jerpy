@@ -1,7 +1,10 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
 
@@ -16,6 +19,7 @@ public class FuncDefParamNode extends Node {
         super(lineNumber);
         this.id = id;
         this.type = type;
+        this.adopt();
     }
 
     public static FuncDefParamNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
@@ -32,11 +36,25 @@ public class FuncDefParamNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(type);
+    }
+
+    @Override
+    public String getSymbol() {
+        return this.id;
+    }
+
+    public TypeNode getType() {
+        return this.type;
     }
 }

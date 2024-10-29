@@ -1,5 +1,7 @@
 package provided;
 
+import internal.scope.Scope;
+
 /**
  * Interface for all Jott parse tree nodes
  *
@@ -18,7 +20,7 @@ public interface JottTree {
 	 * Errors validating will be reported to System.err
      * @return true if valid Jott code; false otherwise
      */
-    public boolean validateTree();
+    public boolean validateTree(Scope scope);
 	
 	/**
 	 * This will execute the Jott code represented by this JottTree node.

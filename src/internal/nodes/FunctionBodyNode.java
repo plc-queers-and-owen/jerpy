@@ -6,6 +6,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import internal.eval.Type;
+import internal.scope.Scope;
 
 /**
  * The body of a function definition
@@ -19,6 +20,7 @@ public class FunctionBodyNode extends Node {
         super(lineNumber);
         this.varDeclarations = varDeclarations;
         this.body = body;
+        this.adopt();
     }
 
     public static FunctionBodyNode parse(PeekingArrayIterator it) throws ParseHaltException {
@@ -64,11 +66,19 @@ public class FunctionBodyNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>();
+        children.addAll(this.varDeclarations);
+        children.add(body);
+        return children;
     }
 }

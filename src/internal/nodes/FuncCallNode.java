@@ -1,8 +1,11 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.TokenType;
 
 /**
@@ -16,6 +19,7 @@ public class FuncCallNode extends OperandNode {
         super(lineNumber);
         this.name = name;
         this.params = params;
+        this.adopt();
     }
 
     // Needs completion
@@ -34,11 +38,16 @@ public class FuncCallNode extends OperandNode {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(this.params);
     }
 }

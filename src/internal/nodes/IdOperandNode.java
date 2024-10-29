@@ -1,7 +1,10 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
 
@@ -15,6 +18,7 @@ public class IdOperandNode extends OperandNode {
     protected IdOperandNode(int lineNumber, String id) {
         super(lineNumber);
         this.id = id;
+        this.adopt();
     }
 
     public static IdOperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
@@ -28,11 +32,16 @@ public class IdOperandNode extends OperandNode {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of();
     }
 }

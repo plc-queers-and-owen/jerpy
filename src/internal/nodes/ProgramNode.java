@@ -3,8 +3,10 @@ package internal.nodes;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
 /**
@@ -16,6 +18,7 @@ public class ProgramNode extends Node {
     protected ProgramNode(int lineNumber, ArrayList<FunctionDefNode> functions) {
         super(lineNumber);
         this.functions = functions;
+        this.adopt();
     }
 
     public static ProgramNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -36,11 +39,19 @@ public class ProgramNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
-        return functions.stream().allMatch(FunctionDefNode::validateTree);
+    public boolean validateTree(Scope scope) {
+        return true;
+        // return functions.stream().allMatch(FunctionDefNode::validateTree);
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        List<Node> children = new ArrayList<>();
+        children.addAll(this.functions);
+        return children;
     }
 }

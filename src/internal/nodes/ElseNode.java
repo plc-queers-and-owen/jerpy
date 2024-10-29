@@ -1,8 +1,11 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.TokenType;
 
 /**
@@ -14,6 +17,7 @@ public class ElseNode extends Node {
     protected ElseNode(int lineNumber, BodyNode body) {
         super(lineNumber);
         this.body = body;
+        this.adopt();
     }
 
     public static ElseNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -31,11 +35,16 @@ public class ElseNode extends Node {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(body);
     }
 }

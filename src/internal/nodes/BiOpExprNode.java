@@ -1,8 +1,11 @@
 package internal.nodes;
 
+import java.util.List;
+
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
 
@@ -19,6 +22,7 @@ public class BiOpExprNode extends ExprNode {
         this.a = a;
         this.op = op;
         this.b = b;
+        this.adopt();
     }
 
     public static BiOpExprNode parse(PeekingArrayIterator it, OperandNode a)
@@ -34,11 +38,16 @@ public class BiOpExprNode extends ExprNode {
     }
 
     @Override
-    public boolean validateTree() {
+    public boolean validateTree(Scope scope) {
         return true;
     }
 
     @Override
     public void execute() {
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return List.of(this.a, this.b);
     }
 }
