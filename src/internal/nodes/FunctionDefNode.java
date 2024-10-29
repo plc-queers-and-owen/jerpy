@@ -5,6 +5,9 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.SemanticNameException;
+import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -83,7 +86,34 @@ public class FunctionDefNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        if (!Character.isLowerCase(this.name.charAt(0))) {
+            new SemanticNameException(this.name).report(this);
+            return false;
+        }
+
+        if (!this.params.stream().allMatch(p -> p.validateTree(scope))) {
+            return false;
+        }
+
+        if (!this.returnType.validateTree(scope)) {
+            return false;
+        }
+
+        try {
+            scope.define(new FunctionSymbol(this.getSymbol(), getLineNumber(), this));
+            scope.enableScope(this.getSymbol());
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
+
+        if (!this.body.validateTree(scope)) {
+            scope.clearScope();
+            return false;
+        }
+
         return true;
+
     }
 
     @Override
