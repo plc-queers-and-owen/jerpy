@@ -14,15 +14,15 @@ import provided.TokenType;
 public class StringExprNode extends ExprNode {
     private final String val;
 
-    protected StringExprNode(int lineNumber, String val) {
-        super(lineNumber);
+    protected StringExprNode(String filename, int lineNumber, String val) {
+        super(filename, lineNumber);
         this.val = val;
         this.adopt();
     }
 
     public static StringExprNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         Token tk = it.expect(TokenType.STRING);
-        return new StringExprNode(tk.getLineNum(), tk.getToken());
+        return new StringExprNode(it.getCurrentFilename(), tk.getLineNum(), tk.getToken());
     }
 
     @Override

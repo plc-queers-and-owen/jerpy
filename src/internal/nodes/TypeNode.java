@@ -13,8 +13,8 @@ import internal.scope.Scope;
 public class TypeNode extends Node {
     private final Type type;
 
-    protected TypeNode(int lineNumber, Type type) {
-        super(lineNumber);
+    protected TypeNode(String filename, int lineNumber, Type type) {
+        super(filename, lineNumber);
         this.type = type;
         this.adopt();
     }
@@ -31,7 +31,7 @@ public class TypeNode extends Node {
             case 3 -> Type.Boolean;
             default -> null;
         };
-        TypeNode ret = new TypeNode(it.peek().getLineNum(), type);
+        TypeNode ret = new TypeNode(it.getCurrentFilename(), it.peek().getLineNum(), type);
         it.skip();
         return ret;
     }

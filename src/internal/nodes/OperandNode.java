@@ -10,8 +10,8 @@ import provided.TokenType;
  * An abstract base class representing an operand
  */
 public abstract class OperandNode extends ExprNode {
-    protected OperandNode(int lineNumber) {
-        super(lineNumber);
+    protected OperandNode(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     public static OperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {

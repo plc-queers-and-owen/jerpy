@@ -18,9 +18,9 @@ public class FunctionDefNode extends Node {
     public FunctionReturnNode returnType;
     public FunctionBodyNode body;
 
-    protected FunctionDefNode(int lineNumber, String name, List<FuncDefParamNode> params,
-            FunctionReturnNode returnType, FunctionBodyNode body) {
-        super(lineNumber);
+    protected FunctionDefNode(String filename, int lineNumber, String name, List<FuncDefParamNode> params,
+                    FunctionReturnNode returnType, FunctionBodyNode body) {
+        super(filename, lineNumber);
         this.name = name;
         this.params = params;
         this.returnType = returnType;
@@ -52,7 +52,7 @@ public class FunctionDefNode extends Node {
         FunctionBodyNode body = FunctionBodyNode.parse(it);
         it.expect(TokenType.R_BRACE);
 
-        return new FunctionDefNode(line, name, params, returnType, body);
+        return new FunctionDefNode(it.getCurrentFilename(), line, name, params, returnType, body);
     }
 
     @Override

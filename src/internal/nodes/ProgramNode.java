@@ -15,8 +15,8 @@ import java.util.StringJoiner;
 public class ProgramNode extends Node {
     private final ArrayList<FunctionDefNode> functions;
 
-    protected ProgramNode(int lineNumber, ArrayList<FunctionDefNode> functions) {
-        super(lineNumber);
+    protected ProgramNode(String filename, int lineNumber, ArrayList<FunctionDefNode> functions) {
+        super(filename, lineNumber);
         this.functions = functions;
         this.adopt();
     }
@@ -26,7 +26,7 @@ public class ProgramNode extends Node {
         while (!it.isDone()) {
             functions.add(FunctionDefNode.parse(it));
         }
-        return new ProgramNode(1, functions);
+        return new ProgramNode(it.getCurrentFilename(), 1, functions);
     }
 
     @Override
@@ -40,8 +40,7 @@ public class ProgramNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
-        // return functions.stream().allMatch(FunctionDefNode::validateTree);
+        return functions.stream().allMatch(node -> node.validateTree(scope));
     }
 
     @Override

@@ -14,8 +14,8 @@ import provided.TokenType;
 public class ElseNode extends Node {
     private final BodyNode body;
 
-    protected ElseNode(int lineNumber, BodyNode body) {
-        super(lineNumber);
+    protected ElseNode(String filename, int lineNumber, BodyNode body) {
+        super(filename, lineNumber);
         this.body = body;
         this.adopt();
     }
@@ -26,7 +26,7 @@ public class ElseNode extends Node {
         BodyNode body = BodyNode.parse(it);
         it.expect(TokenType.R_BRACE);
 
-        return new ElseNode(line, body);
+        return new ElseNode(it.getCurrentFilename(), line, body);
     }
 
     @Override

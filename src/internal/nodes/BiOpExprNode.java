@@ -17,8 +17,8 @@ public class BiOpExprNode extends ExprNode {
     private final OperandNode a, b;
     private final String op;
 
-    protected BiOpExprNode(int lineNumber, OperandNode a, String op, OperandNode b) {
-        super(lineNumber);
+    protected BiOpExprNode(String filename, int lineNumber, OperandNode a, String op, OperandNode b) {
+        super(filename, lineNumber);
         this.a = a;
         this.op = op;
         this.b = b;
@@ -29,7 +29,7 @@ public class BiOpExprNode extends ExprNode {
             throws ParseUnexpectedTokenException, ParseHaltException {
         Token op = it.expect(TokenType.REL_OP, TokenType.MATH_OP);
         OperandNode b = OperandNode.parse(it);
-        return new BiOpExprNode(op.getLineNum(), a, op.getToken(), b);
+        return new BiOpExprNode(it.getCurrentFilename(), op.getLineNum(), a, op.getToken(), b);
     }
 
     @Override

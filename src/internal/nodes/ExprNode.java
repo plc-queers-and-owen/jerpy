@@ -9,8 +9,8 @@ import provided.TokenType;
  * An abstract base class for Jott expressions
  */
 public abstract class ExprNode extends Node {
-    protected ExprNode(int lineNumber) {
-        super(lineNumber);
+    protected ExprNode(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     public static ExprNode parse(PeekingArrayIterator it) throws ParseHaltException {

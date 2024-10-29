@@ -13,8 +13,8 @@ import provided.TokenType;
 public class ReturnStmt extends Node {
     private final ExprNode expr;
 
-    protected ReturnStmt(int lineNumber, ExprNode expr) {
-        super(lineNumber);
+    protected ReturnStmt(String filename, int lineNumber, ExprNode expr) {
+        super(filename, lineNumber);
         this.expr = expr;
         this.adopt();
     }
@@ -28,7 +28,7 @@ public class ReturnStmt extends Node {
             expr = ExprNode.parse(it);
             it.expect(TokenType.SEMICOLON);
         }
-        return new ReturnStmt(line, expr);
+        return new ReturnStmt(it.getCurrentFilename(), line, expr);
     }
 
     @Override

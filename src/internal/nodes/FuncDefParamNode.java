@@ -15,8 +15,8 @@ public class FuncDefParamNode extends Node {
     private final String id;
     private final TypeNode type;
 
-    protected FuncDefParamNode(int lineNumber, String id, TypeNode type) {
-        super(lineNumber);
+    protected FuncDefParamNode(String filename, int lineNumber, String id, TypeNode type) {
+        super(filename, lineNumber);
         this.id = id;
         this.type = type;
         this.adopt();
@@ -27,7 +27,7 @@ public class FuncDefParamNode extends Node {
         // Looks like we're skipping twice here?
         it.expect(TokenType.COLON);
         TypeNode type = TypeNode.parse(it);
-        return new FuncDefParamNode(id.getLineNum(), id.getToken(), type);
+        return new FuncDefParamNode(it.getCurrentFilename(), id.getLineNum(), id.getToken(), type);
     }
 
     @Override

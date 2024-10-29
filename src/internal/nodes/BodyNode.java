@@ -12,8 +12,8 @@ public class BodyNode extends Node {
     private final ArrayList<BodyStmtNode> bodyStatements;
     private final ReturnStmt returnStmt;
 
-    protected BodyNode(int lineNumber, ArrayList<BodyStmtNode> bodyStatements, ReturnStmt returnStmt) {
-        super(lineNumber);
+    protected BodyNode(String filename, int lineNumber, ArrayList<BodyStmtNode> bodyStatements, ReturnStmt returnStmt) {
+        super(filename, lineNumber);
         this.bodyStatements = bodyStatements;
         this.returnStmt = returnStmt;
         this.adopt();
@@ -26,12 +26,12 @@ public class BodyNode extends Node {
                 case 0:
                     ReturnStmt returnStmt = ReturnStmt.parse(it);
                     it.peekExpect("}");
-                    return new BodyNode(it.getCurrentLine(), statements, returnStmt);
+                    return new BodyNode(it.getCurrentFilename(), it.getCurrentLine(), statements, returnStmt);
                 case 1:
                     it.skip();
                     break;
                 case 2:
-                    return new BodyNode(it.getCurrentLine(), statements, null);
+                    return new BodyNode(it.getCurrentFilename(), it.getCurrentLine(), statements, null);
                 default:
                     statements.add(BodyStmtNode.parse(it));
             }

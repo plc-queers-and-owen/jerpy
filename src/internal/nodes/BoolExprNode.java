@@ -13,8 +13,8 @@ import internal.scope.Scope;
 public class BoolExprNode extends ExprNode {
     private final boolean val;
 
-    protected BoolExprNode(int lineNumber, boolean val) {
-        super(lineNumber);
+    protected BoolExprNode(String filename, int lineNumber, boolean val) {
+        super(filename, lineNumber);
         this.val = val;
         this.adopt();
     }
@@ -23,7 +23,7 @@ public class BoolExprNode extends ExprNode {
         boolean val = it.peekExpect("True", "False") == 0;
         int line = it.peek().getLineNum();
         it.skip();
-        return new BoolExprNode(line, val);
+        return new BoolExprNode(it.getCurrentFilename(), line, val);
     }
 
     @Override

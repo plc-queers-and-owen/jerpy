@@ -15,8 +15,8 @@ public class BodyStmtNode extends Node {
     private final WhileLoopNode whileLoop;
     private final AsmtNode asmt;
 
-    protected BodyStmtNode(int lineNumber, FuncCallNode contained) {
-        super(lineNumber);
+    protected BodyStmtNode(String filename, int lineNumber, FuncCallNode contained) {
+        super(filename, lineNumber);
         this.funcCall = contained;
         this.ifStmt = null;
         this.whileLoop = null;
@@ -24,8 +24,8 @@ public class BodyStmtNode extends Node {
         this.adopt();
     }
 
-    protected BodyStmtNode(int lineNumber, IfStmtNode contained) {
-        super(lineNumber);
+    protected BodyStmtNode(String filename, int lineNumber, IfStmtNode contained) {
+        super(filename, lineNumber);
         this.funcCall = null;
         this.ifStmt = contained;
         this.whileLoop = null;
@@ -33,8 +33,8 @@ public class BodyStmtNode extends Node {
         this.adopt();
     }
 
-    protected BodyStmtNode(int lineNumber, WhileLoopNode contained) {
-        super(lineNumber);
+    protected BodyStmtNode(String filename, int lineNumber, WhileLoopNode contained) {
+        super(filename, lineNumber);
         this.funcCall = null;
         this.ifStmt = null;
         this.whileLoop = contained;
@@ -42,8 +42,8 @@ public class BodyStmtNode extends Node {
         this.adopt();
     }
 
-    protected BodyStmtNode(int lineNumber, AsmtNode contained) {
-        super(lineNumber);
+    protected BodyStmtNode(String filename, int lineNumber, AsmtNode contained) {
+        super(filename, lineNumber);
         this.funcCall = null;
         this.ifStmt = null;
         this.whileLoop = null;
@@ -85,15 +85,16 @@ public class BodyStmtNode extends Node {
     public static BodyStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         switch (it.peekExpect(TokenType.FC_HEADER, "While", "If", TokenType.ID_KEYWORD)) {
             case 0:
-                BodyStmtNode result = new BodyStmtNode(it.getCurrentLine(), FuncCallNode.parse(it));
+                BodyStmtNode result = new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(),
+                        FuncCallNode.parse(it));
                 it.expect(";");
                 return result;
             case 1:
-                return new BodyStmtNode(it.getCurrentLine(), WhileLoopNode.parse(it));
+                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), WhileLoopNode.parse(it));
             case 2:
-                return new BodyStmtNode(it.getCurrentLine(), IfStmtNode.parse(it));
+                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), IfStmtNode.parse(it));
             default:
-                return new BodyStmtNode(it.getCurrentLine(), AsmtNode.parse(it));
+                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), AsmtNode.parse(it));
         }
     }
 

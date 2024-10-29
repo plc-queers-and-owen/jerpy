@@ -21,8 +21,8 @@ public class VariableDeclarationNode extends Node {
         return name;
     }
 
-    protected VariableDeclarationNode(int lineNumber, TypeNode type, String name) {
-        super(lineNumber);
+    protected VariableDeclarationNode(String filename, int lineNumber, TypeNode type, String name) {
+        super(filename, lineNumber);
         this.type = type;
         this.name = name;
         this.adopt();
@@ -33,7 +33,7 @@ public class VariableDeclarationNode extends Node {
 
         String name = it.expect(TokenType.ID_KEYWORD).getToken();
 
-        return new VariableDeclarationNode(type.getLineNumber(), type, name);
+        return new VariableDeclarationNode(it.getCurrentFilename(), type.getLineNumber(), type, name);
     }
 
     @Override

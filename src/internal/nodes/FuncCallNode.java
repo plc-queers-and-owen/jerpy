@@ -15,8 +15,8 @@ public class FuncCallNode extends OperandNode {
     private final String name;
     private final ParamsNode params;
 
-    protected FuncCallNode(int lineNumber, String name, ParamsNode params) {
-        super(lineNumber);
+    protected FuncCallNode(String filename, int lineNumber, String name, ParamsNode params) {
+        super(filename, lineNumber);
         this.name = name;
         this.params = params;
         this.adopt();
@@ -29,7 +29,7 @@ public class FuncCallNode extends OperandNode {
         it.expect(TokenType.L_BRACKET);
         ParamsNode params = ParamsNode.parse(it);
         it.expect("]");
-        return new FuncCallNode(line, name, params);
+        return new FuncCallNode(it.getCurrentFilename(), line, name, params);
     }
 
     @Override

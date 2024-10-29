@@ -10,9 +10,16 @@ import java.util.Arrays;
  */
 public abstract class Node implements JottTree {
     private final int lineNumber;
+    private final String filename;
+
+    public String getFilename() {
+        return filename;
+    }
+
     private Node parent;
 
-    protected Node(int lineNumber) {
+    protected Node(String filename, int lineNumber) {
+        this.filename = filename;
         this.lineNumber = lineNumber;
         this.parent = null;
     }

@@ -11,8 +11,8 @@ public class WhileLoopNode extends Node {
     private final ExprNode expression;
     private final BodyNode body;
 
-    protected WhileLoopNode(int lineNumber, ExprNode expression, BodyNode body) {
-        super(lineNumber);
+    protected WhileLoopNode(String filename, int lineNumber, ExprNode expression, BodyNode body) {
+        super(filename, lineNumber);
         this.expression = expression;
         this.body = body;
         this.adopt();
@@ -42,7 +42,7 @@ public class WhileLoopNode extends Node {
         it.expect("{");
         BodyNode body = BodyNode.parse(it);
         it.expect("}");
-        return new WhileLoopNode(it.getCurrentLine(), expression, body);
+        return new WhileLoopNode(it.getCurrentFilename(), it.getCurrentLine(), expression, body);
     }
 
     @Override

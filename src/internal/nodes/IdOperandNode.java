@@ -15,15 +15,15 @@ import provided.TokenType;
 public class IdOperandNode extends OperandNode {
     String id;
 
-    protected IdOperandNode(int lineNumber, String id) {
-        super(lineNumber);
+    protected IdOperandNode(String filename, int lineNumber, String id) {
+        super(filename, lineNumber);
         this.id = id;
         this.adopt();
     }
 
     public static IdOperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         Token id = it.expect(TokenType.ID_KEYWORD);
-        return new IdOperandNode(id.getLineNum(), id.getToken());
+        return new IdOperandNode(it.getCurrentFilename(), id.getLineNum(), id.getToken());
     }
 
     @Override

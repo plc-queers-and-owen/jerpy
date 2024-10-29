@@ -15,8 +15,8 @@ import provided.TokenType;
 public class NumberOperandNode extends OperandNode {
     private String val;
 
-    protected NumberOperandNode(int lineNumber, String val) {
-        super(lineNumber);
+    protected NumberOperandNode(String filename, int lineNumber, String val) {
+        super(filename, lineNumber);
         this.val = val;
         this.adopt();
     }
@@ -27,12 +27,12 @@ public class NumberOperandNode extends OperandNode {
                 int line = it.peek().getLineNum();
                 String val = "-" + it.expect(TokenType.NUMBER).getToken();
                 it.skip();
-                return new NumberOperandNode(line, val);
+                return new NumberOperandNode(it.getCurrentFilename(), line, val);
             }
             case 1 -> {
                 Token t = it.peek();
                 it.skip();
-                return new NumberOperandNode(t.getLineNum(), t.getToken());
+                return new NumberOperandNode(it.getCurrentFilename(), t.getLineNum(), t.getToken());
             }
             default -> throw new UnreachableException();
         }

@@ -11,8 +11,8 @@ import internal.scope.Scope;
 public class ParamsNode extends Node{
     private final ArrayList<ExprNode> params;
 
-    protected ParamsNode(int lineNumber, ArrayList<ExprNode> params) {
-        super(lineNumber);
+    protected ParamsNode(String filename, int lineNumber, ArrayList<ExprNode> params) {
+        super(filename, lineNumber);
         this.params = params;
         this.adopt();
     }
@@ -21,7 +21,7 @@ public class ParamsNode extends Node{
         ArrayList<ExprNode> params = new ArrayList<>();
         while (true) {
             if(it.peekExpectSafe("]") == 0) {
-                return new ParamsNode(it.getCurrentLine(), params);
+                return new ParamsNode(it.getCurrentFilename(), it.getCurrentLine(), params);
             } else {
                 if (params.size() != 0) {
                     it.expect(",");
