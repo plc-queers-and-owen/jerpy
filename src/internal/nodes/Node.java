@@ -142,4 +142,18 @@ public abstract class Node implements JottTree {
     public String getSymbol() {
         return null;
     }
+
+    /**
+     * Helper function to check if an id is valid
+     * 
+     * @param id ID string to check
+     * @return True if valid, false otherwise
+     */
+    public static boolean validateId(String id) {
+        if (id.length() == 0) {
+            return false;
+        } else {
+            return Character.isLowerCase(id.charAt(0));
+        }
+    }
 }

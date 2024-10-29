@@ -86,7 +86,7 @@ public class FunctionDefNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        if (!Character.isLowerCase(this.name.charAt(0))) {
+        if (!validateId(name)) {
             new SemanticNameException(this.name).report(this);
             return false;
         }
@@ -110,10 +110,10 @@ public class FunctionDefNode extends Node {
         if (!this.body.validateTree(scope)) {
             scope.clearScope();
             return false;
+        } else {
+            scope.clearScope();
+            return true;
         }
-
-        return true;
-
     }
 
     @Override
