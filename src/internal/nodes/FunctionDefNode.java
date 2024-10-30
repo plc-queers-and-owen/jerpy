@@ -9,6 +9,7 @@ import internal.SemanticException;
 import internal.SemanticNameException;
 import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
+import internal.eval.Type;
 import provided.TokenType;
 
 /**
@@ -127,5 +128,9 @@ public class FunctionDefNode extends Node {
         children.add(returnType);
         children.add(body);
         return children;
+    }
+
+    public Type getReturnType() {
+        return this.returnType.getType();
     }
 }

@@ -68,7 +68,13 @@ public class FunctionBodyNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        for (VariableDeclarationNode dec : varDeclarations) {
+            if (!dec.validateTree(scope)) {
+                return false;
+            }
+        }
+
+        return this.body.validateTree(scope);
     }
 
     @Override

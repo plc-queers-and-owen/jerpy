@@ -14,6 +14,10 @@ import provided.TokenType;
 public class ElseNode extends Node {
     private final BodyNode body;
 
+    public BodyNode getBody() {
+        return body;
+    }
+
     protected ElseNode(String filename, int lineNumber, BodyNode body) {
         super(filename, lineNumber);
         this.body = body;

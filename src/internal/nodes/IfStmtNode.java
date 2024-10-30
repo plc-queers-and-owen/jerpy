@@ -15,8 +15,22 @@ import provided.TokenType;
 public class IfStmtNode extends Node {
     private final ExprNode expr;
     private final BodyNode body;
+
+    public BodyNode getBody() {
+        return body;
+    }
+
     private final ArrayList<ElseIfNode> elifs;
+
+    public ArrayList<ElseIfNode> getElifs() {
+        return elifs;
+    }
+
     private final ElseNode els;
+
+    public ElseNode getEls() {
+        return els;
+    }
 
     protected IfStmtNode(String filename, int lineNumber, ExprNode expr, BodyNode body, ArrayList<ElseIfNode> elseifs,
             ElseNode els) {

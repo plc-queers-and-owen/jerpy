@@ -55,4 +55,8 @@ public class FunctionReturnNode extends Node {
     public List<Node> getChildren() {
         return List.of();
     }
+
+    public Type getType() {
+        return this.type;
+    }
 }
