@@ -65,4 +65,8 @@ public enum Type {
 
         }
     }
+
+    public boolean isNumeric() {
+        return this == Type.Double || this == Type.Integer;
+    }
 }
