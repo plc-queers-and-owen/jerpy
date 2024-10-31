@@ -4,7 +4,9 @@ import java.util.List;
 
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.SemanticNameException;
+import internal.scope.ParameterSymbol;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -40,6 +42,13 @@ public class FuncDefParamNode extends Node {
     public boolean validateTree(Scope scope) {
         if (!validateId(id)) {
             new SemanticNameException(id).report(this);
+            return false;
+        }
+
+        try {
+            scope.getCurrentScope().define(ParameterSymbol.from(this));
+        } catch (SemanticException e) {
+            e.report(this);
             return false;
         }
 

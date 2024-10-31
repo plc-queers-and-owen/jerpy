@@ -92,10 +92,6 @@ public class FunctionDefNode extends Node {
             return false;
         }
 
-        if (!this.params.stream().allMatch(p -> p.validateTree(scope))) {
-            return false;
-        }
-
         if (!this.returnType.validateTree(scope)) {
             return false;
         }
@@ -105,6 +101,10 @@ public class FunctionDefNode extends Node {
             scope.enableScope(this.getSymbol());
         } catch (SemanticException e) {
             e.report(this);
+            return false;
+        }
+
+        if (!this.params.stream().allMatch(p -> p.validateTree(scope))) {
             return false;
         }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticUsageException;
 import internal.scope.Scope;
 
 public class ParamsNode extends Node{
@@ -48,6 +49,14 @@ public class ParamsNode extends Node{
     }
 
     public boolean validateParameters(Scope scope, FunctionDefNode definition) {
+        if (this.params.size() != definition.params.size()) {
+            new SemanticUsageException("::" + definition.name + "(...) requires exactly " + definition.params.size()
+                    + " parameters, but got " + this.params.size()).report(this);
+            return false;
+        }
+        for (int p = 0; p < this.params.size(); p++) {
+
+        }
         return true;
     }
 
