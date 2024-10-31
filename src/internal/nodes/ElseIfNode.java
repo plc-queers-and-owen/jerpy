@@ -15,8 +15,8 @@ public class ElseIfNode extends Node {
     private final ExprNode expr;
     private final BodyNode body;
 
-    protected ElseIfNode(int lineNumber, ExprNode expr, BodyNode body) {
-        super(lineNumber);
+    protected ElseIfNode(String filename, int lineNumber, ExprNode expr, BodyNode body) {
+        super(filename, lineNumber);
         this.expr = expr;
         this.body = body;
         this.adopt();
@@ -31,7 +31,7 @@ public class ElseIfNode extends Node {
         BodyNode body = BodyNode.parse(it);
         it.expect(TokenType.R_BRACE);
 
-        return new ElseIfNode(line, expr, body);
+        return new ElseIfNode(it.getCurrentFilename(), line, expr, body);
     }
 
     @Override

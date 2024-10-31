@@ -5,7 +5,11 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.SemanticNameException;
+import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
+import internal.eval.Type;
 import provided.TokenType;
 
 /**
@@ -18,9 +22,9 @@ public class FunctionDefNode extends Node {
     public FunctionReturnNode returnType;
     public FunctionBodyNode body;
 
-    protected FunctionDefNode(int lineNumber, String name, List<FuncDefParamNode> params,
-            FunctionReturnNode returnType, FunctionBodyNode body) {
-        super(lineNumber);
+    protected FunctionDefNode(String filename, int lineNumber, String name, List<FuncDefParamNode> params,
+                    FunctionReturnNode returnType, FunctionBodyNode body) {
+        super(filename, lineNumber);
         this.name = name;
         this.params = params;
         this.returnType = returnType;
@@ -52,7 +56,7 @@ public class FunctionDefNode extends Node {
         FunctionBodyNode body = FunctionBodyNode.parse(it);
         it.expect(TokenType.R_BRACE);
 
-        return new FunctionDefNode(line, name, params, returnType, body);
+        return new FunctionDefNode(it.getCurrentFilename(), line, name, params, returnType, body);
     }
 
     @Override
@@ -83,7 +87,35 @@ public class FunctionDefNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        if (!validateId(name)) {
+            new SemanticNameException(this.name).report(this);
+            return false;
+        }
+
+        if (!this.returnType.validateTree(scope)) {
+            return false;
+        }
+
+        try {
+            scope.define(new FunctionSymbol(this.getSymbol(), getLineNumber(), this));
+            scope.enableScope(this.getSymbol());
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
+
+        if (!this.params.stream().allMatch(p -> p.validateTree(scope))) {
+            return false;
+        }
+
+        if (!this.body.validateTree(scope)) {
+            scope.clearScope();
+            return false;
+        } else {
+            scope.clearScope();
+            scope.finish(this.getSymbol());
+            return true;
+        }
     }
 
     @Override
@@ -97,5 +129,9 @@ public class FunctionDefNode extends Node {
         children.add(returnType);
         children.add(body);
         return children;
+    }
+
+    public Type getReturnType() {
+        return this.returnType.getType();
     }
 }

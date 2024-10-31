@@ -3,15 +3,18 @@ package internal.nodes;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.UnreachableException;
+import internal.eval.Type;
+import internal.scope.Scope;
 import provided.TokenType;
 
 /**
  * An abstract base class representing an operand
  */
 public abstract class OperandNode extends ExprNode {
-    protected OperandNode(int lineNumber) {
-        super(lineNumber);
+    protected OperandNode(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     public static OperandNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
@@ -22,4 +25,6 @@ public abstract class OperandNode extends ExprNode {
             default -> throw new UnreachableException();
         };
     }
+
+    public abstract Type inferType(Scope scope) throws SemanticException;
 }

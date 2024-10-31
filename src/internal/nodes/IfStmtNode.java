@@ -15,11 +15,26 @@ import provided.TokenType;
 public class IfStmtNode extends Node {
     private final ExprNode expr;
     private final BodyNode body;
+
+    public BodyNode getBody() {
+        return body;
+    }
+
     private final ArrayList<ElseIfNode> elifs;
+
+    public ArrayList<ElseIfNode> getElifs() {
+        return elifs;
+    }
+
     private final ElseNode els;
 
-    protected IfStmtNode(int lineNumber, ExprNode expr, BodyNode body, ArrayList<ElseIfNode> elseifs, ElseNode els) {
-        super(lineNumber);
+    public ElseNode getEls() {
+        return els;
+    }
+
+    protected IfStmtNode(String filename, int lineNumber, ExprNode expr, BodyNode body, ArrayList<ElseIfNode> elseifs,
+            ElseNode els) {
+        super(filename, lineNumber);
         this.expr = expr;
         this.body = body;
         this.elifs = elseifs;
@@ -50,7 +65,7 @@ public class IfStmtNode extends Node {
             els = ElseNode.parse(it);
         }
 
-        return new IfStmtNode(line, expr, body, elifs, els);
+        return new IfStmtNode(it.getCurrentFilename(), line, expr, body, elifs, els);
     }
 
     @Override

@@ -5,6 +5,8 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -15,8 +17,8 @@ public class FuncCallNode extends OperandNode {
     private final String name;
     private final ParamsNode params;
 
-    protected FuncCallNode(int lineNumber, String name, ParamsNode params) {
-        super(lineNumber);
+    protected FuncCallNode(String filename, int lineNumber, String name, ParamsNode params) {
+        super(filename, lineNumber);
         this.name = name;
         this.params = params;
         this.adopt();
@@ -29,7 +31,7 @@ public class FuncCallNode extends OperandNode {
         it.expect(TokenType.L_BRACKET);
         ParamsNode params = ParamsNode.parse(it);
         it.expect("]");
-        return new FuncCallNode(line, name, params);
+        return new FuncCallNode(it.getCurrentFilename(), line, name, params);
     }
 
     @Override
@@ -39,7 +41,13 @@ public class FuncCallNode extends OperandNode {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        try {
+            scope.getScope(name);
+            return this.params.validateTree(scope) && this.params.validateParameters(scope, getEnclosingFunction());
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
     }
 
     @Override
@@ -49,5 +57,14 @@ public class FuncCallNode extends OperandNode {
     @Override
     public List<Node> getChildren() {
         return List.of(this.params);
+    }
+
+    public FunctionDefNode getDefinition(Scope scope) throws SemanticException {
+        return scope.getScope(this.name).getContext().getTarget();
+    }
+
+    @Override
+    public Type inferType(Scope scope) throws SemanticException {
+        return this.getDefinition(scope).getReturnType();
     }
 }

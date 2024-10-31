@@ -15,6 +15,7 @@ import internal.eval.TypedValue;
  */
 public class LocalScope {
     private final FunctionSymbol context;
+    private boolean completed;
     private HashMap<String, ParameterSymbol> parameters;
     private HashMap<String, VariableSymbol> variables;
 
@@ -27,6 +28,7 @@ public class LocalScope {
         this.context = context;
         this.parameters = new HashMap<>();
         this.variables = new HashMap<>();
+        this.completed = false;
     }
 
     /**
@@ -36,6 +38,14 @@ public class LocalScope {
      */
     public FunctionSymbol getContext() {
         return context;
+    }
+
+    public boolean isComplete() {
+        return this.completed;
+    }
+
+    public void finish() {
+        this.completed = true;
     }
 
     /**

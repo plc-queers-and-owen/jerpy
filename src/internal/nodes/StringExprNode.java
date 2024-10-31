@@ -4,6 +4,8 @@ import java.util.List;
 
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -14,15 +16,15 @@ import provided.TokenType;
 public class StringExprNode extends ExprNode {
     private final String val;
 
-    protected StringExprNode(int lineNumber, String val) {
-        super(lineNumber);
+    protected StringExprNode(String filename, int lineNumber, String val) {
+        super(filename, lineNumber);
         this.val = val;
         this.adopt();
     }
 
     public static StringExprNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         Token tk = it.expect(TokenType.STRING);
-        return new StringExprNode(tk.getLineNum(), tk.getToken());
+        return new StringExprNode(it.getCurrentFilename(), tk.getLineNum(), tk.getToken());
     }
 
     @Override
@@ -42,5 +44,10 @@ public class StringExprNode extends ExprNode {
     @Override
     public List<Node> getChildren() {
         return List.of();
+    }
+
+    @Override
+    public Type inferType(Scope scope) throws SemanticException {
+        return Type.String;
     }
 }

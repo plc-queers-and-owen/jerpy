@@ -13,8 +13,8 @@ import internal.scope.Scope;
 public class FunctionReturnNode extends Node {
     private Type type;
 
-    protected FunctionReturnNode(int lineNumber, Type type) {
-        super(lineNumber);
+    protected FunctionReturnNode(String filename, int lineNumber, Type type) {
+        super(filename, lineNumber);
         this.type = type;
         this.adopt();
     }
@@ -33,7 +33,7 @@ public class FunctionReturnNode extends Node {
         // Skip since we only peeked earlier
         it.skip();
 
-        return new FunctionReturnNode(lineNumber, type);
+        return new FunctionReturnNode(it.getCurrentFilename(), lineNumber, type);
     }
 
     @Override
@@ -54,5 +54,9 @@ public class FunctionReturnNode extends Node {
     @Override
     public List<Node> getChildren() {
         return List.of();
+    }
+
+    public Type getType() {
+        return this.type;
     }
 }

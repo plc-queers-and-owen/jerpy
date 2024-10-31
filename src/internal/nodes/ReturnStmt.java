@@ -4,6 +4,10 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.SemanticReturnPathException;
+import internal.SemanticTypeException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -13,8 +17,8 @@ import provided.TokenType;
 public class ReturnStmt extends Node {
     private final ExprNode expr;
 
-    protected ReturnStmt(int lineNumber, ExprNode expr) {
-        super(lineNumber);
+    protected ReturnStmt(String filename, int lineNumber, ExprNode expr) {
+        super(filename, lineNumber);
         this.expr = expr;
         this.adopt();
     }
@@ -28,7 +32,7 @@ public class ReturnStmt extends Node {
             expr = ExprNode.parse(it);
             it.expect(TokenType.SEMICOLON);
         }
-        return new ReturnStmt(line, expr);
+        return new ReturnStmt(it.getCurrentFilename(), line, expr);
     }
 
     @Override
@@ -42,6 +46,22 @@ public class ReturnStmt extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        if (this.getEnclosingFunction().getReturnType() == Type.Void) {
+            new SemanticReturnPathException("Cannot return a value from a Void function.").report(this);
+            return false;
+        }
+
+        try {
+            if (this.getEnclosingFunction().getReturnType() != this.expr.inferType(scope)) {
+                new SemanticTypeException(this.expr.inferType(scope), this.getEnclosingFunction().getReturnType())
+                        .report(this);
+                return false;
+            }
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
+
         return true;
     }
 

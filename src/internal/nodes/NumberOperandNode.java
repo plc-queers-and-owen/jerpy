@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.UnreachableException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -15,8 +16,8 @@ import provided.TokenType;
 public class NumberOperandNode extends OperandNode {
     private String val;
 
-    protected NumberOperandNode(int lineNumber, String val) {
-        super(lineNumber);
+    protected NumberOperandNode(String filename, int lineNumber, String val) {
+        super(filename, lineNumber);
         this.val = val;
         this.adopt();
     }
@@ -27,12 +28,12 @@ public class NumberOperandNode extends OperandNode {
                 int line = it.peek().getLineNum();
                 String val = "-" + it.expect(TokenType.NUMBER).getToken();
                 it.skip();
-                return new NumberOperandNode(line, val);
+                return new NumberOperandNode(it.getCurrentFilename(), line, val);
             }
             case 1 -> {
                 Token t = it.peek();
                 it.skip();
-                return new NumberOperandNode(t.getLineNum(), t.getToken());
+                return new NumberOperandNode(it.getCurrentFilename(), t.getLineNum(), t.getToken());
             }
             default -> throw new UnreachableException();
         }
@@ -55,5 +56,14 @@ public class NumberOperandNode extends OperandNode {
     @Override
     public List<Node> getChildren() {
         return List.of();
+    }
+
+    @Override
+    public Type inferType(Scope scope) {
+        if (this.val.contains(".")) {
+            return Type.Double;
+        } else {
+            return Type.Integer;
+        }
     }
 }

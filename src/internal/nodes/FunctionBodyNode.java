@@ -5,6 +5,7 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticReturnPathException;
 import internal.eval.Type;
 import internal.scope.Scope;
 
@@ -16,8 +17,9 @@ public class FunctionBodyNode extends Node {
     List<VariableDeclarationNode> varDeclarations;
     BodyNode body;
 
-    protected FunctionBodyNode(int lineNumber, List<VariableDeclarationNode> varDeclarations, BodyNode body) {
-        super(lineNumber);
+    protected FunctionBodyNode(String filename, int lineNumber, List<VariableDeclarationNode> varDeclarations,
+            BodyNode body) {
+        super(filename, lineNumber);
         this.varDeclarations = varDeclarations;
         this.body = body;
         this.adopt();
@@ -47,7 +49,7 @@ public class FunctionBodyNode extends Node {
             lineNumber = body.getLineNumber();
         }
 
-        return new FunctionBodyNode(lineNumber, varDeclarations, body);
+        return new FunctionBodyNode(it.getCurrentFilename(), lineNumber, varDeclarations, body);
 
     }
 
@@ -67,7 +69,21 @@ public class FunctionBodyNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        for (VariableDeclarationNode dec : varDeclarations) {
+            if (!dec.validateTree(scope)) {
+                return false;
+            }
+        }
+
+        if (this.body.validateTree(scope)) {
+            if (this.getEnclosingFunction().getReturnType() != Type.Void && !this.body.isReturnable()) {
+                new SemanticReturnPathException("Not all code paths return a value.")
+                        .report(this.getEnclosingFunction());
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

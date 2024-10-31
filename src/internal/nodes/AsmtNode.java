@@ -11,8 +11,8 @@ public class AsmtNode extends Node {
     private final IdOperandNode idNode;
     private final ExprNode expressionNode;
 
-    protected AsmtNode(int lineNumber, IdOperandNode id, ExprNode expression) {
-        super(lineNumber);
+    protected AsmtNode(String filename, int lineNumber, IdOperandNode id, ExprNode expression) {
+        super(filename, lineNumber);
         this.idNode = id;
         this.expressionNode = expression;
         this.adopt();
@@ -38,7 +38,7 @@ public class AsmtNode extends Node {
         it.expect("=");
         ExprNode expression = ExprNode.parse(it);
         it.expect(";");
-        return new AsmtNode(it.getCurrentLine(), id, expression);
+        return new AsmtNode(it.getCurrentFilename(), it.getCurrentLine(), id, expression);
     }
 
     @Override

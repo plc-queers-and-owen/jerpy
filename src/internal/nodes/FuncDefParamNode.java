@@ -4,6 +4,9 @@ import java.util.List;
 
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.SemanticNameException;
+import internal.scope.ParameterSymbol;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -15,8 +18,8 @@ public class FuncDefParamNode extends Node {
     private final String id;
     private final TypeNode type;
 
-    protected FuncDefParamNode(int lineNumber, String id, TypeNode type) {
-        super(lineNumber);
+    protected FuncDefParamNode(String filename, int lineNumber, String id, TypeNode type) {
+        super(filename, lineNumber);
         this.id = id;
         this.type = type;
         this.adopt();
@@ -27,7 +30,7 @@ public class FuncDefParamNode extends Node {
         // Looks like we're skipping twice here?
         it.expect(TokenType.COLON);
         TypeNode type = TypeNode.parse(it);
-        return new FuncDefParamNode(id.getLineNum(), id.getToken(), type);
+        return new FuncDefParamNode(it.getCurrentFilename(), id.getLineNum(), id.getToken(), type);
     }
 
     @Override
@@ -37,7 +40,19 @@ public class FuncDefParamNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        if (!validateId(id)) {
+            new SemanticNameException(id).report(this);
+            return false;
+        }
+
+        try {
+            scope.getCurrentScope().define(ParameterSymbol.from(this));
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
+
+        return this.type.validateTree(scope);
     }
 
     @Override
