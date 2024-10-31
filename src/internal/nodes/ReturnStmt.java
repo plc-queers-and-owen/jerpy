@@ -4,6 +4,8 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticReturnPathException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -42,6 +44,10 @@ public class ReturnStmt extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        if (this.getEnclosingFunction().getReturnType() == Type.Void) {
+            new SemanticReturnPathException("Cannot return a value from a Void function.").report(this);
+            return false;
+        }
         return true;
     }
 

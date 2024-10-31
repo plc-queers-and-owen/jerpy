@@ -86,7 +86,7 @@ public class Scope {
      * @throws SemanticException Thrown if the scope name is unknown.
      */
     public LocalScope getScope(String scope) throws SemanticException {
-        if (this.scopes.containsKey(scope)) {
+        if (this.isComplete(scope)) {
             return this.scopes.get(scope);
         } else {
             throw new SemanticUnknownSymbolException(scope);
@@ -96,5 +96,15 @@ public class Scope {
     public Scope() {
         this.scopes = new HashMap<>();
         this.currentScope = null;
+    }
+
+    public boolean isComplete(String name) {
+        return this.scopes.get(name) != null && this.scopes.get(name).isComplete();
+    }
+
+    public void finish(String name) {
+        if (this.scopes.containsKey(name)) {
+            this.scopes.get(name).finish();
+        }
     }
 }

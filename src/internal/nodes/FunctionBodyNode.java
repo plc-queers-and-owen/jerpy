@@ -5,6 +5,7 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticReturnPathException;
 import internal.eval.Type;
 import internal.scope.Scope;
 
@@ -74,7 +75,15 @@ public class FunctionBodyNode extends Node {
             }
         }
 
-        return this.body.validateTree(scope);
+        if (this.body.validateTree(scope)) {
+            if (this.getEnclosingFunction().getReturnType() != Type.Void && !this.body.isReturnable()) {
+                new SemanticReturnPathException("Not all code paths return a value.")
+                        .report(this.getEnclosingFunction());
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

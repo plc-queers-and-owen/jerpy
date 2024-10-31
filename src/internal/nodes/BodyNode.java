@@ -7,8 +7,6 @@ import internal.BodyStmtType;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
-import internal.SemanticReturnPathException;
-import internal.eval.Type;
 import internal.scope.Scope;
 
 public class BodyNode extends Node {
@@ -60,26 +58,23 @@ public class BodyNode extends Node {
     }
 
     public boolean isReturnable() {
-        switch (this.getBodyType()) {
-            case BodyType.FunctionDef:
-                if (this.returnStmt == null) {
-                    for (BodyStmtNode statement : bodyStatements) {
-                        if (statement.getType() == BodyStmtType.IF) {
-                            IfStmtNode node = IfStmtNode.class.cast(statement.getNode());
-                            if (node.getBody().isReturnable()
-                                    && (node.getEls() != null && node.getEls().getBody().isReturnable())) {
-                                return true;
-                            }
+        if (this.getBodyType() == BodyType.WhileLoop) {
+            return false;
+        } else {
+            if (this.returnStmt == null) {
+                for (BodyStmtNode statement : bodyStatements) {
+                    if (statement.getType() == BodyStmtType.IF) {
+                        IfStmtNode node = IfStmtNode.class.cast(statement.getNode());
+                        if (node.getBody().isReturnable()
+                                && (node.getEls() != null && node.getEls().getBody().isReturnable())) {
+                            return true;
                         }
                     }
-                    return false;
-                } else {
-                    return true;
                 }
-            case BodyType.WhileLoop:
                 return false;
-            default:
-                return false; // TODO add stuff
+            } else {
+                return true;
+            }
         }
     }
 

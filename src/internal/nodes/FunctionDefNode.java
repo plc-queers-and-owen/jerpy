@@ -113,6 +113,7 @@ public class FunctionDefNode extends Node {
             return false;
         } else {
             scope.clearScope();
+            scope.finish(this.getSymbol());
             return true;
         }
     }

@@ -3,7 +3,10 @@ package internal.nodes;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.UnreachableException;
+import internal.eval.Type;
+import internal.scope.Scope;
 import provided.TokenType;
 
 /**
@@ -22,4 +25,6 @@ public abstract class OperandNode extends ExprNode {
             default -> throw new UnreachableException();
         };
     }
+
+    public abstract Type inferType(Scope scope) throws SemanticException;
 }

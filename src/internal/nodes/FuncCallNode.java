@@ -5,6 +5,8 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -49,5 +51,14 @@ public class FuncCallNode extends OperandNode {
     @Override
     public List<Node> getChildren() {
         return List.of(this.params);
+    }
+
+    public FunctionDefNode getDefinition(Scope scope) throws SemanticException {
+        return scope.getScope(this.name).getContext().getTarget();
+    }
+
+    @Override
+    public Type inferType(Scope scope) throws SemanticException {
+        return this.getDefinition(scope).getReturnType();
     }
 }
