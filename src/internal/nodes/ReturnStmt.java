@@ -4,7 +4,9 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.SemanticReturnPathException;
+import internal.SemanticTypeException;
 import internal.eval.Type;
 import internal.scope.Scope;
 import provided.TokenType;
@@ -48,6 +50,18 @@ public class ReturnStmt extends Node {
             new SemanticReturnPathException("Cannot return a value from a Void function.").report(this);
             return false;
         }
+
+        try {
+            if (this.getEnclosingFunction().getReturnType() != this.expr.inferType(scope)) {
+                new SemanticTypeException(this.expr.inferType(scope), this.getEnclosingFunction().getReturnType())
+                        .report(this);
+                return false;
+            }
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
+
         return true;
     }
 

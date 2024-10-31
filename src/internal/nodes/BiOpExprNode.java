@@ -5,6 +5,9 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.SemanticTypeException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -39,7 +42,22 @@ public class BiOpExprNode extends ExprNode {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        try {
+            if (!this.a.inferType(scope).isNumeric()) {
+                new SemanticException("Type Error: Expected either an Integer or Double value but got "
+                        + this.a.inferType(scope).toString()).report(a);
+                return false;
+            }
+            if (this.a.inferType(scope) != this.b.inferType(scope)) {
+                new SemanticTypeException(this.b.inferType(scope), this.a.inferType(scope)).report(b);
+                return false;
+            }
+            return true;
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
+
     }
 
     @Override
@@ -49,5 +67,13 @@ public class BiOpExprNode extends ExprNode {
     @Override
     public List<Node> getChildren() {
         return List.of(this.a, this.b);
+    }
+
+    @Override
+    public Type inferType(Scope scope) throws SemanticException {
+        if (this.validateTree(scope)) {
+            return this.a.inferType(scope);
+        }
+        throw new SemanticException("Type Error: Type mismatch in numeric operation.");
     }
 }

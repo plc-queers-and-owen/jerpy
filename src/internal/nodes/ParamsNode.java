@@ -44,6 +44,10 @@ public class ParamsNode extends Node{
 
     @Override
     public boolean validateTree(Scope scope) {
+        return this.params.stream().allMatch(p -> p.validateTree(scope));
+    }
+
+    public boolean validateParameters(Scope scope, FunctionDefNode definition) {
         return true;
     }
 

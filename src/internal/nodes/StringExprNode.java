@@ -4,6 +4,8 @@ import java.util.List;
 
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.Type;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -42,5 +44,10 @@ public class StringExprNode extends ExprNode {
     @Override
     public List<Node> getChildren() {
         return List.of();
+    }
+
+    @Override
+    public Type inferType(Scope scope) throws SemanticException {
+        return Type.String;
     }
 }

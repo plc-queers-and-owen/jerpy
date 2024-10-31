@@ -41,7 +41,13 @@ public class FuncCallNode extends OperandNode {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        try {
+            scope.getScope(name);
+            return this.params.validateTree(scope) && this.params.validateParameters(scope, getEnclosingFunction());
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
     }
 
     @Override
