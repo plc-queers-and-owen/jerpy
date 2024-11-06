@@ -5,6 +5,9 @@ import java.util.HashMap;
 import internal.SemanticException;
 import internal.SemanticRedefinitionException;
 import internal.SemanticUnknownSymbolException;
+import internal.scope.builtins.ConcatFunction;
+import internal.scope.builtins.LengthFunction;
+import internal.scope.builtins.PrintFunction;
 
 /**
  * A class representing the global scope, and containing the local scope of each
@@ -95,6 +98,26 @@ public class Scope {
 
     public Scope() {
         this.scopes = new HashMap<>();
+
+        // Include builtins
+        // don't know if we need to properly define parameters
+        // but that would require reworking LocalScope more so
+        // I'm not doing that right now unless its needed
+        FunctionSymbol print = new PrintFunction();
+        LocalScope printScope = new LocalScope(print);
+        printScope.finish();
+        this.scopes.put(print.name(), printScope);
+
+        FunctionSymbol concat = new ConcatFunction();
+        LocalScope concatScope = new LocalScope(concat);
+        concatScope.finish();
+        this.scopes.put(concat.name(), concatScope);
+
+        FunctionSymbol length = new LengthFunction();
+        LocalScope lengthScope = new LocalScope(length);
+        lengthScope.finish();
+        this.scopes.put(length.name(), lengthScope);
+
         this.currentScope = null;
     }
 
