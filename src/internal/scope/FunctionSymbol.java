@@ -1,15 +1,32 @@
 package internal.scope;
 
-import internal.nodes.FunctionDefNode;
+import internal.eval.Type;
 
-public class FunctionSymbol extends SymbolItem<FunctionDefNode> {
-    public FunctionSymbol(String symbol, int definedAt, FunctionDefNode target) {
-        super(symbol, definedAt, target);
-    }
+public interface FunctionSymbol {
+    /**
+     * @return The name of the function defined by this symbol
+     */
+    public String name();
 
-    @Override
-    public SymbolType getSymbolType() {
-        return SymbolType.Function;
-    }
+    /**
+     * @return The number of parameters this function takes
+     */
+    public int paramCount();
 
+    /**
+     * Gets the type of a parameter
+     * 
+     * @param idx The index of the paramter
+     * @return The type of the parameter at idx or null if idx is out of bounds
+     */
+    public Type paramType(int idx);
+
+    /**
+     * Whether the FunctionSymbol is a builtin or not
+     * 
+     * If this is false it is safe to cast to {@link DefinedFunctionSymbol}
+     */
+    public boolean isBuiltin();
+
+    public void execute();
 }

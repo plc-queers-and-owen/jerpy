@@ -71,7 +71,7 @@ public class Scope {
      * @param func Function symbol
      * @throws SemanticException Thrown if the function has already been defined.
      */
-    public void define(FunctionSymbol func) throws SemanticException {
+    public void define(DefinedFunctionSymbol func) throws SemanticException {
         if (this.scopes.containsKey(func.getSymbol())) {
             throw new SemanticRedefinitionException(func.getSymbol());
         }

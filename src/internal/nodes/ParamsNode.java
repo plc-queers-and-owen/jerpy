@@ -9,9 +9,10 @@ import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
+import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
 
-public class ParamsNode extends Node{
+public class ParamsNode extends Node {
     private final ArrayList<ExprNode> params;
 
     protected ParamsNode(String filename, int lineNumber, ArrayList<ExprNode> params) {
@@ -23,7 +24,7 @@ public class ParamsNode extends Node{
     public static ParamsNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
         ArrayList<ExprNode> params = new ArrayList<>();
         while (true) {
-            if(it.peekExpectSafe("]") == 0) {
+            if (it.peekExpectSafe("]") == 0) {
                 return new ParamsNode(it.getCurrentFilename(), it.getCurrentLine(), params);
             } else {
                 if (params.size() != 0) {
@@ -57,17 +58,17 @@ public class ParamsNode extends Node{
      * @param definition Referenced definition
      * @return True if good, false if no
      */
-    public boolean validateParameters(Scope scope, FunctionDefNode definition) {
-        if (this.params.size() != definition.params.size()) {
-            new SemanticUsageException("::" + definition.name + "(...) requires exactly " + definition.params.size()
+    public boolean validateParameters(Scope scope, FunctionSymbol definition) {
+        if (this.params.size() != definition.paramCount()) {
+            new SemanticUsageException("::" + definition.name() + "(...) requires exactly " + definition.paramCount()
                     + " parameters, but got " + this.params.size()).report(this);
             return false;
         }
         for (int p = 0; p < this.params.size(); p++) {
             try {
-                if (this.params.get(p).inferType(scope) != definition.params.get(0).getType().getType()) {
+                if (this.params.get(p).inferType(scope) != definition.paramType(p)) {
                     new SemanticTypeException(this.params.get(p).inferType(scope),
-                            definition.params.get(0).getType().getType()).report(this.params.get(p));
+                            definition.paramType(p)).report(this.params.get(p));
                     return false;
                 }
             } catch (SemanticException e) {
@@ -88,5 +89,5 @@ public class ParamsNode extends Node{
         children.addAll(this.params);
         return children;
     }
-    
+
 }
