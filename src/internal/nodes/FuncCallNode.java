@@ -9,7 +9,6 @@ import internal.SemanticException;
 import internal.eval.Type;
 import internal.scope.DefinedFunctionSymbol;
 import internal.scope.FunctionSymbol;
-import internal.scope.LocalScope;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -45,9 +44,9 @@ public class FuncCallNode extends OperandNode {
     @Override
     public boolean validateTree(Scope scope) {
         try {
-            LocalScope calledFunc = scope.getScope(name);
+            FunctionSymbol calledFunc = scope.getScope(name).getContext();
             return this.params.validateTree(scope)
-                    && this.params.validateParameters(scope, calledFunc.getContext());
+                    && calledFunc.validateParameters(scope, this.params);
         } catch (SemanticException e) {
             e.report(this);
             return false;

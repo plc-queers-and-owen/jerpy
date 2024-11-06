@@ -6,10 +6,6 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
-import internal.SemanticException;
-import internal.SemanticTypeException;
-import internal.SemanticUsageException;
-import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
 
 public class ParamsNode extends Node {
@@ -51,32 +47,8 @@ public class ParamsNode extends Node {
         return this.params.stream().allMatch(p -> p.validateTree(scope));
     }
 
-    /**
-     * Checks if all the parameter types match
-     * 
-     * @param scope      Scope object
-     * @param definition Referenced definition
-     * @return True if good, false if no
-     */
-    public boolean validateParameters(Scope scope, FunctionSymbol definition) {
-        if (this.params.size() != definition.paramCount()) {
-            new SemanticUsageException("::" + definition.name() + "(...) requires exactly " + definition.paramCount()
-                    + " parameters, but got " + this.params.size()).report(this);
-            return false;
-        }
-        for (int p = 0; p < this.params.size(); p++) {
-            try {
-                if (this.params.get(p).inferType(scope) != definition.paramType(p)) {
-                    new SemanticTypeException(this.params.get(p).inferType(scope),
-                            definition.paramType(p)).report(this.params.get(p));
-                    return false;
-                }
-            } catch (SemanticException e) {
-                e.report(this.params.get(p));
-                return false;
-            }
-        }
-        return true;
+    public List<ExprNode> params() {
+        return this.params;
     }
 
     @Override
