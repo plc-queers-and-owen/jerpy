@@ -72,4 +72,9 @@ public class DefinedFunctionSymbol extends SymbolItem<FunctionDefNode> implement
         }
         return true;
     }
+
+    @Override
+    public Type returnType() {
+        return this.getTarget().getReturnType();
+    }
 }

@@ -24,6 +24,11 @@ public interface FunctionSymbol {
     public Type paramType(int idx);
 
     /**
+     * The return type of the function
+     */
+    public Type returnType();
+
+    /**
      * Whether the FunctionSymbol is a builtin or not
      * 
      * If this is false it is safe to cast to {@link DefinedFunctionSymbol}

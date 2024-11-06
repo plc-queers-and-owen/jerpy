@@ -7,7 +7,6 @@ import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.eval.Type;
-import internal.scope.DefinedFunctionSymbol;
 import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
 import provided.TokenType;
@@ -62,21 +61,12 @@ public class FuncCallNode extends OperandNode {
         return List.of(this.params);
     }
 
-    public FunctionDefNode getDefinition(Scope scope) throws SemanticException {
-        FunctionSymbol calledSymbol = scope.getScope(this.name).getContext();
-        if (!calledSymbol.isBuiltin()) {
-            return ((DefinedFunctionSymbol) calledSymbol).getTarget();
-        } else {
-            // TODO(Maddy): actually handle this
-            // I think this involves changing the return type to return FunctionSymbol
-            // instead of FunctionDefNode, but I don't want to look at users of this method
-            // right now
-            throw new SemanticException("Tried to call getDefinition when calling a builtin");
-        }
+    public FunctionSymbol getDefinition(Scope scope) throws SemanticException {
+        return scope.getScope(this.name).getContext();
     }
 
     @Override
     public Type inferType(Scope scope) throws SemanticException {
-        return this.getDefinition(scope).getReturnType();
+        return this.getDefinition(scope).returnType();
     }
 }

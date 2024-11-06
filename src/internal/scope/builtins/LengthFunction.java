@@ -62,4 +62,9 @@ public class LengthFunction implements FunctionSymbol {
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 
+    @Override
+    public Type returnType() {
+        return Type.Integer;
+    }
+
 }

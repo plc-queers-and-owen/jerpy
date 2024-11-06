@@ -68,4 +68,9 @@ public class ConcatFunction implements FunctionSymbol {
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 
+    @Override
+    public Type returnType() {
+        return Type.String;
+    }
+
 }

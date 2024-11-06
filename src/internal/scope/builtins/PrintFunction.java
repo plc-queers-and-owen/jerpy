@@ -58,4 +58,9 @@ public class PrintFunction implements FunctionSymbol {
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 
+    @Override
+    public Type returnType() {
+        return Type.Void;
+    }
+
 }
