@@ -125,6 +125,10 @@ public class BodyStmtNode extends Node {
         }
     }
 
+    public boolean isReturnable() {
+        return ifStmt != null && ifStmt.isReturnable();
+    }
+
     @Override
     public List<Node> getChildren() {
         return List.of(this.getNode());
