@@ -101,4 +101,9 @@ public class IfStmtNode extends Node {
         }
         return children;
     }
+
+    public boolean isReturnable() {
+        if (els == null) return false;
+        return body.isReturnable() && els.getBody().isReturnable() && elifs.stream().allMatch(x -> x.getBody().isReturnable());
+    }
 }

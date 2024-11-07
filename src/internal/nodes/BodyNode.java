@@ -58,24 +58,11 @@ public class BodyNode extends Node {
     }
 
     public boolean isReturnable() {
-        if (this.getBodyType() == BodyType.WhileLoop) {
-            return false;
-        } else {
-            if (this.returnStmt == null) {
-                for (BodyStmtNode statement : bodyStatements) {
-                    if (statement.getType() == BodyStmtType.IF) {
-                        IfStmtNode node = IfStmtNode.class.cast(statement.getNode());
-                        if (node.getBody().isReturnable()
-                                && (node.getEls() != null && node.getEls().getBody().isReturnable())) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            } else {
-                return true;
-            }
+        if (returnStmt != null) return true;
+        for (int i = bodyStatements.size() - 1; i >= 0; i--) {
+            if (bodyStatements.get(i).isReturnable()) return true;
         }
+        return false;
     }
 
     @Override

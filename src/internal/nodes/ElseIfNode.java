@@ -52,4 +52,8 @@ public class ElseIfNode extends Node {
     public List<Node> getChildren() {
         return List.of(this.expr, this.body);
     }
+
+    public BodyNode getBody() {
+        return body;
+    }
 }
