@@ -7,7 +7,7 @@ import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.SemanticNameException;
-import internal.scope.FunctionSymbol;
+import internal.scope.DefinedFunctionSymbol;
 import internal.scope.Scope;
 import internal.eval.Type;
 import provided.TokenType;
@@ -23,7 +23,7 @@ public class FunctionDefNode extends Node {
     public FunctionBodyNode body;
 
     protected FunctionDefNode(String filename, int lineNumber, String name, List<FuncDefParamNode> params,
-                    FunctionReturnNode returnType, FunctionBodyNode body) {
+            FunctionReturnNode returnType, FunctionBodyNode body) {
         super(filename, lineNumber);
         this.name = name;
         this.params = params;
@@ -97,7 +97,7 @@ public class FunctionDefNode extends Node {
         }
 
         try {
-            scope.define(new FunctionSymbol(this.getSymbol(), getLineNumber(), this));
+            scope.define(new DefinedFunctionSymbol(this.getSymbol(), getLineNumber(), this));
             scope.enableScope(this.getSymbol());
         } catch (SemanticException e) {
             e.report(this);

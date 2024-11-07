@@ -7,6 +7,7 @@ import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.eval.Type;
+import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -42,8 +43,9 @@ public class FuncCallNode extends OperandNode {
     @Override
     public boolean validateTree(Scope scope) {
         try {
-            scope.getScope(name);
-            return this.params.validateTree(scope) && this.params.validateParameters(scope, getEnclosingFunction());
+            FunctionSymbol calledFunc = scope.getScope(name).getContext();
+            return this.params.validateTree(scope)
+                    && calledFunc.validateParameters(scope, this.params);
         } catch (SemanticException e) {
             e.report(this);
             return false;
@@ -59,12 +61,12 @@ public class FuncCallNode extends OperandNode {
         return List.of(this.params);
     }
 
-    public FunctionDefNode getDefinition(Scope scope) throws SemanticException {
-        return scope.getScope(this.name).getContext().getTarget();
+    public FunctionSymbol getDefinition(Scope scope) throws SemanticException {
+        return scope.getScope(this.name).getContext();
     }
 
     @Override
     public Type inferType(Scope scope) throws SemanticException {
-        return this.getDefinition(scope).getReturnType();
+        return this.getDefinition(scope).returnType();
     }
 }
