@@ -83,7 +83,9 @@ public class IfStmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        return this.expr.validateTree(scope) && this.body.validateTree(scope)
+                && this.elifs.stream().allMatch(v -> v.validateTree(scope))
+                && (this.els == null || this.els.validateTree(scope));
     }
 
     @Override

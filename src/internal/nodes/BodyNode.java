@@ -3,7 +3,6 @@ package internal.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-import internal.BodyStmtType;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;

@@ -4,7 +4,10 @@ import java.util.List;
 
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.SemanticNameException;
 import internal.scope.Scope;
+import internal.scope.VariableSymbol;
 import provided.TokenType;
 
 public class VariableDeclarationNode extends Node {
@@ -43,7 +46,21 @@ public class VariableDeclarationNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        if (!validateId(name)) {
+            new SemanticNameException(name).report(this);
+            return false;
+        }
+
+        if (this.type.validateTree(scope)) {
+            try {
+                scope.getCurrentScope().define(VariableSymbol.from(this));
+                return true;
+            } catch (SemanticException e) {
+                e.report(this);
+                return false;
+            }
+        }
+        return false;
     }
 
     @Override
