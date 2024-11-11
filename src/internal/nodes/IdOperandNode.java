@@ -35,7 +35,7 @@ public class IdOperandNode extends OperandNode {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        return validateId(id) && scope.getCurrentScope().isDeclared(id);
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.List;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.scope.Scope;
 
 public class AsmtNode extends Node {
@@ -25,7 +26,18 @@ public class AsmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        try {
+            if (this.idNode.validateTree(scope) && this.expressionNode.validateTree(scope)) {
+                if (scope.getCurrentScope().getType(this.idNode.id).equals(this.expressionNode.inferType(scope))) {
+                    return true;
+                }
+            }
+        } catch (SemanticException e) {
+            e.report(this);
+            return false;
+        }
+
+        return false;
     }
 
     @Override
