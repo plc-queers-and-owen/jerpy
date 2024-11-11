@@ -40,7 +40,7 @@ public class ElseNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        return this.body.validateTree(scope);
     }
 
     @Override

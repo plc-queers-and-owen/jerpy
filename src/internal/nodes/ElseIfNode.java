@@ -41,7 +41,7 @@ public class ElseIfNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        return this.expr.validateTree(scope) && this.body.validateTree(scope);
     }
 
     @Override
