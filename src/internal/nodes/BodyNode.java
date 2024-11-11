@@ -54,7 +54,8 @@ public class BodyNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        return this.bodyStatements.stream().allMatch(v -> v.validateTree(scope))
+                && (this.returnStmt == null || this.returnStmt.validateTree(scope));
     }
 
     public boolean isReturnable() {

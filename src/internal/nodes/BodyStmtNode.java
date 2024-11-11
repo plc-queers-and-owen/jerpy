@@ -79,7 +79,16 @@ public class BodyStmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        switch (this.getType()) {
+            case BodyStmtType.FUNC_CALL:
+                return this.funcCall.validateTree(scope);
+            case BodyStmtType.IF:
+                return this.ifStmt.validateTree(scope);
+            case BodyStmtType.WHILE:
+                return this.whileLoop.validateTree(scope);
+            default:
+                return this.asmt.validateTree(scope);
+        }
     }
 
     public static BodyStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
