@@ -52,6 +52,12 @@ public class ReturnStmt extends Node {
         }
 
         try {
+            if (this.getEnclosingFunction().getSymbol().equals("main")
+                    && this.getEnclosingFunction().getReturnType() != Type.Void) {
+                new SemanticTypeException(this.getEnclosingFunction().getReturnType(), Type.Void)
+                        .report(this.getEnclosingFunction());
+                return false;
+            }
             if (this.getEnclosingFunction().getReturnType() != this.expr.inferType(scope)) {
                 new SemanticTypeException(this.expr.inferType(scope), this.getEnclosingFunction().getReturnType())
                         .report(this);
