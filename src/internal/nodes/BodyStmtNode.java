@@ -7,6 +7,7 @@ import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.scope.Scope;
+import provided.Token;
 import provided.TokenType;
 
 public class BodyStmtNode extends Node {
@@ -98,12 +99,22 @@ public class BodyStmtNode extends Node {
                         FuncCallNode.parse(it));
                 it.expect(";");
                 return result;
-            case 1:
-                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), WhileLoopNode.parse(it));
-            case 3:
-                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), IfStmtNode.parse(it));
             default:
-                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), AsmtNode.parse(it));
+                Token id = it.peek();
+                it.skip();
+                if (it.peek().getToken().equals("=")) {
+                    it.back();
+                    return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), AsmtNode.parse(it));
+                } else {
+                    it.back();
+                    switch (id.getToken()) {
+                        case "While":
+                            return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(),
+                                    WhileLoopNode.parse(it));
+                        default:
+                            return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), IfStmtNode.parse(it));
+                    }
+                }
         }
     }
 

@@ -40,6 +40,15 @@ public class PeekingArrayIterator {
         }
     }
 
+    /**
+     * Skips backward 1 token
+     */
+    public void back() {
+        if (idx > 0) {
+            idx--;
+        }
+    }
+
     public String getContext() {
         return String.join("",
                 this.internal
