@@ -24,6 +24,3 @@ JottParserTester and JottTokenizerTester classes should be in a package call tes
 
 the testCases directories should be in the working directory of your project. 
 
-## Currently Failing Phase 3:
-- mismatchedReturn.jott (Just. Doesn't output anything?)
-

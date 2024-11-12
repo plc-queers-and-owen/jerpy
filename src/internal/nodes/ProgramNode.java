@@ -42,7 +42,7 @@ public class ProgramNode extends Node {
     @Override
     public boolean validateTree(Scope scope) {
         boolean result = functions.stream().allMatch(node -> node.validateTree(scope));
-        if (!scope.isComplete("main")) {
+        if (!scope.isComplete("main") && result) {
             new SemanticUsageException("All programs must include a main[] function.").report(this);
             return false;
         }
