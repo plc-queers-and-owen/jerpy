@@ -3,6 +3,7 @@ package internal.nodes;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticUsageException;
 import internal.scope.Scope;
 
 import java.util.ArrayList;
@@ -40,7 +41,12 @@ public class ProgramNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return functions.stream().allMatch(node -> node.validateTree(scope));
+        boolean result = functions.stream().allMatch(node -> node.validateTree(scope));
+        if (!scope.isComplete("main")) {
+            new SemanticUsageException("All programs must include a main[] function.").report(this);
+            return false;
+        }
+        return result;
     }
 
     @Override

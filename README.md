@@ -26,6 +26,5 @@ the testCases directories should be in the working directory of your project.
 
 ## Currently Failing Phase 3:
 - mismatchedReturn.jott (Just. Doesn't output anything?)
-- missingMain.jott (MUST INCLUDE MAIN)
 - whileKeyword.jott (Should instead fail PH3)
 
