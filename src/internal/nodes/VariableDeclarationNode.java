@@ -35,6 +35,7 @@ public class VariableDeclarationNode extends Node {
         TypeNode type = TypeNode.parse(it);
 
         String name = it.expect(TokenType.ID_KEYWORD).getToken();
+        it.expect(";");
 
         return new VariableDeclarationNode(it.getCurrentFilename(), type.getLineNumber(), type, name);
     }

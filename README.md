@@ -25,7 +25,6 @@ JottParserTester and JottTokenizerTester classes should be in a package call tes
 the testCases directories should be in the working directory of your project. 
 
 ## Currently Failing Phase 3:
-- largerValid.jott (Parser error?)
 - mainReturnNotInt.jott (Wrong error, should fail for any non-void)
 - mismatchedReturn.jott (Just. Doesn't output anything?)
 - missingMain.jott (MUST INCLUDE MAIN)
