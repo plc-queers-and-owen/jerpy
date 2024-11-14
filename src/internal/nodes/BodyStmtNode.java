@@ -7,6 +7,7 @@ import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.scope.Scope;
+import provided.Token;
 import provided.TokenType;
 
 public class BodyStmtNode extends Node {
@@ -79,22 +80,41 @@ public class BodyStmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        switch (this.getType()) {
+            case BodyStmtType.FUNC_CALL:
+                return this.funcCall.validateTree(scope);
+            case BodyStmtType.IF:
+                return this.ifStmt.validateTree(scope);
+            case BodyStmtType.WHILE:
+                return this.whileLoop.validateTree(scope);
+            default:
+                return this.asmt.validateTree(scope);
+        }
     }
 
     public static BodyStmtNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException, ParseHaltException {
-        switch (it.peekExpect(TokenType.FC_HEADER, "While", "If", TokenType.ID_KEYWORD)) {
+        switch (it.peekExpect(TokenType.FC_HEADER, TokenType.ID_KEYWORD)) {
             case 0:
                 BodyStmtNode result = new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(),
                         FuncCallNode.parse(it));
                 it.expect(";");
                 return result;
-            case 1:
-                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), WhileLoopNode.parse(it));
-            case 2:
-                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), IfStmtNode.parse(it));
             default:
-                return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), AsmtNode.parse(it));
+                Token id = it.peek();
+                it.skip();
+                if (it.peek().getToken().equals("=")) {
+                    it.back();
+                    return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), AsmtNode.parse(it));
+                } else {
+                    it.back();
+                    switch (id.getToken()) {
+                        case "While":
+                            return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(),
+                                    WhileLoopNode.parse(it));
+                        default:
+                            return new BodyStmtNode(it.getCurrentFilename(), it.getCurrentLine(), IfStmtNode.parse(it));
+                    }
+                }
         }
     }
 

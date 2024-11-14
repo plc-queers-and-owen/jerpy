@@ -100,9 +100,6 @@ public class Scope {
         this.scopes = new HashMap<>();
 
         // Include builtins
-        // don't know if we need to properly define parameters
-        // but that would require reworking LocalScope more so
-        // I'm not doing that right now unless its needed
         FunctionSymbol print = new PrintFunction();
         LocalScope printScope = new LocalScope(print);
         printScope.finish();

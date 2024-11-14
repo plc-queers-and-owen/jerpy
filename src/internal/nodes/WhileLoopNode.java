@@ -25,7 +25,7 @@ public class WhileLoopNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return true;
+        return this.expression.validateTree(scope) && this.body.validateTree(scope);
     }
 
     @Override

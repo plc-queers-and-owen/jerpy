@@ -105,6 +105,7 @@ public class FunctionDefNode extends Node {
         }
 
         if (!this.params.stream().allMatch(p -> p.validateTree(scope))) {
+            scope.clearScope();
             return false;
         }
 
@@ -133,5 +134,10 @@ public class FunctionDefNode extends Node {
 
     public Type getReturnType() {
         return this.returnType.getType();
+    }
+
+    @Override
+    public String getSymbol() {
+        return this.name;
     }
 }
