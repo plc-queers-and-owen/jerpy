@@ -53,7 +53,7 @@ public class PrintFunction implements FunctionSymbol {
     }
 
     @Override
-    public void execute() {
+    public void execute(Scope scope) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }

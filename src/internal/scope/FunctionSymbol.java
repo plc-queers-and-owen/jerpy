@@ -44,5 +44,5 @@ public interface FunctionSymbol {
      */
     public boolean validateParameters(Scope scope, ParamsNode params) throws SemanticException;
 
-    public void execute();
+    public void execute(Scope scope);
 }

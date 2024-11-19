@@ -21,9 +21,4 @@ public interface JottTree {
      * @return true if valid Jott code; false otherwise
      */
     public boolean validateTree(Scope scope);
-	
-	/**
-	 * This will execute the Jott code represented by this JottTree node.
-	 */
-	public void execute();
 }

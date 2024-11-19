@@ -44,7 +44,7 @@ public class DefinedFunctionSymbol extends SymbolItem<FunctionDefNode> implement
     }
 
     @Override
-    public void execute() {
+    public void execute(Scope scope) {
         // TODO(phase-4)
         // Don't know if we'll end up needing this here,
         // but its useful for builtins if its in FuncitonSymbol

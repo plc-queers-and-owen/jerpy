@@ -74,7 +74,7 @@ public class BodyStmtNode extends Node {
     }
 
     @Override
-    public void execute() {
+    public void execute(Scope scope) {
 
     }
 

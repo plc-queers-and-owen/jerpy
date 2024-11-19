@@ -1,5 +1,8 @@
 package internal.nodes;
 import java.util.List;
+
+import internal.eval.TypedValue;
+import internal.scope.Scope;
 import provided.JottTree;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +48,13 @@ public abstract class Node implements JottTree {
 
     public void setParent(Node parent) {
         this.parent = parent;
+    }
+
+    public void execute(Scope scope) {
+    }
+
+    public TypedValue evaluate(Scope scope) {
+        return null;
     }
 
     /**
