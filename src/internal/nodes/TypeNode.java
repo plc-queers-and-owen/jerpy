@@ -47,7 +47,7 @@ public class TypeNode extends Node {
     }
 
     @Override
-    public void execute() {
+    public void execute(Scope scope) {
     }
 
     @Override

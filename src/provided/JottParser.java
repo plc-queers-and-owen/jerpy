@@ -11,7 +11,6 @@ import internal.ParseHaltException;
 
 import internal.PeekingArrayIterator;
 import internal.nodes.ProgramNode;
-import internal.scope.Scope;
 
 import java.util.ArrayList;
 
@@ -27,10 +26,7 @@ public class JottParser {
         PeekingArrayIterator it = new PeekingArrayIterator(tokens);
         try {
             ProgramNode parsed = ProgramNode.parse(it);
-            if (parsed.validateTree(new Scope())) {
-                return parsed;
-            }
-            return null;
+            return parsed;
         } catch (ParseHaltException e) {
             System.err.println("Syntax Error");
             System.err.println(e.getMessage());

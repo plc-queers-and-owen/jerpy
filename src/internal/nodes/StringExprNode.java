@@ -38,7 +38,7 @@ public class StringExprNode extends ExprNode {
     }
 
     @Override
-    public void execute() {
+    public void execute(Scope scope) {
     }
 
     @Override

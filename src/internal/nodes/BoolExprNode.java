@@ -39,7 +39,7 @@ public class BoolExprNode extends ExprNode {
     }
 
     @Override
-    public void execute() {
+    public void execute(Scope scope) {
     }
 
     @Override
