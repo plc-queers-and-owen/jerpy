@@ -6,6 +6,7 @@ import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.nodes.ExprNode;
 import internal.nodes.ParamsNode;
 import internal.scope.FunctionSymbol;
@@ -53,9 +54,8 @@ public class PrintFunction implements FunctionSymbol {
     }
 
     @Override
-    public void execute(Scope scope) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+    public TypedValue evaluate(Scope scope, ParamsNode params) {
+        return null;
     }
 
     @Override

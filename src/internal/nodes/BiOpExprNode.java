@@ -1,13 +1,16 @@
 package internal.nodes;
 
+import java.util.Arrays;
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -17,6 +20,7 @@ import provided.TokenType;
  * Node: <rel_op> | <math_op>
  */
 public class BiOpExprNode extends ExprNode {
+    private static final List<String> relOps = Arrays.asList("<", ">", "<=", ">=", "==", "!=");
     private final OperandNode a, b;
     private final String op;
 
@@ -61,7 +65,52 @@ public class BiOpExprNode extends ExprNode {
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) throws ExecutionException, SemanticException {
+        double first = this.a.evaluate(scope).getNumericOperand();
+        double second = this.b.evaluate(scope).getNumericOperand();
+        TypedValue result;
+
+        switch (this.op) {
+            case "+":
+                result = new TypedValue(first + second);
+                break;
+            case "-":
+                result = new TypedValue(first + second);
+                break;
+            case "*":
+                result = new TypedValue(first * second);
+                break;
+            case "/":
+                result = new TypedValue(first / second);
+                break;
+            case "<":
+                result = new TypedValue(first < second);
+                break;
+            case ">":
+                result = new TypedValue(first > second);
+                break;
+            case "<=":
+                result = new TypedValue(first <= second);
+                break;
+            case ">=":
+                result = new TypedValue(first >= second);
+                break;
+            case "==":
+                result = new TypedValue(first == second);
+                break;
+            case "!=":
+                result = new TypedValue(first != second);
+                break;
+            default:
+                throw new ExecutionException("Missed an unknown operator", this);
+        }
+
+        if (this.inferType(scope) == Type.Integer) {
+            int resultInt = (int) Math.floor(result.getDouble());
+            return new TypedValue(resultInt);
+        } else {
+            return result;
+        }
     }
 
     @Override
@@ -69,10 +118,18 @@ public class BiOpExprNode extends ExprNode {
         return List.of(this.a, this.b);
     }
 
+    public boolean isRelOp() {
+        return relOps.contains(this.op);
+    }
+
     @Override
     public Type inferType(Scope scope) throws SemanticException {
         if (this.validateTree(scope)) {
-            return this.a.inferType(scope);
+            if (this.isRelOp()) {
+                return Type.Boolean;
+            } else {
+                return this.a.inferType(scope);
+            }
         }
         throw new SemanticException("Type Error: Type mismatch in numeric operation.");
     }

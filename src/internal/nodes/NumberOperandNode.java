@@ -6,6 +6,7 @@ import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.UnreachableException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -50,7 +51,8 @@ public class NumberOperandNode extends OperandNode {
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) {
+        return new TypedValue(this.inferType(scope), this.val);
     }
 
     @Override
