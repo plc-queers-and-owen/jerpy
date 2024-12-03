@@ -47,10 +47,6 @@ public class TypeNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
-    }
-
-    @Override
     public List<Node> getChildren() {
         return List.of();
     }

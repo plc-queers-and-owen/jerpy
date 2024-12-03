@@ -91,7 +91,11 @@ public class FunctionBodyNode extends Node {
 
     @Override
     public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
-        return null;
+        for (VariableDeclarationNode dec : this.varDeclarations) {
+            dec.evaluate(scope);
+        }
+
+        return this.body.evaluate(scope);
     }
 
     @Override

@@ -2,10 +2,12 @@ package internal.nodes;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.SemanticNameException;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import internal.scope.VariableSymbol;
 import provided.TokenType;
@@ -65,7 +67,9 @@ public class VariableDeclarationNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        scope.getCurrentScope().define(new VariableSymbol(this.getSymbol(), this.getLineNumber(), this));
+        return new TypedValue();
     }
 
     @Override

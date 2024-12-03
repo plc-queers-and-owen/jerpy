@@ -3,9 +3,12 @@ package internal.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 
 public class BodyNode extends Node {
@@ -66,7 +69,19 @@ public class BodyNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        for (BodyStmtNode stmt : this.bodyStatements) {
+            TypedValue bodyReturn = stmt.evaluate(scope);
+            if (bodyReturn.hasValue()) {
+                return bodyReturn;
+            }
+        }
+
+        if (this.returnStmt == null) {
+            return new TypedValue();
+        } else {
+            return this.returnStmt.evaluate(scope);
+        }
     }
 
     @Override

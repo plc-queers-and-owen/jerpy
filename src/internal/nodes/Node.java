@@ -52,9 +52,6 @@ public abstract class Node implements JottTree {
         this.parent = parent;
     }
 
-    public void execute(Scope scope) throws ExecutionException, SemanticException {
-    }
-
     public TypedValue evaluate(Scope scope) throws ExecutionException, SemanticException {
         return null;
     }

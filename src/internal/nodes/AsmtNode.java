@@ -2,11 +2,13 @@ package internal.nodes;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.SemanticTypeException;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 
 public class AsmtNode extends Node {
@@ -46,8 +48,9 @@ public class AsmtNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
-
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        scope.getCurrentScope().setValue(this.idNode.id, this.expressionNode.evaluate(scope));
+        return new TypedValue();
     }
 
     public static AsmtNode parse(PeekingArrayIterator it) throws ParseHaltException, ParseUnexpectedTokenException {

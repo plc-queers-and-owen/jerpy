@@ -89,10 +89,6 @@ public class IfStmtNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
-    }
-
-    @Override
     public List<Node> getChildren() {
         List<Node> children = new ArrayList<>();
         children.add(expr);

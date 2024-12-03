@@ -1,7 +1,6 @@
 package internal.nodes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import internal.ParseHaltException;
@@ -50,10 +49,6 @@ public class ParamsNode extends Node {
 
     public List<ExprNode> params() {
         return this.params;
-    }
-
-    @Override
-    public void execute(Scope scope) {
     }
 
     @Override

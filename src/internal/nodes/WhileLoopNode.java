@@ -2,9 +2,12 @@ package internal.nodes;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 
 public class WhileLoopNode extends Node {
@@ -28,11 +31,6 @@ public class WhileLoopNode extends Node {
         return this.expression.validateTree(scope) && this.body.validateTree(scope);
     }
 
-    @Override
-    public void execute(Scope scope) {
-
-    }
-
     public static WhileLoopNode parse(PeekingArrayIterator it)
             throws ParseHaltException, ParseUnexpectedTokenException {
         it.expect("While");
@@ -48,6 +46,17 @@ public class WhileLoopNode extends Node {
     @Override
     public List<Node> getChildren() {
         return List.of(expression, body);
+    }
+
+    @Override
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        while (this.expression.evaluate(scope).getBoolean()) {
+            TypedValue bodyResult = this.body.evaluate(scope);
+            if (bodyResult.hasValue()) {
+                return bodyResult;
+            }
+        }
+        return new TypedValue();
     }
 
 }
