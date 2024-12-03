@@ -78,6 +78,8 @@ public class BodyStmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         switch (this.getType()) {
             case BodyStmtType.FUNC_CALL:
                 return this.funcCall.validateTree(scope);

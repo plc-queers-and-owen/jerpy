@@ -28,4 +28,12 @@ public abstract class SymbolItem<T extends Node> {
     }
 
     public abstract SymbolType getSymbolType();
+
+    public void initialize() {
+
+    }
+
+    public boolean isInitialized() {
+        return true;
+    }
 }

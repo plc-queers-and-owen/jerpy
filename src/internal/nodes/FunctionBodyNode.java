@@ -72,6 +72,8 @@ public class FunctionBodyNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         for (VariableDeclarationNode dec : varDeclarations) {
             if (!dec.validateTree(scope)) {
                 return false;

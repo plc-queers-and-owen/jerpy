@@ -90,6 +90,8 @@ public class FunctionDefNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         if (!validateId(name)) {
             new SemanticNameException(this.name).report(this);
             return false;
@@ -124,8 +126,8 @@ public class FunctionDefNode extends Node {
 
     public TypedValue call(Scope scope, ParamsNode callParams) throws SemanticException, ExecutionException {
         String parentScope = scope.getCurrentScopeName();
-        scope.enableScope(this.getSymbol());
-        LocalScope current = scope.getCurrentScope();
+
+        LocalScope current = scope.getScope(this.getSymbol());
         for (int param = 0; param < this.params.size(); param++) {
             try {
                 current.setValue(this.params.get(param).getSymbol(), callParams.params().get(param).evaluate(scope));
@@ -133,9 +135,13 @@ public class FunctionDefNode extends Node {
                 // Should never actually end up here
             }
         }
-
+        scope.enableScope(this.getSymbol());
         TypedValue result = this.body.evaluate(scope);
-        scope.enableScope(parentScope);
+        if (parentScope == null) {
+            scope.clearScope();
+        } else {
+            scope.enableScope(parentScope);
+        }
         return result;
     }
 

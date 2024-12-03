@@ -52,14 +52,14 @@ public class PeekingArrayIterator {
     public String getContext() {
         return String.join("",
                 this.internal
-                        .subList(Math.clamp(idx - 10000, 0, this.internal.size()),
-                                Math.clamp(idx, 0, this.internal.size()))
+                        .subList(Math.clamp(idx - 50, 0, this.internal.size()),
+                                        Math.clamp(idx, 0, this.internal.size()))
                         .stream().map(value -> value.getToken()).toList())
                 + "  --> " + this.internal.get(Math.clamp(idx, 0, this.internal.size() - 1)).getToken() + " <--  "
                 + String.join("",
                                 this.internal
                                 .subList(Math.clamp(idx + 1, 0, this.internal.size()),
-                                        Math.clamp(idx + 100000, 0, this.internal.size()))
+                                        Math.clamp(idx + 50, 0, this.internal.size()))
                                 .stream().map(value -> value.getToken()).toList());
     }
 

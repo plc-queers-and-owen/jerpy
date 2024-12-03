@@ -46,6 +46,8 @@ public class BiOpExprNode extends ExprNode {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         try {
             if (!this.a.inferType(scope).isNumeric()) {
                 new SemanticException("Type Error: Expected either an Integer or Double value but got "
@@ -75,12 +77,15 @@ public class BiOpExprNode extends ExprNode {
                 result = new TypedValue(first + second);
                 break;
             case "-":
-                result = new TypedValue(first + second);
+                result = new TypedValue(first - second);
                 break;
             case "*":
                 result = new TypedValue(first * second);
                 break;
             case "/":
+                if (second == 0.0) {
+                    throw new ExecutionException("Cannot divide by 0", a);
+                }
                 result = new TypedValue(first / second);
                 break;
             case "<":

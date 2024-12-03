@@ -29,9 +29,12 @@ public class AsmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         try {
-            if (this.idNode.validateTree(scope) && this.expressionNode.validateTree(scope)) {
+            if (validateId(this.idNode.id) && this.expressionNode.validateTree(scope)) {
                 if (scope.getCurrentScope().getType(this.idNode.id).equals(this.expressionNode.inferType(scope))) {
+                    scope.getCurrentScope().initialize(this.idNode.id);
                     return true;
                 } else {
                     new SemanticTypeException(this.expressionNode.inferType(scope),

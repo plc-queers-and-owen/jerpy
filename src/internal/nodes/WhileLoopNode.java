@@ -28,6 +28,8 @@ public class WhileLoopNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         return this.expression.validateTree(scope) && this.body.validateTree(scope);
     }
 
@@ -51,6 +53,8 @@ public class WhileLoopNode extends Node {
     @Override
     public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
         while (this.expression.evaluate(scope).getBoolean()) {
+            // System.out.println(this.expression.evaluate(scope).getValue() + "::" +
+            // this.expression.convertToJott());
             TypedValue bodyResult = this.body.evaluate(scope);
             if (bodyResult.hasValue()) {
                 return bodyResult;

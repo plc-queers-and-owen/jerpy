@@ -48,6 +48,8 @@ public class ReturnStmt extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         if (this.getEnclosingFunction().getReturnType() == Type.Void) {
             new SemanticReturnPathException("Cannot return a value from a Void function.").report(this);
             return false;

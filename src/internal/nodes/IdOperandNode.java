@@ -6,6 +6,8 @@ import internal.ExecutionException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
+import internal.SemanticNameException;
+import internal.SemanticUninitializedVariableException;
 import internal.eval.Type;
 import internal.eval.TypedValue;
 import internal.scope.Scope;
@@ -37,7 +39,16 @@ public class IdOperandNode extends OperandNode {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return validateId(id) && scope.getCurrentScope().isInitialized(id);
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
+        if (validateId(id) && scope.getCurrentScope().isInitialized(id)) {
+            return true;
+        } else if (validateId(id)) {
+            new SemanticUninitializedVariableException(id).report(this);
+        } else {
+            new SemanticNameException(id).report(this);
+        }
+        return false;
     }
 
     @Override

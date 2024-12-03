@@ -49,6 +49,8 @@ public class VariableDeclarationNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         if (!validateId(name)) {
             new SemanticNameException(name).report(this);
             return false;
@@ -68,7 +70,8 @@ public class VariableDeclarationNode extends Node {
 
     @Override
     public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
-        scope.getCurrentScope().define(new VariableSymbol(this.getSymbol(), this.getLineNumber(), this));
+        // scope.getCurrentScope().define(new VariableSymbol(this.getSymbol(),
+        // this.getLineNumber(), this));
         return new TypedValue();
     }
 
