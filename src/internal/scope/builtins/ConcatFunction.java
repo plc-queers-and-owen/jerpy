@@ -2,6 +2,7 @@ package internal.scope.builtins;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
@@ -64,8 +65,11 @@ public class ConcatFunction implements FunctionSymbol {
     }
 
     @Override
-    public TypedValue evaluate(Scope scope, ParamsNode params) {
-        return null;
+    public TypedValue evaluate(Scope scope, ParamsNode params) throws SemanticException, ExecutionException {
+        String first = params.params().getFirst().evaluate(scope).getString();
+        String second = params.params().getLast().evaluate(scope).getString();
+
+        return new TypedValue(first.concat(second));
     }
 
     @Override

@@ -2,6 +2,7 @@ package internal.scope.builtins;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
@@ -54,8 +55,10 @@ public class PrintFunction implements FunctionSymbol {
     }
 
     @Override
-    public TypedValue evaluate(Scope scope, ParamsNode params) {
-        return null;
+    public TypedValue evaluate(Scope scope, ParamsNode params) throws SemanticException, ExecutionException {
+        String content = params.params().getFirst().evaluate(scope).getValue();
+        System.out.println(content);
+        return new TypedValue();
     }
 
     @Override

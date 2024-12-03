@@ -2,6 +2,7 @@ package internal.scope.builtins;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
@@ -58,8 +59,9 @@ public class LengthFunction implements FunctionSymbol {
     }
 
     @Override
-    public TypedValue evaluate(Scope scope, ParamsNode params) {
-        return null;
+    public TypedValue evaluate(Scope scope, ParamsNode params) throws ExecutionException, SemanticException {
+        String param = params.params().getFirst().evaluate(scope).getString();
+        return new TypedValue(param.length());
     }
 
     @Override

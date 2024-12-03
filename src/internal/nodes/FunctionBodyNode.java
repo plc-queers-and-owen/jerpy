@@ -3,10 +3,13 @@ package internal.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.SemanticReturnPathException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 
 /**
@@ -87,7 +90,8 @@ public class FunctionBodyNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        return null;
     }
 
     @Override

@@ -79,6 +79,10 @@ public class TypedValue {
         }
     }
 
+    public boolean hasValue() {
+        return !this.type.equals(Type.Void);
+    }
+
     public TypedValue(double value) {
         this.type = Type.Double;
         this.value = String.valueOf(value);
@@ -101,5 +105,10 @@ public class TypedValue {
         } else {
             this.value = "False";
         }
+    }
+
+    public TypedValue() {
+        this.type = Type.Void;
+        this.value = null;
     }
 }

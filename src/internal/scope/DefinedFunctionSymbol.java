@@ -1,5 +1,6 @@
 package internal.scope;
 
+import internal.ExecutionException;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
@@ -45,8 +46,8 @@ public class DefinedFunctionSymbol extends SymbolItem<FunctionDefNode> implement
     }
 
     @Override
-    public TypedValue evaluate(Scope scope, ParamsNode params) {
-        return null;
+    public TypedValue evaluate(Scope scope, ParamsNode params) throws SemanticException, ExecutionException {
+        return this.getTarget().call(scope, params);
     }
 
     @Override

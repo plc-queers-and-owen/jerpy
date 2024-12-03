@@ -3,13 +3,16 @@ package internal.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.SemanticNameException;
 import internal.scope.DefinedFunctionSymbol;
+import internal.scope.LocalScope;
 import internal.scope.Scope;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import provided.TokenType;
 
 /**
@@ -119,8 +122,21 @@ public class FunctionDefNode extends Node {
         }
     }
 
-    @Override
-    public void execute(Scope scope) {
+    public TypedValue call(Scope scope, ParamsNode callParams) throws SemanticException, ExecutionException {
+        String parentScope = scope.getCurrentScopeName();
+        scope.enableScope(this.getSymbol());
+        LocalScope current = scope.getCurrentScope();
+        for (int param = 0; param < this.params.size(); param++) {
+            try {
+                current.setValue(this.params.get(param).getSymbol(), callParams.params().get(param).evaluate(scope));
+            } catch (IndexOutOfBoundsException e) {
+                // Should never actually end up here
+            }
+        }
+
+        TypedValue result = this.body.evaluate(scope);
+        scope.enableScope(parentScope);
+        return result;
     }
 
     @Override
