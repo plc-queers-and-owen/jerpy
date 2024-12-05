@@ -78,25 +78,4 @@ public class BodyNode extends Node {
         }
         return children;
     }
-
-    /**
-     * Gets the type of body this is
-     * 
-     * @return an instance of BodyType
-     */
-    public BodyType getBodyType() {
-        Node parent = this.getAnyClosestParent("FunctionDefNode", "WhileLoopNode", "IfStmtNode", "ElseIfNode",
-                "ElseNode");
-        if (parent instanceof FunctionDefNode) {
-            return BodyType.FunctionDef;
-        } else if (parent instanceof WhileLoopNode) {
-            return BodyType.WhileLoop;
-        } else if (parent instanceof IfStmtNode) {
-            return BodyType.If;
-        } else if (parent instanceof ElseIfNode) {
-            return BodyType.ElseIf;
-        } else {
-            return BodyType.Else;
-        }
-    }
 }
