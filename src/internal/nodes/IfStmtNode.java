@@ -3,9 +3,12 @@ package internal.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -83,13 +86,11 @@ public class IfStmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         return this.expr.validateTree(scope) && this.body.validateTree(scope)
                 && this.elifs.stream().allMatch(v -> v.validateTree(scope))
                 && (this.els == null || this.els.validateTree(scope));
-    }
-
-    @Override
-    public void execute(Scope scope) {
     }
 
     @Override
@@ -102,6 +103,25 @@ public class IfStmtNode extends Node {
             children.add(this.els);
         }
         return children;
+    }
+
+    @Override
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        if (this.expr.evaluate(scope).getBoolean()) {
+            return this.body.evaluate(scope);
+        }
+
+        for (ElseIfNode elif : this.elifs) {
+            if (elif.matches(scope)) {
+                return elif.getBody().evaluate(scope);
+            }
+        }
+
+        if (this.els == null) {
+            return new TypedValue();
+        } else {
+            return this.els.evaluate(scope);
+        }
     }
 
     public boolean isReturnable() {

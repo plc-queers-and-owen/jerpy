@@ -40,6 +40,8 @@ public class FuncDefParamNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         if (!validateId(id)) {
             new SemanticNameException(id).report(this);
             return false;
@@ -53,10 +55,6 @@ public class FuncDefParamNode extends Node {
         }
 
         return this.type.validateTree(scope);
-    }
-
-    @Override
-    public void execute(Scope scope) {
     }
 
     @Override

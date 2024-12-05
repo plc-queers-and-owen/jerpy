@@ -1,9 +1,11 @@
 package internal.scope;
 
+import internal.ExecutionException;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.nodes.FuncDefParamNode;
 import internal.nodes.FunctionDefNode;
 import internal.nodes.ParamsNode;
@@ -44,11 +46,8 @@ public class DefinedFunctionSymbol extends SymbolItem<FunctionDefNode> implement
     }
 
     @Override
-    public void execute(Scope scope) {
-        // TODO(phase-4)
-        // Don't know if we'll end up needing this here,
-        // but its useful for builtins if its in FuncitonSymbol
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+    public TypedValue evaluate(Scope scope, ParamsNode params) throws SemanticException, ExecutionException {
+        return this.getTarget().call(scope, params);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package internal.scope;
 
+import internal.ExecutionException;
 import internal.SemanticException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.nodes.ParamsNode;
 
 public interface FunctionSymbol {
@@ -44,5 +46,5 @@ public interface FunctionSymbol {
      */
     public boolean validateParameters(Scope scope, ParamsNode params) throws SemanticException;
 
-    public void execute(Scope scope);
+    public TypedValue evaluate(Scope scope, ParamsNode params) throws ExecutionException, SemanticException;
 }

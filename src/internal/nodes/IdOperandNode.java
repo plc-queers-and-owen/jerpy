@@ -2,10 +2,14 @@ package internal.nodes;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
+import internal.SemanticNameException;
+import internal.SemanticUninitializedVariableException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -35,11 +39,26 @@ public class IdOperandNode extends OperandNode {
 
     @Override
     public boolean validateTree(Scope scope) {
-        return validateId(id) && scope.getCurrentScope().isDeclared(id);
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
+        if (validateId(id) && scope.getCurrentScope().isInitialized(id)) {
+            return true;
+        } else if (validateId(id)) {
+            new SemanticUninitializedVariableException(id).report(this);
+        } else {
+            new SemanticNameException(id).report(this);
+        }
+        return false;
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) throws ExecutionException {
+        try {
+            return scope.getCurrentScope().getValue(id);
+        } catch (SemanticException e) {
+            throw new ExecutionException("Undeclared/uninitialized variable used.", this);
+        }
+
     }
 
     @Override

@@ -2,11 +2,13 @@ package internal.nodes;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.FunctionSymbol;
 import internal.scope.Scope;
 import provided.TokenType;
@@ -42,6 +44,8 @@ public class FuncCallNode extends OperandNode {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         try {
             FunctionSymbol calledFunc = scope.getScope(name).getContext();
             return this.params.validateTree(scope)
@@ -53,7 +57,8 @@ public class FuncCallNode extends OperandNode {
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) throws ExecutionException, SemanticException {
+        return this.getDefinition(scope).evaluate(scope, params);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package internal.nodes;
 import java.util.List;
 
+import internal.ExecutionException;
+import internal.SemanticException;
 import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.JottTree;
@@ -50,10 +52,7 @@ public abstract class Node implements JottTree {
         this.parent = parent;
     }
 
-    public void execute(Scope scope) {
-    }
-
-    public TypedValue evaluate(Scope scope) {
+    public TypedValue evaluate(Scope scope) throws ExecutionException, SemanticException {
         return null;
     }
 

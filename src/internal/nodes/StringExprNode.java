@@ -6,6 +6,7 @@ import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -24,7 +25,8 @@ public class StringExprNode extends ExprNode {
 
     public static StringExprNode parse(PeekingArrayIterator it) throws ParseUnexpectedTokenException {
         Token tk = it.expect(TokenType.STRING);
-        return new StringExprNode(it.getCurrentFilename(), tk.getLineNum(), tk.getToken());
+        return new StringExprNode(it.getCurrentFilename(), tk.getLineNum(), tk.getToken().substring(1,
+                tk.getToken().length() - 1));
     }
 
     @Override
@@ -34,11 +36,14 @@ public class StringExprNode extends ExprNode {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         return true;
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) {
+        return new TypedValue(val);
     }
 
     @Override

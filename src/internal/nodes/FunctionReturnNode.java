@@ -43,12 +43,9 @@ public class FunctionReturnNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         return true;
-    }
-
-    @Override
-    public void execute(Scope scope) {
-
     }
 
     @Override

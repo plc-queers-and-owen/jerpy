@@ -68,6 +68,21 @@ public class TypedValue {
         }
     }
 
+    public double getNumericOperand() throws SemanticException {
+        switch (this.type) {
+            case Type.Double:
+                return this.getDouble();
+            case Type.Integer:
+                return (double) this.getInteger();
+            default:
+                throw new SemanticException("Value stored with inappropriate type.");
+        }
+    }
+
+    public boolean hasValue() {
+        return !this.type.equals(Type.Void);
+    }
+
     public TypedValue(double value) {
         this.type = Type.Double;
         this.value = String.valueOf(value);
@@ -90,5 +105,10 @@ public class TypedValue {
         } else {
             this.value = "False";
         }
+    }
+
+    public TypedValue() {
+        this.type = Type.Void;
+        this.value = null;
     }
 }

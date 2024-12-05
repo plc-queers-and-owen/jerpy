@@ -3,9 +3,12 @@ package internal.nodes;
 import java.util.List;
 
 import internal.BodyStmtType;
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.Token;
 import provided.TokenType;
@@ -74,12 +77,9 @@ public class BodyStmtNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
-
-    }
-
-    @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         switch (this.getType()) {
             case BodyStmtType.FUNC_CALL:
                 return this.funcCall.validateTree(scope);
@@ -152,5 +152,10 @@ public class BodyStmtNode extends Node {
     @Override
     public List<Node> getChildren() {
         return List.of(this.getNode());
+    }
+
+    @Override
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        return this.getNode().evaluate(scope);
     }
 }

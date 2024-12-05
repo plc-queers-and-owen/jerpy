@@ -2,10 +2,12 @@ package internal.scope.builtins;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.SemanticException;
 import internal.SemanticTypeException;
 import internal.SemanticUsageException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.nodes.ExprNode;
 import internal.nodes.ParamsNode;
 import internal.scope.FunctionSymbol;
@@ -63,9 +65,11 @@ public class ConcatFunction implements FunctionSymbol {
     }
 
     @Override
-    public void execute(Scope scope) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+    public TypedValue evaluate(Scope scope, ParamsNode params) throws SemanticException, ExecutionException {
+        String first = params.params().getFirst().evaluate(scope).getString();
+        String second = params.params().getLast().evaluate(scope).getString();
+
+        return new TypedValue(first.concat(second));
     }
 
     @Override

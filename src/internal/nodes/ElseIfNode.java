@@ -2,9 +2,11 @@ package internal.nodes;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -41,11 +43,9 @@ public class ElseIfNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         return this.expr.validateTree(scope) && this.body.validateTree(scope);
-    }
-
-    @Override
-    public void execute(Scope scope) {
     }
 
     @Override
@@ -55,5 +55,9 @@ public class ElseIfNode extends Node {
 
     public BodyNode getBody() {
         return body;
+    }
+
+    public boolean matches(Scope scope) throws SemanticException, ExecutionException {
+        return this.expr.evaluate(scope).getBoolean();
     }
 }

@@ -6,6 +6,7 @@ import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 
 /**
@@ -35,11 +36,14 @@ public class BoolExprNode extends ExprNode {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         return true;
     }
 
     @Override
-    public void execute(Scope scope) {
+    public TypedValue evaluate(Scope scope) {
+        return new TypedValue(val);
     }
 
     @Override

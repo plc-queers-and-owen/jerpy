@@ -5,14 +5,17 @@ import internal.nodes.VariableDeclarationNode;
 
 public class VariableSymbol extends SymbolItem<VariableDeclarationNode> {
     private TypedValue value;
+    private boolean initialized;
     public VariableSymbol(String symbol, int definedAt, VariableDeclarationNode target) {
         super(symbol, definedAt, target);
         this.value = null;
+        this.initialized = false;
     }
 
     public VariableSymbol(String symbol, int definedAt, VariableDeclarationNode target, TypedValue value) {
         super(symbol, definedAt, target);
         this.value = value;
+        this.initialized = true;
     }
 
     public static VariableSymbol from(VariableDeclarationNode target) {
@@ -42,5 +45,15 @@ public class VariableSymbol extends SymbolItem<VariableDeclarationNode> {
     @Override
     public SymbolType getSymbolType() {
         return SymbolType.Variable;
+    }
+
+    @Override
+    public void initialize() {
+        this.initialized = true;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return this.initialized;
     }
 }

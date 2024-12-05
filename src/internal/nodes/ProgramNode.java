@@ -1,8 +1,10 @@
 package internal.nodes;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
+import internal.SemanticException;
 import internal.SemanticUsageException;
 import internal.scope.Scope;
 
@@ -41,6 +43,8 @@ public class ProgramNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         boolean result = functions.stream().allMatch(node -> node.validateTree(scope));
         if (!scope.isComplete("main") && result) {
             new SemanticUsageException("All programs must include a main[] function.").report(this);
@@ -49,8 +53,9 @@ public class ProgramNode extends Node {
         return result;
     }
 
-    @Override
-    public void execute(Scope scope) {
+    public void execute(Scope scope) throws SemanticException, ExecutionException {
+        scope.getScope("main").getContext().evaluate(scope,
+                new ParamsNode(getFilename(), getLineNumber(), new ArrayList<>()));
     }
 
     @Override

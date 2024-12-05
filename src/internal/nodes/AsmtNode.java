@@ -2,11 +2,13 @@ package internal.nodes;
 
 import java.util.List;
 
+import internal.ExecutionException;
 import internal.ParseHaltException;
 import internal.ParseUnexpectedTokenException;
 import internal.PeekingArrayIterator;
 import internal.SemanticException;
 import internal.SemanticTypeException;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 
 public class AsmtNode extends Node {
@@ -27,9 +29,12 @@ public class AsmtNode extends Node {
 
     @Override
     public boolean validateTree(Scope scope) {
+        // System.out.println(this.convertToJott() + " :: " +
+        // Integer.toString(this.getLineNumber()));
         try {
-            if (this.idNode.validateTree(scope) && this.expressionNode.validateTree(scope)) {
+            if (validateId(this.idNode.id) && this.expressionNode.validateTree(scope)) {
                 if (scope.getCurrentScope().getType(this.idNode.id).equals(this.expressionNode.inferType(scope))) {
+                    scope.getCurrentScope().initialize(this.idNode.id);
                     return true;
                 } else {
                     new SemanticTypeException(this.expressionNode.inferType(scope),
@@ -46,8 +51,9 @@ public class AsmtNode extends Node {
     }
 
     @Override
-    public void execute(Scope scope) {
-
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+        scope.getCurrentScope().setValue(this.idNode.id, this.expressionNode.evaluate(scope));
+        return new TypedValue();
     }
 
     public static AsmtNode parse(PeekingArrayIterator it) throws ParseHaltException, ParseUnexpectedTokenException {

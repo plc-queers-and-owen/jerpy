@@ -114,11 +114,17 @@ public class LocalScope {
      */
     public boolean isInitialized(String key) {
         if (this.parameters.containsKey(key)) {
-            return this.parameters.get(key).hasValue();
+            return true;
         } else if (this.variables.containsKey(key)) {
-            return this.variables.get(key).hasValue();
+            return this.variables.get(key).isInitialized();
         } else {
             return false;
+        }
+    }
+
+    public void initialize(String key) {
+        if (this.variables.containsKey(key)) {
+            this.variables.get(key).initialize();
         }
     }
 
