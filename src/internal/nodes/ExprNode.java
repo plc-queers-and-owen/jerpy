@@ -1,10 +1,8 @@
 package internal.nodes;
 
-import internal.ParseHaltException;
-import internal.ParseLowerCaseIdentifierException;
-import internal.PeekingArrayIterator;
-import internal.SemanticException;
+import internal.*;
 import internal.eval.Type;
+import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -41,4 +39,7 @@ public abstract class ExprNode extends Node {
     }
 
     public abstract Type inferType(Scope scope) throws SemanticException;
+
+    @Override
+    public abstract TypedValue evaluate(Scope scope) throws ExecutionException, SemanticException;
 }

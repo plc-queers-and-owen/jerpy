@@ -2,12 +2,7 @@ package internal.nodes;
 
 import java.util.List;
 
-import internal.ExecutionException;
-import internal.ParseHaltException;
-import internal.PeekingArrayIterator;
-import internal.SemanticException;
-import internal.SemanticReturnPathException;
-import internal.SemanticTypeException;
+import internal.*;
 import internal.eval.Type;
 import internal.eval.TypedValue;
 import internal.scope.Scope;
@@ -67,6 +62,7 @@ public class ReturnStmt extends Node {
                         .report(this);
                 return false;
             }
+            expr.validateTree(scope);
         } catch (SemanticException e) {
             e.report(this);
             return false;
@@ -76,8 +72,8 @@ public class ReturnStmt extends Node {
     }
 
     @Override
-    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
-        return this.expr.evaluate(scope);
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException, ReturnException {
+        throw new ReturnException(this.expr.evaluate(scope));
     }
 
     @Override

@@ -2,12 +2,7 @@ package internal.nodes;
 
 import java.util.List;
 
-import internal.BodyStmtType;
-import internal.ExecutionException;
-import internal.ParseHaltException;
-import internal.ParseUnexpectedTokenException;
-import internal.PeekingArrayIterator;
-import internal.SemanticException;
+import internal.*;
 import internal.eval.TypedValue;
 import internal.scope.Scope;
 import provided.Token;
@@ -155,7 +150,7 @@ public class BodyStmtNode extends Node {
     }
 
     @Override
-    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException, ReturnException {
         return this.getNode().evaluate(scope);
     }
 }
