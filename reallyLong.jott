@@ -2,6 +2,18 @@
 #it will test many of the features
 #it does not test them all
 
+Def earlyReturn[]: String {
+    ::concat["a", "b"];
+    ::concat["x", "y"];
+    Return ::concat["g"];
+}
+
+Def testEarlyReturn[]: Void {
+    String val;
+    val = ::earlyReturn[];
+    ::print[::concat["g == ", val]];
+}
+
 Def testPrintLoop[ x:Integer ]:Void{
     While[x>0]{
 	    ::print[x];
@@ -74,4 +86,5 @@ Def main[]:Void{
 	intI = ::testIfLoop[3];
 	::print[intI];
 	::testFuncCallLoop[5];
+	::testEarlyReturn[];
 }
