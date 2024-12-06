@@ -3,11 +3,7 @@ package internal.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-import internal.ExecutionException;
-import internal.ParseHaltException;
-import internal.ParseUnexpectedTokenException;
-import internal.PeekingArrayIterator;
-import internal.SemanticException;
+import internal.*;
 import internal.eval.TypedValue;
 import internal.scope.Scope;
 
@@ -71,19 +67,14 @@ public class BodyNode extends Node {
     }
 
     @Override
-    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException, ReturnException {
         for (BodyStmtNode stmt : this.bodyStatements) {
-            TypedValue bodyReturn = stmt.evaluate(scope);
-            if (bodyReturn.hasValue()) {
-                return bodyReturn;
-            }
+            stmt.evaluate(scope);
         }
-
-        if (this.returnStmt == null) {
-            return new TypedValue();
-        } else {
-            return this.returnStmt.evaluate(scope);
+        if (this.returnStmt != null) {
+            this.returnStmt.evaluate(scope);
         }
+        return new TypedValue();
     }
 
     @Override

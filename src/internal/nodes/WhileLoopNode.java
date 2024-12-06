@@ -2,11 +2,7 @@ package internal.nodes;
 
 import java.util.List;
 
-import internal.ExecutionException;
-import internal.ParseHaltException;
-import internal.ParseUnexpectedTokenException;
-import internal.PeekingArrayIterator;
-import internal.SemanticException;
+import internal.*;
 import internal.eval.TypedValue;
 import internal.scope.Scope;
 
@@ -51,7 +47,7 @@ public class WhileLoopNode extends Node {
     }
 
     @Override
-    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException {
+    public TypedValue evaluate(Scope scope) throws SemanticException, ExecutionException, ReturnException {
         while (this.expression.evaluate(scope).getBoolean()) {
             // System.out.println(this.expression.evaluate(scope).getValue() + "::" +
             // this.expression.convertToJott());

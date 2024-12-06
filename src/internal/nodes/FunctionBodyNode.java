@@ -3,11 +3,7 @@ package internal.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-import internal.ExecutionException;
-import internal.ParseHaltException;
-import internal.PeekingArrayIterator;
-import internal.SemanticException;
-import internal.SemanticReturnPathException;
+import internal.*;
 import internal.eval.Type;
 import internal.eval.TypedValue;
 import internal.scope.Scope;
@@ -97,7 +93,11 @@ public class FunctionBodyNode extends Node {
             dec.evaluate(scope);
         }
 
-        return this.body.evaluate(scope);
+        try {
+            return this.body.evaluate(scope);
+        } catch (ReturnException e) {
+            return e.getValue();
+        }
     }
 
     @Override

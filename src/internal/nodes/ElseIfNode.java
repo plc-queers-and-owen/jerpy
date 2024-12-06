@@ -2,11 +2,7 @@ package internal.nodes;
 
 import java.util.List;
 
-import internal.ExecutionException;
-import internal.ParseHaltException;
-import internal.ParseUnexpectedTokenException;
-import internal.PeekingArrayIterator;
-import internal.SemanticException;
+import internal.*;
 import internal.scope.Scope;
 import provided.TokenType;
 
@@ -57,7 +53,7 @@ public class ElseIfNode extends Node {
         return body;
     }
 
-    public boolean matches(Scope scope) throws SemanticException, ExecutionException {
+    public boolean matches(Scope scope) throws SemanticException, ExecutionException, ReturnException {
         return this.expr.evaluate(scope).getBoolean();
     }
 }

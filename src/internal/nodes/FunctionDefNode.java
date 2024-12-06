@@ -133,6 +133,7 @@ public class FunctionDefNode extends Node {
                 current.setValue(this.params.get(param).getSymbol(), callParams.params().get(param).evaluate(scope));
             } catch (IndexOutOfBoundsException e) {
                 // Should never actually end up here
+                throw new RuntimeException(e);
             }
         }
         scope.enableScope(this.getSymbol());
