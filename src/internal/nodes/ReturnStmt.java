@@ -62,6 +62,7 @@ public class ReturnStmt extends Node {
                         .report(this);
                 return false;
             }
+            expr.validateTree(scope);
         } catch (SemanticException e) {
             e.report(this);
             return false;
