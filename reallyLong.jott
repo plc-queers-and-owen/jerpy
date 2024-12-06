@@ -5,13 +5,13 @@
 Def earlyReturn[]: String {
     ::concat["a", "b"];
     ::concat["x", "y"];
-    Return ::concat["g"];
+    Return ::concat["g", "x"];
 }
 
 Def testEarlyReturn[]: Void {
     String val;
     val = ::earlyReturn[];
-    ::print[::concat["g == ", val]];
+    ::print[::concat["gx == ", val]];
 }
 
 Def testPrintLoop[ x:Integer ]:Void{
