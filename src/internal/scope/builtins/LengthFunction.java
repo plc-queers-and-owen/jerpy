@@ -49,7 +49,7 @@ public class LengthFunction implements FunctionSymbol {
             return false;
         }
 
-        if (p.getFirst().inferType(scope) == Type.String) {
+        if (p.getFirst().inferType(scope) != Type.String) {
             new SemanticTypeException(p.getFirst().inferType(scope),
                     Type.String).report(p.getFirst());
             return false;

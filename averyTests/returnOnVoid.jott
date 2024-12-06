@@ -1,0 +1,10 @@
+#Passed
+Def returnOnVoid[]: Void {
+    Integer x;
+    x = 10;
+    Return x;
+}
+
+Def main[]:Void{
+    ::returnOnVoid[];
+}

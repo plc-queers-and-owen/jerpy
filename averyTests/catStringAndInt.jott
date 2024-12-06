@@ -1,0 +1,13 @@
+#Passed
+Def catStringAndInt[]: Void {
+    Integer y;
+    String s;
+    y = 1;
+    s = "abc";
+    ::concat[y, s];
+    
+}
+
+Def main[]:Void{
+    ::catStringAndInt[];
+}

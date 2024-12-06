@@ -1,0 +1,18 @@
+#Passed
+Def elseBeforeElseif[]: Integer {
+    Integer y;
+    If [2 > 4] {
+        y = 0;
+    }
+    Else {
+        y = 1;
+    }
+    Elseif [2 < 4] {
+        y = 2;
+    }
+    Return y;
+}
+
+Def main[]:Void{
+    ::elseBeforeElseif[];
+}
