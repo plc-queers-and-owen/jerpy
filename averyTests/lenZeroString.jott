@@ -1,0 +1,14 @@
+Def lenZeroString[]: Void {
+    String s;
+    String t;
+    Integer len;
+    s = "";
+    t = "foo";
+    len = ::length[s];
+    ::print[len];
+    ::print[::concat[s, t]];
+}
+
+Def main[]:Void{
+    ::lenZeroString[];
+}
