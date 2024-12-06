@@ -1,0 +1,9 @@
+#Passed
+Def divideByZero[x:Integer]: Void {
+    Integer y;
+    y = x / 0;
+}
+
+Def main[]:Void{
+    ::divideByZero[4];
+}

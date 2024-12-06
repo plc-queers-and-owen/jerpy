@@ -1,0 +1,10 @@
+#Passed
+Def returnWrongType[]: String {
+    Integer x;
+    x = 10;
+    Return x;
+}
+
+Def main[]:Void{
+    ::returnOnVoid[];
+}
