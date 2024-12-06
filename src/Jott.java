@@ -30,8 +30,6 @@ public class Jott {
             } catch (ExecutionException e) {
                 System.err.println(e.getMessage());
             }
-        } else {
-            System.out.println("INVALID");
         }
     }
 }
